@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v60"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v61"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -243,6 +243,7 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpven{fill:var(--ok,#2e7d32);font:600 3px var(--f-ui)}
 .bpd{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--plocha)}
 .novk{border-color:var(--acc)}.novk ul,.novL{margin:6px 0 8px;padding-left:18px}.novk li,.novL li{margin:3px 0;max-width:72ch}
+@media (max-width:640px){button.chip,a.chip{min-height:26px}.ksort{display:inline-flex;align-items:center;min-height:28px}.mk{height:max(24px,var(--v));min-width:max(24px,var(--v))}}
 .kosL{display:flex;flex-direction:column;gap:6px}.kontR{border-top:1px solid var(--line);padding:8px 0}.kontR:first-of-type{border-top:0}.zsrvSt summary{cursor:pointer;color:var(--mut);padding:4px 0}.zsrvSt .kosL{margin-top:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .t-poslucharna{--tm:#9ccccd}.t-ucebna{--tm:#ccccff}.t-kancelar{--tm:#ffcc00}.t-sekretariat{--tm:#ffe26a}.t-vedouci{--tm:#fdeeb5}.t-zasedaci{--tm:#ffff3a}.t-wc{--tm:#66cbff}.t-studio{--tm:#aa72b1}.t-odpocinkova{--tm:#e28100}.t-klub{--tm:#3b6ab2}.t-tech{--tm:#8c8c8c}.t-kavarna{--tm:#6e3d12}
 .bpvest .bpm[class*=" t-"] rect,.bpn0{fill:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha))}
@@ -1001,9 +1002,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v60';
+const VERZE = 'v61';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v61', 'Přístupnost a pohodlí v telefonu – větší tlačítka filtrů, řazení a značek na mapě, popisky všech polí pro čtečku obrazovky.'],
   ['v60', '🩺 Kontrola dat (Záloha a export) – najde chyby v datech (stejné číslo dvakrát, materiál bez katalogu, chybějící fotky…) a bezpečné opravy udělá jedním klikem.'],
   ['v59', 'Co je nového – po aktualizaci se na Domů ukáže, co přibylo. Celý seznam je na dlaždici Co je nového. Číslo verze je vidět v hlavičce.'],
   ['v58', 'Plánky pater v telefonu – plánek se ořízne na kresbu patra a sám ukáže místnost s nesplněnými; ⤢ Celé patro / 🔍 Přiblížit, posouvání prstem.'],
@@ -2911,7 +2913,7 @@ function vDetail(id) {
   // místo
   o += `<h3>Místo</h3><div class="karta small">${m ? `<b>${esc(m.budova || '')} · ${esc(m.mistnost)}</b><br>Rozvaděč: ${esc(m.rozvadec || '–')} · jistič / okruh: ${esc(m.okruh || '–')}${(() => { const j = coVypnout(m); return j ? ` <b>→ vypni ${esc(j.oz)}${j.typ ? ' (' + esc(j.typ) + ')' : ''}${j.co ? ': ' + esc(j.co) : ''}</b>` : ''; })()}<br>Svítidla: ${esc(m.svitidla || '–')}${m.poznamka ? '<br>' + esc(m.poznamka) : ''}<div class="rada" style="margin-top:8px"><a class="btn sm" href="#misto=${encodeURIComponent(mistoKlic(p))}">Otevřít místo – historie, dokumenty</a></div>`
     : `Místo zatím nemáš v seznamu Míst.<div class="rada" style="margin-top:8px"><button class="btn sm" data-a="nove-misto">+ Přidat „${esc(p.mistnost || p.mistoOdhad || 'místo')}“ do Míst</button></div><p class="mut" style="margin:6px 0 0">Do Míst si zapíšeš rozvaděč, jistič a typ svítidel. Návrh materiálu je pak přesnější.</p>`}${(() => { const k = mistoKlic(p); const n = k ? S.poz.filter((q) => q.id !== p.id && mistoKlic(q) === k).length : 0; return n ? `<p class="small" style="margin:6px 0 0">V této místnosti bylo ještě <b>${n}</b> ${n === 1 ? 'další požadavek' : n < 5 ? 'další požadavky' : 'dalších požadavků'}. <a href="#misto=${encodeURIComponent(k)}">Historie</a></p>` : ''; })()}</div>`;
-  o += `<h3>Poznámka</h3><div class="karta"><textarea id="pozn" rows="3" style="width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--plocha)" placeholder="Co jsi zjistil, co je potřeba příště…">${esc(p.poznamka || '')}</textarea><div class="rada" style="margin-top:6px"><button class="btn sm" data-a="ulozit-pozn">Uložit poznámku</button></div></div>`;
+  o += `<h3>Poznámka</h3><div class="karta"><textarea id="pozn" aria-label="Poznámka" rows="3" style="width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--plocha)" placeholder="Co jsi zjistil, co je potřeba příště…">${esc(p.poznamka || '')}</textarea><div class="rada" style="margin-top:6px"><button class="btn sm" data-a="ulozit-pozn">Uložit poznámku</button></div></div>`;
   o += '</div></div>';
   return o;
 }
