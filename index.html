@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v76"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v77"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -370,6 +370,22 @@ div.den{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:10px 
 .gm-bez .gm-sheet{position:relative;left:auto;right:auto;bottom:auto;margin:0 96px 12px 12px;max-height:none}
 .gm.gm-full{position:fixed;inset:0;z-index:70;width:100vw;height:100vh;height:100dvh;max-height:none;min-height:0;aspect-ratio:auto;border-radius:0;border:0}
 html.gm-zamek,html.gm-zamek body{overflow:hidden}
+nav.karty .kfoto,nav.karty .kdal,nav.karty .i,nav.karty .kp,.obl{display:none}
+@media (min-width:1000px){body{padding-left:240px}
+  nav.karty{position:fixed;left:0;top:0;bottom:0;width:240px;box-sizing:border-box;flex-direction:column;gap:2px;overflow-y:auto;max-width:none;margin:0;padding:14px 12px 20px;background:var(--plocha);border-right:1px solid var(--line);z-index:20}
+  nav.karty a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;border-bottom:0;color:var(--ink);font:500 16px var(--f-ui);white-space:normal;flex:none}
+  nav.karty a .i{display:flex;color:var(--mut)}nav.karty .kdom{display:none}nav.karty a .kt{flex:1}nav.karty a:hover{background:color-mix(in srgb,var(--ink) 5%,var(--plocha))}
+  nav.karty a.on{background:var(--acc-s);color:var(--acc);font-weight:600;border-bottom:0}nav.karty a.on .i{color:var(--acc)}
+  nav.karty .kp{display:block;font:600 13px var(--f-mono);color:var(--mut)}nav.karty .kp:empty{display:none}
+  nav.karty .kp.w{min-width:22px;height:22px;border-radius:11px;background:color-mix(in srgb,var(--warn) 18%,var(--plocha));color:var(--warn);display:flex;align-items:center;justify-content:center;font-size:12px;padding:0 4px;box-sizing:border-box}
+  nav.karty .kfoto{display:flex;justify-content:center;min-height:52px;margin:0 0 14px;border-radius:14px;background:var(--acc);color:var(--plocha);font-weight:600;font-size:17px}nav.karty .kfoto .i{color:var(--plocha)}nav.karty .kfoto:hover{background:var(--acc);filter:brightness(1.08)}
+  nav.karty .kdal{display:block;margin:14px 12px 4px;font:600 12.5px var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+  nav.karty a.dal{min-height:38px;padding-left:46px;font-size:15px}
+  .obl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:16px;position:relative}
+  .oblc{display:flex;align-items:center;min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);text-decoration:none;font:600 14.5px var(--f-ui)}.oblc:hover{border-color:var(--acc)}.oblc.on{border-color:var(--acc);color:var(--acc);background:var(--acc-s)}
+  .oblp{min-width:36px;height:36px;padding:0 10px;border-radius:18px;border:1px dashed var(--line);background:none;font:600 16px var(--f-ui);color:var(--ink);cursor:pointer}
+  .oblpop{position:absolute;top:44px;left:0;z-index:30;background:var(--plocha);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:12px 14px;display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:2px 16px;min-width:340px}
+  .oblpop b{grid-column:1/-1;margin-bottom:4px}.oblpop label{display:flex;gap:8px;align-items:center;min-height:36px;cursor:pointer}.oblpop input{width:18px;height:18px}.oblpop .btn{grid-column:1/-1;justify-self:end;margin-top:6px}}
 .mtel{display:none}.gm-osm{display:none}
 html.mapa-okno,html.mapa-okno body{overflow:hidden;overscroll-behavior:none}
 html.mapa-okno #hlavni{height:calc(100vh - var(--hlav,88px) - var(--spod,0px));height:calc(100dvh - var(--hlav,88px) - var(--spod,0px));max-width:none;display:flex;flex-direction:column;padding-bottom:10px;box-sizing:border-box;overflow:hidden;overflow:clip}
@@ -554,21 +570,23 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 
 <div id="nejede" class="nejede" role="alert"><b>Aplikace se tady nespustila.</b> Tenhle náhled nespouští programy. Otevři soubor v prohlížeči <b>Chrome</b> – na počítači dvojklikem, v telefonu Stažené soubory → otevřít v Chrome.</div>
 <header>
-  <div class="hl"><button class="hbtn zpet" id="zpetBtn" type="button" aria-label="Zpět" title="Zpět (Alt + ← nebo Backspace)" hidden>←</button><div class="znak" aria-hidden="true">Ú</div><h1>Deník údržby</h1><span class="stav" id="stav">Načítám…</span><span class="hbtns"><button class="hbtn" id="hledBtn" aria-label="Hledat všude (Ctrl+K)" title="Hledat všude (Ctrl+K)">🔍</button><button class="hbtn q" id="pomocBtn" aria-label="Nápověda (?)" title="Nápověda (?)">?</button></span></div>
-  <nav class="karty" id="karty">
-    <a href="#domu" data-v="domu" aria-label="Domů">⌂ Domů</a>
-    <a href="#dnes" data-v="dnes">Dnes</a>
-    <a href="#seznam" data-v="seznam">Požadavky</a>
-    <a href="#prehled" data-v="prehled">Splněno?</a>
-    <a href="#prehledy" data-v="prehledy">Přehledy</a>
-    <a href="#material" data-v="material">Materiál</a>
-    <a href="#katalog" data-v="katalog">Katalog</a>
-    <a href="#kalendar" data-v="kalendar">Kalendář</a>
-    <a href="#dochazka" data-v="dochazka">Docházka</a>
-    <a href="#naradi" data-v="naradi">Nářadí a lidé</a>
-    <a href="#mista" data-v="mista">Místa</a>
-    <a href="#sklad" data-v="sklad">Sklad</a>
-    <a href="#mapa" data-v="mapa">Mapa</a>
+  <div class="hl"><button class="hbtn zpet" id="zpetBtn" type="button" aria-label="Zpět" title="Zpět (Alt + ← nebo Backspace)" hidden>←</button><div class="znak" aria-hidden="true">Ú</div><h1>Deník údržby</h1><span class="obl" id="obl" role="group" aria-label="Oblíbené"></span><span class="stav" id="stav">Načítám…</span><span class="hbtns"><button class="hbtn" id="hledBtn" aria-label="Hledat všude (Ctrl+K)" title="Hledat všude (Ctrl+K)">🔍</button><button class="hbtn q" id="pomocBtn" aria-label="Nápověda (?)" title="Nápověda (?)">?</button></span></div>
+  <nav class="karty" id="karty" aria-label="Hlavní menu">
+    <a href="#novy" data-v="novy" class="kfoto"><span class="i" data-ico="foto"></span>Vyfotit papír</a>
+    <a href="#domu" data-v="domu" aria-label="Domů"><span class="i" data-ico="domu"></span><span class="kt"><span class="kdom">⌂ </span>Domů</span></a>
+    <a href="#dnes" data-v="dnes"><span class="i" data-ico="plan"></span><span class="kt">Dnes</span></a>
+    <a href="#seznam" data-v="seznam"><span class="i" data-ico="seznam"></span><span class="kt">Požadavky</span><b class="kp" data-kp="seznam"></b></a>
+    <a href="#mapa" data-v="mapa"><span class="i" data-ico="mapa"></span><span class="kt">Mapa</span></a>
+    <a href="#material" data-v="material"><span class="i" data-ico="material"></span><span class="kt">Materiál</span><b class="kp w" data-kp="material"></b></a>
+    <span class="kdal" aria-hidden="true">Další</span>
+    <a href="#prehled" data-v="prehled" class="dal">Splněno?</a>
+    <a href="#prehledy" data-v="prehledy" class="dal">Přehledy</a>
+    <a href="#kalendar" data-v="kalendar" class="dal">Kalendář</a>
+    <a href="#dochazka" data-v="dochazka" class="dal">Docházka</a>
+    <a href="#katalog" data-v="katalog" class="dal">Katalog</a>
+    <a href="#sklad" data-v="sklad" class="dal">Sklad</a>
+    <a href="#naradi" data-v="naradi" class="dal">Nářadí a lidé</a>
+    <a href="#mista" data-v="mista" class="dal">Místa</a>
   </nav>
 </header>
 <main class="obal" id="hlavni"><div class="prazdne"><b>Načítám požadavky…</b>Za chvíli se tu ukáže seznam. Nový přidáš vyfocením papíru v kartě „+ Nový“.</div></main>
@@ -577,7 +595,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   <a href="#dnes" data-v="dnes"><span class="i" data-ico="plan"></span>Dnes</a>
   <a href="#novy" data-v="novy" class="hl2"><span class="i" data-ico="foto"></span>Vyfotit</a>
   <a href="#seznam" data-v="seznam"><span class="i" data-ico="seznam"></span>Požadavky</a>
-  <a href="#dochazka" data-v="dochazka"><span class="i" data-ico="hodiny"></span>Docházka</a>
+  <a href="#mapa" data-v="mapa"><span class="i" data-ico="mapa"></span>Mapa</a>
 </nav>
 <div class="pomoc" id="pomoc" hidden></div>
 <div id="hotovo"></div>
@@ -1111,9 +1129,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v76';
+const VERZE = 'v77';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v77', 'Nový vzhled, krok 1: na počítači je menu vlevo – nahoře velké Vyfotit papír, pod ním Domů, Dnes, Požadavky, Mapa a Materiál (s počty), pod „Další“ všechno ostatní. Nahoře vedle názvu jsou Oblíbené – tlačítkem + si vybereš, které stránky tam chceš mít (třeba Kalendář, Docházka, Katalog). Dlaždice na Domů zůstávají. Na telefonu je ve spodní liště místo Docházky Mapa (Docházka je na Domů).'],
   ['v76', 'Najít podle papíru je chytřejší: Claude z fotky přečte všechny kolonky – číslo, datum, budovu, místnost, řešitele, objednatele, kontakt i závadu – a porovná je se všemi požadavky v deníku (i se splněnými). Každý dostane jistotu v procentech a u něj je vidět, co sedí (✓), co skoro (≈) a co ne (✗). Číslo pozná i bez roku, s jiným zápisem (1234/2026) nebo s jednou špatně přečtenou číslicí. Když jeden požadavek jasně vede, rovnou se otevře; jinak vybereš z nejbližších variant.'],
   ['v75', 'Ikonky u materiálu a nářadí: každá položka materiálu má ikonku podle druhu (zářivka, jistič, kabel…), nářadí podle toho, co to je (vrtačka, žebřík, měřák, kleště…). Fotka se místo ikonky ukáže jen ověřená – tlačítkem „Ověřit fotky“ v Katalogu a v Nářadí Claude zkontroluje, že na fotce ta věc opravdu je (nebo to potvrdíš sám u položky). Nesedící fotka zůstane schovaná za ikonkou. 3D: v tmavém režimu je obrys patra líp vidět a ve 3D se už nekreslí obrys nižšího patra.'],
   ['v74', 'Mapa je jedno okno: stránka se neposouvá, mapa vyplní celé okno pod lištou. Nápověda, vlastní plánek a body z GPS jsou pod tlačítkem ⋯ Další, zdroj mapy (OpenStreetMap) v rohu mapy, karta budovy bez plánku je panel přímo na mapě. Sloupec pater vpravo už se neposouvá. V budově je seznam nesplněných vpravo vedle plánku a každý požadavek má fotku papíru, nebo ikonku podle druhu závady (světlo, zásuvka, jistič, spotřebič, rozvod, ostatní). Když na fotku najedeš myší, zvětší se. Na telefonu je lišta mapy na dva řádky a v budově z ní zůstane jen hledání, ať je plánek co největší.'],
@@ -3139,6 +3158,7 @@ function vImport() {
 }
 // --- ikony (vlastní, jednoduché čáry)
 const ICO = {
+  domu: '<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>',
   foto: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   seznam: '<path d="M9 6h11M9 12h11M9 18h11M4 6h1M4 12h1M4 18h1"/>',
   prehled: '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M14 16.5l2 2 4-4"/>',
@@ -3205,7 +3225,7 @@ async function overFotky(kol) { if (!S.sample || S.ai.over) return; const L = (S
     S.ai.over.i++; vykresli(); }
   S.ai.over = null; vykresli(); toast(`Ověřeno: ${ok} fotek sedí${ne ? ', ' + ne + ' nesedí – u nich zůstane ikonka' : ''}.`); }
 const svg = (d, s = 24) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-document.querySelectorAll('#spodni [data-ico]').forEach((e) => { e.innerHTML = svg(ICO[e.dataset.ico], 22); });
+document.querySelectorAll('#spodni [data-ico], #karty [data-ico]').forEach((e) => { e.innerHTML = svg(ICO[e.dataset.ico], 22); });
 const kratkaBudova = (s) => (s || '').replace(/^ČZU\s*\/\s*Suchdol\s*\/\s*/i, '').trim();
 const dniOd = (d) => d ? Math.round((new Date(dnes()) - new Date(d)) / 864e5) : 0;
 function hodinyTyden() { const now = new Date(); const t0 = new Date(now); t0.setDate(now.getDate() - ((now.getDay() + 6) % 7)); const k = iso(t0), d = dnes(); let h = 0;
@@ -3915,6 +3935,16 @@ function oknoRozm() { const r = document.documentElement, h = document.querySele
   r.style.setProperty('--hlav', Math.round(Math.max(0, hb.bottom)) + 'px'); r.style.setProperty('--spod', Math.round(sp && getComputedStyle(sp).display !== 'none' ? sp.getBoundingClientRect().height : 0) + 'px'); }
 addEventListener('resize', () => { if (document.documentElement.classList.contains('mapa-okno')) oknoRozm(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.mapDalsi && document.documentElement.classList.contains('mapa-okno') && !document.querySelector('.gm.gm-full')) { S.mapDalsi = false; vykresli(); } });
+// v77: počty v levém menu a Oblíbené nahoře (vybere si je uživatel, pamatují se v prohlížeči)
+function kPocty() { const n = (S.poz || []).filter((p) => p.stav !== 'hotovy' && !p.slouceno).length; let m = 0; try { (S.poz || []).filter((p) => p.stav !== 'hotovy' && !p.slouceno).forEach((p) => (p.material || []).forEach((x) => { if (maNazev(x) && kObjednani(x)) m++; })); } catch (e) { m = 0; }
+  [['seznam', n], ['material', m]].forEach(([k, c]) => { const e = document.querySelector(`#karty [data-kp="${k}"]`); if (e) e.textContent = c ? String(c) : ''; }); }
+const OBL0 = ['kalendar', 'dochazka', 'katalog'];
+const oblVse = () => [...document.querySelectorAll('#karty a[data-v]')].filter((a) => a.dataset.v !== 'novy').map((a) => ({ v: a.dataset.v, t: (a.querySelector('.kt') || a).textContent.replace('⌂', '').trim() }));
+function oblRender(v) { const el = document.getElementById('obl'); if (!el) return; const vse = oblVse(), O = ls.get('oblibene', OBL0).filter((k) => vse.some((x) => x.v === k));
+  el.innerHTML = O.map((k) => { const x = vse.find((y) => y.v === k); return `<a class="oblc${k === v ? ' on' : ''}" href="#${k}">${esc(x.t)}</a>`; }).join('') + `<button type="button" class="oblp" data-a="obl-upr" aria-expanded="${!!S.oblUpr}" aria-label="Vybrat oblíbené" title="Vybrat, co chceš mít nahoře">${O.length ? '+' : '☆ Oblíbené'}</button>`
+    + (S.oblUpr ? `<div class="oblpop" role="dialog" aria-label="Oblíbené nahoře"><b>Nahoře chci mít:</b>${vse.map((x) => `<label><input type="checkbox" data-obl="${x.v}"${O.includes(x.v) ? ' checked' : ''}> ${esc(x.t)}</label>`).join('')}<button type="button" class="btn sm p" data-a="obl-upr">Hotovo</button></div>` : ''); }
+document.addEventListener('change', (e) => { const c = e.target.closest && e.target.closest('[data-obl]'); if (!c) return; const vse = oblVse().map((x) => x.v); let O = ls.get('oblibene', OBL0).filter((k) => vse.includes(k)); O = c.checked ? [...O.filter((k) => k !== c.dataset.obl), c.dataset.obl] : O.filter((k) => k !== c.dataset.obl); ls.set('oblibene', O.slice(0, 8)); oblRender((location.hash || '#domu').slice(1)); const n = document.querySelector(`[data-obl="${c.dataset.obl}"]`); if (n) n.focus(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.oblUpr) { S.oblUpr = false; oblRender((location.hash || '#domu').slice(1)); } });
 function vMapaGps() {
   const s = S.mista.filter((m) => /-?\d+[.,]\d+\s*,\s*-?\d+[.,]\d+/.test(m.gps || ''));
   let o = '<h3>Body z GPS (u Míst)</h3>';
@@ -3933,7 +3963,7 @@ const klicMista = () => { try { return decodeURIComponent(cesta().slice(6)); } c
 function vykresli() {
   const c = cesta(); const v = c === 'den' ? 'dnes' : c.startsWith('p-') ? 'seznam' : c === 'import' || c === 'novy' || c === 'foto' || c === 'napady' || c === 'zaloha' || c === 'novinky' || c === 'vse' ? 'domu' : c === 'lide' || c === 'ulozky' ? 'naradi' : c.startsWith('misto=') ? 'mista' : c.startsWith('kat=') ? 'katalog' : c === 'ucebny' ? 'mista' : c === 'najit' ? 'seznam' : c;
   if (c.startsWith('p-')) { const id = c.slice(2); const l = ls.get('posl', []).filter((x) => x !== id); l.unshift(id); ls.set('posl', l.slice(0, 8)); }
-  document.querySelectorAll('#karty a, #spodni a').forEach((a) => a.classList.toggle('on', a.dataset.v === v));
+  document.querySelectorAll('#karty a, #spodni a').forEach((a) => a.classList.toggle('on', a.dataset.v === v)); kPocty(); oblRender(v);
   const el = $('#hlavni'); const okno = c === 'mapa'; document.documentElement.classList.toggle('mapa-okno', okno); if (okno) { if (window.scrollY) window.scrollTo(0, 0); oknoRozm(); } else S.mapDalsi = false;
   el.innerHTML = c.startsWith('p-') ? vDetail(c.slice(2)) : c.startsWith('misto=') ? vMisto(klicMista()) : c.startsWith('kat=') ? vKat(kid()) : c === 'katalog' ? vKatalog() : c === 'prehledy' ? vPrehledy() : c === 'domu' ? vDomu() : c === 'foto' ? vFoto() : c === 'dochazka' ? vDochazka() : c === 'napady' ? vNapady() : c === 'dnes' ? vDnes() : c === 'den' ? vDen() : c === 'sklad' ? vSklad() : c === 'zaloha' ? vZaloha() : c === 'novinky' ? vNovinky() : c === 'vse' ? vVse() : c === 'prehled' ? vPrehled() : c === 'naradi' || c === 'lide' || c === 'ulozky' ? vNaradi(c) : c === 'novy' ? vNovy() : c === 'import' ? vImport() : c === 'material' ? vMaterial() : c === 'kalendar' ? vKalendar() : c === 'mista' ? vMista() : c === 'mapa' ? vMapa() : c === 'najit' ? vNajit() : c === 'ucebny' ? vUcebny() : c === 'seznam' ? vSeznam() : vDomu();
   if (c.startsWith('p-')) { const hs = [...el.querySelectorAll('h3')]; if (hs.length > 3) { const kr = (t) => { t = t.split('·')[0].trim(); return /hodin/i.test(t) ? 'Hodiny' : /^verze/i.test(t) ? 'Verze papíru' : /^údaje/i.test(t) ? 'Údaje' : t.split(' ')[0]; };
@@ -4283,8 +4313,9 @@ document.addEventListener('click', async (e) => {
   if (b.dataset.tstart != null) { const k = b.dataset.tstart; if (k === '?') { S.startVyb = !S.startVyb; vykresli(); const f = $('#trStart'); if (f) f.focus(); return; } S.startVyb = false; await ulozNast('trasa', { ...trasaN(), start: k, startDen: k ? dnes() : '', pres: null, presDen: '' }); if (k) { toast('Dnes začínáš: ' + MAPA_B[k][2] + '.'); } vykresli(); return; }
   if (a === 'bp-novy') { const m = (($('#bpNova') || {}).value || '').trim() || b.dataset.bpm || ''; S.draft = { stav: 'novy', datum: dnes(), budova: 'ČZU / Suchdol / ' + b.dataset.bpb, mistnost: m }; S.foto = null; S.fotoFile = null; location.hash = 'novy'; return; }
   if (a === 'gm-areal') { S.gmZpet = S.mapSel; S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; vykresli(); return; }
+  if (a === 'obl-upr') { S.oblUpr = !S.oblUpr; oblRender((location.hash || '#domu').slice(1)); const f = document.querySelector(S.oblUpr ? '.oblpop input' : '.oblp'); if (f) f.focus(); return; }
   if (a === 'map-dalsi') { S.mapDalsi = !S.mapDalsi; vykresli(); const t = document.querySelector(S.mapDalsi ? '.mdalsi [data-a="map-dalsi"]' : '.mapnav [data-a="map-dalsi"]'); if (t) t.focus({ preventScroll: true }); return; }
-  if (a === 'map-zakl') { S.mapZakl = !S.mapZakl; if (S.mapZakl && budMaPlan(S.mapSel)) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
+  if (a === 'map-zakl') { S.mapZakl = !S.mapZakl; if (S.mapZakl) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (a === 'plan-vse') { S.planVse = true; vykresli(); return; }
   if (a === 'plan-navrh') { const T = trasaN(); const kap = +T.hodin || 6; const ids = planDnes().slice(); const pred = ids.length; const hop = CESTA[T.vozitko ? 'vozitko' : 'pesky'].hop / 60;
     const kand = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno && !ids.includes(p.id) && !(p.material || []).some((x) => kObjednani(x) || objednano(x)) && lidiP(p) <= (+T.lidi || 1) && !(T.den === 'lehky' && obtiznost(p) === 3));
