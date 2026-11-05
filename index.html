@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v70"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v71"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -374,7 +374,7 @@ html.gm-zamek,html.gm-zamek body{overflow:hidden}
 .mbud .kh{flex-wrap:wrap}
 .b3seg{margin-left:auto}.b3seg+.seg{margin-left:6px}.b3seg button{min-height:44px;padding:0 16px;font-weight:600}
 .gm-3d{perspective:1500px;perspective-origin:50% 30%;background:radial-gradient(ellipse at 50% 35%,var(--plocha),color-mix(in srgb,var(--ink) 9%,var(--plocha)))}
-.b3-sc{position:absolute;left:calc(var(--cx,50%) + var(--px,0px));top:calc(56% + var(--py,0px));width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);transform-style:preserve-3d;transform:scale(var(--zm)) rotateX(var(--rx)) rotateZ(var(--rz)) translateZ(calc((var(--n) - 1) * var(--gap) * -0.5))}
+.b3-sc{position:absolute;left:calc(var(--cx,50%) + var(--px,0px));top:calc(56% + var(--py,0px));width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);transform-style:preserve-3d;transform:rotateX(var(--rx)) rotateZ(var(--rz)) translateZ(calc((var(--n) - 1) * var(--gap) * -0.5))}
 .b3-p{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * var(--gap)));border-radius:6px;background:color-mix(in srgb,var(--plocha) 74%,transparent);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--ink) 35%,transparent),0 6px 18px rgba(0,0,0,.12);cursor:pointer;outline:none}
 .b3-p svg{position:absolute;inset:0;width:100%;height:100%;display:block;margin:0;overflow:visible}
 .b3-p.on{box-shadow:0 0 0 3px var(--ok),0 6px 18px rgba(0,0,0,.18)}
@@ -1076,9 +1076,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v70';
+const VERZE = 'v71';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v71', 'Čitelné 3D: v Patrech je plánek po přiblížení ostrý a štítky pater zůstanou malé. Ve Stěnách je číslo místnosti namalované na podlaze (i s druhem místnosti) a na vnější stěně, která míří ven – leží v ploše jako barva, neotáčí se. Silně je vidět jen to, na co se díváš: shora nápis na podlaze, ze strany nápis na stěně; ten druhý je světlý a průhledný.'],
   ['v70', 'PEF: učebny C (C11–C28) jsou v plánku, ve 3D i v seznamu učeben jako počítačové – mají vlastní barvu a legendu. V Nápadech je nový nápad Průchod školou s kamerou a Fotky místností.'],
   ['v69', '3D budovy: kolečkem posouváš nahoru a dolů (Shift + kolečko do strany), Ctrl + kolečko nebo dva prsty přibližují, posun i pravým tlačítkem nebo Shift + tažením. Zelená plocha ukazuje zemi u přízemí, stěny mají barvu místnosti a jsou průhlednější, místnost pod myší se zvýrazní i s názvem. Legenda je výraznější.'],
   ['v68', 'Plánek budovy v jednom měřítku – všechna patra stejně velká a přesně nad sebou, při přepnutí patra zůstane pohled (jen se posune na místnost s požadavkem). Plánek je hned čitelný, kolečko nad mapou vždy přibližuje a mapou jde volně posouvat. Domů: na počítači zase přehled se vším, na telefonu jednoduchý.'],
@@ -3567,9 +3568,9 @@ function gm3Init(el) {
   if (S.gmFull === 'plan') { el.classList.add('gm-full'); document.documentElement.classList.add('gm-zamek'); }
   let v = { ...B3_Z, ...(GMV[key] || {}) }, anim = 0;
   const kresli = () => { const W = el.clientWidth || 600, H = el.clientHeight || 400, sl = (window.innerWidth || 1000) < 700 ? 8 : 94, av = Math.max(120, W - sl - 70); let sw = Math.min(av * 0.7, 620), sh = sw / ar; const mh = H * 0.42; if (sh > mh) { sh = mh; sw = sh * ar; }
-    const gap = Math.max(16, Math.min(80, (H * 0.52) / Math.max(1, n))); v.rx = Math.max(8, Math.min(88, v.rx)); v.zm = Math.max(0.5, Math.min(3, v.zm));
-    sc.style.cssText = `--cx:${(70 + av / 2).toFixed(1)}px;--sw:${sw.toFixed(1)}px;--sh:${sh.toFixed(1)}px;--gap:${gap.toFixed(1)}px;--n:${n};--rx:${v.rx.toFixed(2)}deg;--rz:${v.rz.toFixed(2)}deg;--zm:${v.zm.toFixed(3)};--px:${(v.px || 0).toFixed(1)}px;--py:${(v.py || 0).toFixed(1)}px`; GMV[key] = { ...v };
-    const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.zm <= 0.501; if (zp) zp.disabled = v.zm >= 2.999; };
+    const gap = Math.max(16, Math.min(80, (H * 0.52) / Math.max(1, n))); v.rx = Math.max(8, Math.min(88, v.rx)); v.zm = Math.max(0.5, Math.min(5, v.zm));
+    sc.style.cssText = `--cx:${(70 + av / 2).toFixed(1)}px;--sw:${(sw * v.zm).toFixed(1)}px;--sh:${(sh * v.zm).toFixed(1)}px;--gap:${(gap * v.zm).toFixed(1)}px;--n:${n};--rx:${v.rx.toFixed(2)}deg;--rz:${v.rz.toFixed(2)}deg;--zm:${v.zm.toFixed(3)};--px:${(v.px || 0).toFixed(1)}px;--py:${(v.py || 0).toFixed(1)}px`; GMV[key] = { ...v };
+    const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.zm <= 0.501; if (zp) zp.disabled = v.zm >= 4.999; };
   const anim3 = (cil, ms) => { cancelAnimationFrame(anim); const z = { ...v }; if (!ms || gmPomalu()) { v = { ...v, ...cil }; kresli(); return; } const t0 = performance.now();
     const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm', 'px', 'py'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
   el._gm = { kresli, rozm: () => ({ l: 0, t: 0, SW: 0, SH: 0 }), zoomBod: (f, x, y, ms) => anim3({ zm: v.zm * f }, ms), fit: (ms) => anim3({ ...B3_Z, rz: B3_Z.rz + Math.round((v.rz - B3_Z.rz) / 360) * 360 }, ms), pohled: () => ({ ...v }) };
@@ -3620,7 +3621,7 @@ function b3sHtml(nb, R, pat, pk, otvP, patra, leg) {
 function gm3sInit(el) {
   if (el._gm) return; const cv = el.querySelector('canvas'), key = el.dataset.gm3s, D = B3D[key]; if (!cv || !D) return; const ctx = cv.getContext('2d'); if (!ctx) return;
   if (S.gmFull === 'plan') { el.classList.add('gm-full'); document.documentElement.classList.add('gm-zamek'); }
-  const Z0 = { rx: 55, rz: -32, zm: 1, px: 0, py: 0 }; let v = { ...Z0, ...(GMV[key] || {}) }, anim = 0, stit = [], plochy = [], box0 = [0, 0, 1, 1], hov = null, mys = null;
+  const Z0 = { rx: 55, rz: -32, zm: 1, px: 0, py: 0 }; let popN = { podlaha: 0, stena: 0, slabe: 0, obe: 0 }, MW = new Map(), v = { ...Z0, ...(GMV[key] || {}) }, anim = 0, stit = [], plochy = [], box0 = [0, 0, 1, 1], hov = null, mys = null;
   const cs = getComputedStyle(el), cv_ = (k, d) => cs.getPropertyValue(k).trim() || d; const bar = (sel) => { const e = el.querySelector('.b3-vz ' + sel); return e ? getComputedStyle(e).fill : '#ccc'; };
   const C = { m: bar('.v-m rect'), ma: bar('.v-ma rect'), ch: bar('.v-ch'), sch: bar('.v-sch rect'), vyt: bar('.v-vyt rect'), tech: bar('.v-tech'), t: {} }; Object.keys(TYP_MIST).forEach((t) => { C.t[t] = bar('.v-t-' + t + ' rect'); });
   const ink = cv_('--ink', '#1b2420'), plo = cv_('--plocha', '#fff'), warn = cv_('--warn', '#a35c00'), okb = cv_('--ok', '#1d7a3e'); const tma = matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
@@ -3635,7 +3636,7 @@ function gm3sInit(el) {
     const sl = (window.innerWidth || 1000) < 700 ? 8 : 94, L0 = 84, T0 = 62, av = [Math.max(80, W - sl - L0 - 10), Math.max(80, H - T0 - 70)];
     const sc = Math.min(av[0] / Math.max(1, a[2] - a[0]), av[1] / Math.max(1, a[3] - a[1])) * 0.95 * v.zm, ox = L0 + av[0] / 2 - (sc * (a[0] + a[2])) / 2, oy = T0 + av[1] / 2 - (sc * (a[1] + a[3])) / 2;
     const P = (X, Y, Z) => { const q = pr0(X, Y, Z); return [ox + (v.px || 0) + sc * q[0], oy + (v.py || 0) + sc * q[1], q[2]]; };
-    const F = []; const quad = (pts, fill, st, i, m, w, al) => { const q = pts.map((b) => P(b[0], b[1], b[2])); F.push({ q, d: q.reduce((x, b) => x + b[2], 0) / q.length, lay: w === -10 ? -1 : w === -9 ? 0 : w === -8 ? 1 : w === -5 ? 2 : 3, fill, st, i, m, a: al == null ? 1 : al }); };
+    const F = []; const quad = (pts, fill, st, i, m, w, al, hr) => { const q = pts.map((b) => P(b[0], b[1], b[2])); F.push({ q, d: q.reduce((x, b) => x + b[2], 0) / q.length, lay: w === -10 ? -1 : w === -9 ? 0 : w === -8 ? 1 : w === -5 ? 2 : 3, fill, st, i, m, a: al == null ? 1 : al, hr }); };
     const zi = Math.max(0, D.f.findIndex((f) => f.k >= 0)), zx = u[2] * 0.35, zy = u[3] * 0.35;
     const stena = tma ? 'rgba(78,90,85,.86)' : 'rgba(228,233,230,.8)', stenaMa = 'rgba(255,165,60,.6)', obrys = tma ? 'rgba(255,255,255,.28)' : 'rgba(0,0,0,.32)';
     D.f.forEach((f, i) => { const z0 = i * G, b = f.box;
@@ -3643,13 +3644,40 @@ function gm3sInit(el) {
       quad([[b[0], b[1], z0 - 0.05], [b[0] + b[2], b[1], z0 - 0.05], [b[0] + b[2], b[1] + b[3], z0 - 0.05], [b[0], b[1] + b[3], z0 - 0.05]], tma ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.04)', f.on ? okb : obrys, i, null, -9);
       f.ch.forEach(([x, y, w, h]) => quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], C.ch, null, i, null, -8));
       const krab = (x, y, w, h, pod, st, m, ma, al) => { quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], pod, null, i, m, -5);
-        [[[x, y], [x + w, y]], [[x + w, y], [x + w, y + h]], [[x + w, y + h], [x, y + h]], [[x, y + h], [x, y]]].forEach(([A, B]) => quad([[A[0], A[1], z0], [B[0], B[1], z0], [B[0], B[1], z0 + VH], [A[0], A[1], z0 + VH]], st, ma ? warn : obrys, i, m, 3, al)); };
+        [[[x, y], [x + w, y]], [[x + w, y], [x + w, y + h]], [[x + w, y + h], [x, y + h]], [[x, y + h], [x, y]]].forEach(([A, B], ei) => quad([[A[0], A[1], z0], [B[0], B[1], z0], [B[0], B[1], z0 + VH], [A[0], A[1], z0 + VH]], st, ma ? warn : obrys, i, m, 3, al, ei)); };
       f.sch.forEach(([x, y, w, h, d]) => krab(x, y, w, h, d === 'vytah' ? C.vyt : d && d !== 'sch' ? C.tech : C.sch, d === 'vytah' ? C.vyt : 'rgba(110,118,114,.85)', null, 0, 0.8));
       f.m.forEach((r) => { const bt = (r.t && C.t[r.t]) || C.m; krab(r.X + 0.15, r.Y + 0.15, r.W - 0.3, r.H - 0.3, r.ma ? C.ma : bt, r.ma ? warn : bt, r.m || null, r.ma, r.ma ? 0.42 : 0.3); }); });
     // shora: vyšší patro vždy před nižším; v patře podlahy pod stěnami, stěny podle hloubky
     F.sort((x, y) => x.i - y.i || x.lay - y.lay || x.d - y.d); plochy = F;
+    // nápisy místností „namalované barvou“: leží v rovině podlahy nebo vnější stěny (jen posunutí a natočení plochy, žádné otáčení k divákovi).
+    // Silný je jen jeden – shora podlaha, ze strany stěna; druhý je světlý a průhledný. Malé (pod 8 px) se nekreslí.
+    const pocty = { podlaha: 0, stena: 0, slabe: 0, obe: 0, vzor: null }, LAB = new Map(), sm = (t) => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
+    const o0 = P(0, 0, 0), sv = (dx, dy, dz) => { const q = P(dx, dy, dz); return [q[0] - o0[0], q[1] - o0[1]]; }, mw = (t, wg) => { const k = wg + '|' + t; if (!MW.has(k)) { ctx.font = `${wg} 40px system-ui,sans-serif`; MW.set(k, ctx.measureText(t).width / 40); } return MW.get(k); };
+    const det = (a, b) => a[0] * b[1] - a[1] * b[0], MIN = 8, us0 = sv(0, 0, 1);
+    D.f.forEach((f, i) => { const z0 = i * G, okoli = [...f.m.map((r) => [r.X, r.Y, r.W, r.H]), ...f.ch, ...f.sch.map((x) => x.slice(0, 4))];
+      f.m.forEach((r) => { if (!r.m) return; const druh = r.t && TYP_MIST[r.t] ? TYP_MIST[r.t] : ''; let pod = null, st = null;
+        // podlaha: text podél osy, která na obrazovce nejvíc míří doprava; nikdy vzhůru nohama ani zrcadlově
+        [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { const ds = sv(dx, dy, 0); [1, -1].forEach((sg) => { const us = sv(-dy * sg, dx * sg, 0); if (det(ds, [-us[0], -us[1]]) <= 0 || us[1] >= 0) return;
+          const del = dx ? r.W : r.H, pri = dx ? r.H : r.W, w1 = mw(r.m, 700), w2 = druh ? mw(druh, 600) * 0.62 : 0; const fsB = Math.min(pri * 0.44, (del * 0.84) / Math.max(w1, 0.1)), fsA = druh ? Math.min((pri * 0.8) / 1.7, (del * 0.84) / Math.max(w1, w2, 0.1)) : 0;
+          const sD = fsA >= fsB * 0.7, fs = sD ? fsA : fsB, hs = Math.hypot(us[0], us[1]) * fs, sk = ds[0] / Math.hypot(ds[0], ds[1]) + 0.25 * Math.min(1, hs / 30);
+          if (!pod || sk > pod.sk) pod = { ds, us, fs, hs, sk, t1: r.m, t2: sD ? druh : '', c: P(r.X + r.W / 2, r.Y + r.H / 2, z0) }; }); });
+        // vnější stěna: ta, co míří ven (ne do chodby ani k sousední místnosti) a nejvíc k divákovi
+        [[0, -1, r.X, r.Y, r.X + r.W, r.Y], [1, 0, r.X + r.W, r.Y, r.X + r.W, r.Y + r.H], [0, 1, r.X + r.W, r.Y + r.H, r.X, r.Y + r.H], [-1, 0, r.X, r.Y + r.H, r.X, r.Y]].forEach(([nx, ny, ax, ay, bx, by], ei) => {
+          const fac = nx * sz + ny * cz; if (fac < 0.15) return; const mx = (ax + bx) / 2 + nx * 1.2, my = (ay + by) / 2 + ny * 1.2; if (okoli.some(([X, Y, W2, H2]) => mx > X && mx < X + W2 && my > Y && my < Y + H2)) return;
+          const len = Math.hypot(bx - ax, by - ay); let ds = sv((bx - ax) / len, (by - ay) / len, 0); if (ds[0] < 0) ds = [-ds[0], -ds[1]]; if (det(ds, [-us0[0], -us0[1]]) <= 0) return;
+          const fs = Math.min(VH * 0.38, (len * 0.8) / Math.max(mw(r.m, 700), 0.1)), hs = Math.hypot(us0[0], us0[1]) * fs, vid = fac * len;
+          if (!st || vid > st.vid) st = { ei, ds, us: us0, fs, hs, fac, vid, t1: r.m, t2: '', c: P((ax + bx) / 2, (ay + by) / 2, z0 + VH * 0.5) }; });
+        const okP = pod && pod.hs >= MIN, okS = st && st.hs >= MIN; if (!okP && !okS) return;
+        const wP = okP ? Math.cos(pp) : 0, wS = okS ? Math.sin(pp) * st.fac * 0.85 : 0, t = sm((wP / Math.max(1e-6, wP + wS) - 0.47) / 0.06), pa = okP ? 0.14 + 0.74 * t : 0, sa = okS ? 0.14 + 0.74 * (1 - t) : 0;
+        LAB.set(i + '|' + r.m, { pod, st, pa, sa }); if (pa > 0.5) pocty.podlaha++; if (sa > 0.5) pocty.stena++; if ((pa && pa <= 0.5) || (sa && sa <= 0.5)) pocty.slabe++; if (pa > 0.5 && sa > 0.5) pocty.obe++;
+        if (!pocty.vzor && okP) pocty.vzor = { x: [pod.ds[0], pod.ds[1]], y: [-pod.us[0], -pod.us[1]] }; }); });
+    const maluj = (o, al) => { const k = 40 / o.fs; ctx.save(); ctx.setTransform((dpr * o.ds[0]) / k, (dpr * o.ds[1]) / k, (-dpr * o.us[0]) / k, (-dpr * o.us[1]) / k, dpr * o.c[0], dpr * o.c[1]);
+      ctx.globalAlpha = al; ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '700 40px system-ui,sans-serif'; ctx.fillText(o.t1, 0, o.t2 ? -13 : 0);
+      if (o.t2) { ctx.font = '600 25px system-ui,sans-serif'; ctx.fillText(o.t2, 0, 22); } ctx.restore(); };
     F.forEach((f) => { const h = hov && f.m && f.m === hov.m && D.f[f.i].k === hov.k; ctx.beginPath(); f.q.forEach((b, j) => (j ? ctx.lineTo(b[0], b[1]) : ctx.moveTo(b[0], b[1]))); ctx.closePath(); ctx.globalAlpha = h ? Math.max(f.a, 0.88) : f.a; ctx.fillStyle = f.fill; ctx.fill(); ctx.globalAlpha = 1;
-      if (h) { ctx.strokeStyle = okb; ctx.lineWidth = 1.8; ctx.stroke(); } else if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = 0.7; ctx.stroke(); } });
+      if (h) { ctx.strokeStyle = okb; ctx.lineWidth = 1.8; ctx.stroke(); } else if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = 0.7; ctx.stroke(); }
+      const L = f.m && LAB.get(f.i + '|' + f.m); if (L) { if (f.lay === 2 && L.pa) maluj(L.pod, h ? Math.max(L.pa, 0.94) : L.pa); else if (f.hr != null && L.st && f.hr === L.st.ei && L.sa) maluj(L.st, h && L.sa > 0.5 ? 1 : L.sa); } });
+    popN = pocty;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     if (hov && mys) { const f = D.f.find((x) => x.k === hov.k), r = f && f.m.find((x) => x.m === hov.m); if (r) { const t = `${r.m}${r.t && TYP_MIST[r.t] ? ' · ' + TYP_MIST[r.t] : ''}${r.ma ? ' · ' + r.ma + ' nesplněné' : ''} · ${f.nm}`; ctx.font = '600 13px system-ui,sans-serif'; const w = ctx.measureText(t).width + 16, x = Math.min(W - w - 4, mys[0] + 14), y = Math.max(4, mys[1] - 34);
       ctx.fillStyle = plo; ctx.strokeStyle = okb; ctx.lineWidth = 1.5; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, 26, 8); else ctx.rect(x, y, w, 26); ctx.fill(); ctx.stroke(); ctx.fillStyle = ink; ctx.textAlign = 'left'; ctx.fillText(t, x + 8, y + 13.5); ctx.textAlign = 'center'; } }
@@ -3657,10 +3685,10 @@ function gm3sInit(el) {
     // štítky pater vlevo od patra, rozestoupené, ať se nepřekrývají
     ctx.font = '700 14px system-ui,sans-serif'; const SL = D.f.map((f, i) => { const b = f.box; let lx = Infinity, ly = 0; [[b[0], b[1]], [b[0] + b[2], b[1]], [b[0] + b[2], b[1] + b[3]], [b[0], b[1] + b[3]]].forEach(([X, Y]) => { const q = P(X, Y, i * G + VH / 2); if (q[0] < lx) { lx = q[0]; ly = q[1]; } });
       const t = f.nm + (f.c ? '  ' + f.c : ''), w = ctx.measureText(t).width + 18; return { f, t, w, x: Math.max(4, lx - w - 10), y: ly - 14 }; }).reverse();
-    SL.forEach((s, j) => { if (j && s.y < SL[j - 1].y + 32) s.y = SL[j - 1].y + 32; }); const pres = SL.length ? SL[SL.length - 1].y + 28 - (H - 4) : 0; if (pres > 0) SL.forEach((s) => { s.y -= pres; });
-    stit = SL.map(({ f, t, w, x, y }) => { const h = 28; y = Math.max(4, y);
+    SL.forEach((s, j) => { if (!j) s.y = Math.max(70, s.y); else if (s.y < SL[j - 1].y + 32) s.y = SL[j - 1].y + 32; }); const pres = SL.length ? SL[SL.length - 1].y + 28 - (H - 4) : 0; if (pres > 0) SL.forEach((s) => { s.y -= pres; });
+    stit = SL.map(({ f, t, w, x, y }) => { const h = 28; y = Math.max(70, y); if (y + h > H - 80 && x < 190) return null;
       ctx.fillStyle = f.on ? okb : plo; ctx.strokeStyle = f.on ? okb : obrys; ctx.lineWidth = 1; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, 8); else ctx.rect(x, y, w, h); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = f.on ? '#fff' : ink; ctx.textAlign = 'left'; ctx.fillText(t, x + 9, y + h / 2 + 0.5); return { k: f.k, x, y, w, h }; });
+      ctx.fillStyle = f.on ? '#fff' : ink; ctx.textAlign = 'left'; ctx.fillText(t, x + 9, y + h / 2 + 0.5); return { k: f.k, x, y, w, h }; }).filter(Boolean);
     const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.zm <= 0.501; if (zp) zp.disabled = v.zm >= 3.999; };
   const vPoly = (x, y, q) => { let c = false; for (let i = 0, j = q.length - 1; i < q.length; j = i++) { if ((q[i][1] > y) !== (q[j][1] > y) && x < ((q[j][0] - q[i][0]) * (y - q[i][1])) / (q[j][1] - q[i][1]) + q[i][0]) c = !c; } return c; };
   const vyber = (x, y) => { const t = stit.find((s) => x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h); if (t) return { k: t.k, m: null }; for (let j = plochy.length - 1; j >= 0; j--) { const f = plochy[j]; if (vPoly(x, y, f.q)) return { k: D.f[f.i].k, m: f.m }; } return null; };
@@ -3672,7 +3700,7 @@ function gm3sInit(el) {
     const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm', 'px', 'py'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
   const kl = (x, y) => { const r = el.getBoundingClientRect(); return [x - r.left, y - r.top]; }, ven = (x, y) => { const r = el.getBoundingClientRect(); return [r.left + x, r.top + y]; };
   el._gm = { kresli, rozm: () => ({ l: 0, t: 0, SW: 0, SH: 0 }), zoomBod: (f, x, y, ms) => anim3({ zm: v.zm * f }, ms), fit: (ms) => anim3({ ...Z0, rz: Z0.rz + Math.round((v.rz - Z0.rz) / 360) * 360 }, ms), pohled: () => ({ ...v }),
-    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), hover: () => (hov ? hov.m : null), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
+    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), hover: () => (hov ? hov.m : null), popisky: () => ({ ...popN }), dvojite: () => popN.obe, nastav: (o) => anim3(o, 0), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
     najdi: (m) => { const f = plochy.filter((q) => q.m === m); for (const q of f) { const cx = q.q.reduce((a, b) => a + b[0], 0) / q.q.length, cy = q.q.reduce((a, b) => a + b[1], 0) / q.q.length; const h = vyber(cx, cy); if (h && h.m === m) return ven(cx, cy); } return null; } };
   kresli(); if (GM_RO) GM_RO.observe(el);
   const P = new Map(); let tah = false, st = null, pin = null;
