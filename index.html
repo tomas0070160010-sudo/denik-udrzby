@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v54"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v55"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -223,6 +223,9 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpp button b{margin-left:5px;background:var(--warn);color:#fff;border-radius:999px;padding:0 6px;font-size:11.5px}
 .bpx{border:1px solid var(--line);border-radius:10px;background:var(--bg)}
 .bpsw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:6px}
+.kdeP{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer;text-align:left}.kdeP .bpsw{overflow:hidden;max-width:620px}.kdeP .bpsvg{width:100%!important;max-width:620px;overflow:hidden}
+.kde .bpm.on rect{stroke:var(--err);stroke-width:1.4}.kdeKruh{fill:none;stroke:var(--err);stroke-width:1.1;opacity:.9;animation:kdePul 1.6s ease-in-out 3}
+@keyframes kdePul{50%{opacity:.25}}@media (prefers-reduced-motion:reduce){.kdeKruh{animation:none}}
 .bpsvg{display:block;height:auto;max-width:none;margin:0 auto;overflow:visible}
 .bpch{fill:color-mix(in srgb,var(--fk,#55605b) 10%,var(--plocha))}
 .bpsch rect{fill:color-mix(in srgb,var(--ink) 8%,var(--plocha));stroke:var(--line)}
@@ -968,7 +971,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v54';
+const VERZE = 'v55';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -2755,6 +2758,7 @@ function vDetail(id) {
   const tp = textPoslat(p, S.poslKontakt);
   { const L = (p.fotky || []).map((f, i) => ({ f, i })).filter((x) => x.f.id).sort((a, b) => (b.f.typ === 'formular') - (a.f.typ === 'formular') || String(a.f.kdy || '').localeCompare(String(b.f.kdy || '')));
     if (L.length || S.assets) o += `<div class="fpas" role="group" aria-label="Fotky požadavku">${L.map(({ f, i }) => `<button data-foto="${i}" aria-label="Fotka ${i + 1}${f.typ === 'formular' ? ' – papír' : ''}"><img src="${fotoUrl(f)}" alt="" loading="lazy">${f.typ === 'formular' ? '<span class="tag">papír</span>' : ''}</button>`).join('')}${S.assets ? `<label class="fdal" for="fotoPridat" title="Přidat fotku">📷<span>Přidat fotku</span></label>` : ''}</div>`; }
+  o += kdeHtml(p);
   o += `<details class="karta posl" style="margin-top:10px"${S.poslOtevreno === p.id ? ' open' : ''}><summary>📤 Poslat do WhatsAppu nebo jinam</summary>
     <p class="small mut" style="margin:6px 0">Text si můžeš upravit. Jméno a telefon objednatele se přidají, jen když zaškrtneš.</p>
     <textarea id="poslText" rows="7" aria-label="Text ke sdílení">${esc(tp)}</textarea>
@@ -3138,6 +3142,8 @@ const PLANY_VEST = {"PEF":{"zdroj":"Vlastní kresba podle plánků pater PEF (pe
 const planVest = (nb) => { const k = BUD_KX[nb] ? null : (MAPA_B[nb] ? nb : mapKlic(nb)); return (k && PLANY_VEST[k]) || null; };
 const planRuc = (nb, k) => { const B = ((S.plany || {}).budovy || {})[nb]; const u = B && B.patra && B.patra[String(k)]; if (u) return u; const V = planVest(nb); const f = V && V.patra[String(k)]; return f ? { ...f, vest: V } : null; };
 const planPatra = (nb) => [...new Set([...Object.keys((((S.plany || {}).budovy || {})[nb] || {}).patra || {}), ...Object.keys((planVest(nb) || {}).patra || {})])].map(Number);
+// místnost z vestavěných plánků podle čísla (přesná shoda): { K, k, m, t }
+function planMistnost(q) { const n = norm(q); if (n.length < 2 || !/\d/.test(n)) return null; for (const K of Object.keys(PLANY_VEST)) { if (!MAPA_B[K]) continue; for (const [k, f] of Object.entries(PLANY_VEST[K].patra)) { const r = (f.m || []).find((x) => x[0] && !x[6] && norm(x[0]) === n); if (r) return { K, k: +k, m: r[0], t: r[5] }; } } return null; }
 const planNazev = (nb, k) => { const f = k !== 'x' && planRuc(nb, k); return (f && f.nazev) || ''; };
 // místnost bez patra v čísle (C11, EI…) – patro podle plánku
 function patroZPlanu(nb, m) { const n = norm(m); for (const k of planPatra(nb)) { const f = planRuc(nb, k); if (f && (f.m || []).some(([x]) => norm(x) === n)) return k; } return null; }
@@ -3162,6 +3168,21 @@ function planSvg(pl, R, nb, sel, pk) { const Rm = new Map(R.map((r) => [norm(r.m
 function planLeg(pl) { const T = [...new Set((pl.m || []).map((x) => x[5]).filter((t) => t && TYP_MIST[t]))]; const vyt = (pl.sch || []).some((s) => s[4] === 'vytah');
   return `<div class="bplg" aria-label="Legenda plánku">${T.map((t) => `<span><i class="t-${t}"></i>${esc(TYP_MIST[t])}</span>`).join('')}<span><i class="bplgs"></i>Schodiště</span>${vyt ? '<span><i class="bplgv">⇅</i>Výtah</span>' : ''}</div>
     <p class="small mut bpleg">✏️ ${esc(pl.vest.zdroj)}. Číslo = nesplněné požadavky · klepni na místnost.</p>`; }
+// 📍 Kde to je (detail požadavku): patro z vlastního plánku, místnost zvýrazněná, ostatní nesplněné na patře s číslem
+function kdeToJe(p) { const nb = budovaKr(p); const m = String(p.mistnost || p.mistoOdhad || '').trim(); if (!m || !nb || nb === 'Bez budovy' || !planPatra(nb).length) return null;
+  const k = patroZPlanu(nb, m); if (k == null) return null; const pl = planRuc(nb, k); if (!pl) return null; const K = mapKlic(nb); return { nb, m, k, pl, K }; }
+// výřez kolem místnosti (ať jsou čísla čitelná i v telefonu); celé patro je v Plánku budovy
+function kdeVyrez(pl, me) { const W = pl.w + 2, H = pl.h + 2, CW = 130, CH = 92, f = (v) => Math.round(v * 10) / 10; if (!me || (W <= CW * 1.2 && H <= CH * 1.2)) return [-1, -1, W, H];
+  const cx = me[1] + me[3] / 2, cy = me[2] + me[4] / 2; const w = Math.min(CW, W), h = Math.min(CH, H); return [f(Math.max(-1, Math.min(W - 1 - w, cx - w / 2))), f(Math.max(-1, Math.min(H - 1 - h, cy - h / 2))), w, h]; }
+function kdeHtml(p) { const x = kdeToJe(p); if (!x) return ''; const v = new Map(); const vPl = (mm) => (x.pl.m || []).find(([a]) => a && norm(a) === norm(mm));
+  S.poz.filter((q) => !q.slouceno && q.stav !== 'hotovy' && norm(budovaKr(q)) === norm(x.nb)).forEach((q) => { const r = vPl(q.mistnost || q.mistoOdhad || ''); if (!r) return; const k = norm(r[0]); v.set(k, { m: r[0], otv: ((v.get(k) || {}).otv || 0) + 1 }); });
+  const R = [...v.values()]; const jine = R.filter((r) => norm(r.m) !== norm(x.m)).sort((a, b) => b.otv - a.otv || a.m.localeCompare(b.m, 'cs', { numeric: true }));
+  const me = vPl(x.m); const kruh = me ? `<circle class="kdeKruh" cx="${me[1] + me[3] / 2}" cy="${me[2] + me[4] / 2}" r="${Math.round((Math.max(me[3], me[4]) / 2 + 5) * 10) / 10}"/>` : '';
+  const svg = planSvg(x.pl, R, x.nb, x.m, x.k).replace(/ data-bp[mbk]="[^"]*"/g, '').replace(/ tabindex="0"/g, '').replace(/ role="button"/g, '').replace(/ aria-pressed="[^"]*"/g, '').replace('</svg>', kruh + '</svg>').replace(/viewBox="[^"]*"/, 'viewBox="' + kdeVyrez(x.pl, me).join(' ') + '"').replace('aria-label="Plánek patra"', `aria-label="Plánek patra ${esc(planNazev(x.nb, x.k) || patroKr(x.k))}, místnost ${esc(x.m)} vyznačená"`);
+  const sum = jine.reduce((a, r) => a + r.otv, 0);
+  return `<div class="karta kde" style="margin-top:10px"><div class="rada" style="gap:8px;margin-bottom:6px"><b>📍 Kde to je</b><span class="small mut">${esc(x.nb)} · ${esc(planNazev(x.nb, x.k) || patroKr(x.k))} · <b>${esc(x.m)}</b>${me && me[5] && TYP_MIST[me[5]] ? ' · ' + esc(TYP_MIST[me[5]]) : ''}</span><button class="btn sm" data-a="kde-mapa" style="margin-left:auto">Plánek budovy →</button></div>
+    <button class="kdeP" data-a="kde-mapa" aria-label="Otevřít plánek budovy ${esc(x.nb)} na patře s místností ${esc(x.m)}">${svg}</button>
+    ${sum ? `<div class="rada small" style="margin-top:6px;gap:6px"><span>Na stejném patře čeká ještě ${sum}:</span>${jine.slice(0, 8).map((r) => `<button class="chip" data-a="kde-mapa" data-m="${esc(r.m)}">${esc(r.m)}${r.otv > 1 ? ' · ' + r.otv : ''}</button>`).join('')}${jine.length > 8 ? '<span class="mut">…</span>' : ''}</div>` : ''}</div>`; }
 function budPlanHtml(K) { const jm = budJmena(K); const nb = jm.find((n) => n === S.bpB) || jm.find((n) => budMistnosti(K, n, jm).some((r) => r.otv)) || jm[0]; const R = budMistnosti(K, nb, jm);
   R.forEach((r) => { if (r.patro == null && planPatra(nb).length) { const k = patroZPlanu(nb, r.m); if (k != null) r.patro = k; } });
   const P = new Map(); R.forEach((r) => { const k = r.patro == null ? 'x' : r.patro; if (!P.has(k)) P.set(k, []); P.get(k).push(r); });
@@ -3298,6 +3319,7 @@ document.addEventListener('input', (e) => {
   if (e.target.id === 'najC' && S.naj) { S.naj.q = e.target.value; S.naj.zustat = true; const pos = e.target.selectionStart; vykresli(); const f = $('#najC'); if (f) { f.focus(); f.setSelectionRange(pos, pos); } return; }
   if (e.target.id === 'mapQ') { S.mapQ = e.target.value; const q = S.mapQ.trim(); S.mapHl = ''; S.mapNasel = '';
     if (q) { const H = ucHledej(q); const u = H.presne[0]; if (u) { const k = UC2MAPA[u.b] || u.b; if (MAPA_B[k]) { S.mapHl = k; S.mapSel = k; S.bpB = budJmena(k)[0]; S.bpP = null; S.bpSel = { b: S.bpB, m: ucKod(u.k) }; S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(MAPA_B[k][2])}${u.patro != null ? ', ' + esc(ucPatroTx(u.patro)) : ''}`; } else S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(u.nazev)} (mimo tenhle plán)`; }
+      else if (planMistnost(q)) { const f = planMistnost(q); S.mapHl = f.K; S.mapSel = f.K; S.bpB = budJmena(f.K)[0]; S.bpP = { b: S.bpB, k: f.k }; S.bpSel = { b: S.bpB, m: f.m }; S.mapNasel = `📍 <b>${esc(f.m)}</b> → ${esc(MAPA_B[f.K][2])}, ${esc(planNazev(S.bpB, f.k) || patroKr(f.k))}${f.t && TYP_MIST[f.t] ? ' · ' + esc(TYP_MIST[f.t]) : ''}`; }
       else { const nq = norm(q); const k = Object.keys(MAPA_B).find((x) => norm(MAPA_B[x][2]).includes(nq)) || (mapKlic(q) || ''); if (k && MAPA_B[k]) { S.mapHl = k; S.mapNasel = '→ ' + esc(MAPA_B[k][2]); } else if (q.length >= 2) S.mapNasel = '<span class="mut">Nic takového na plánu.</span>'; } }
     const pos = e.target.selectionStart; vykresli(); const f = $('#mapQ'); if (f) { f.focus(); f.setSelectionRange(pos, pos); }
     if (S.mapHl) { const m = $('.mk.hl'); if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }); } return; }
@@ -3795,6 +3817,9 @@ document.addEventListener('click', async (e) => {
     S.ai.navrh = false; vykresli(); return;
   }
   if (a === 'nove-misto') { const m = { id: 'm-' + Date.now().toString(36), budova: p.budova || '', mistnost: p.mistnost || p.mistoOdhad || '' }; await ulozMisto(m); toast('Místo přidáno – doplň rozvaděč a svítidla.'); location.hash = 'misto=' + encodeURIComponent(mistoKlic(m)); return; }
+  if (a === 'kde-mapa') { const x = kdeToJe(p); if (!x || !MAPA_B[x.K]) return; const nb = budJmena(x.K).find((n) => norm(n) === norm(x.nb)) || x.nb;
+    S.mapSel = x.K; S.mapHl = x.K; S.bpB = nb; S.bpP = { b: nb, k: x.k }; S.bpSel = { b: nb, m: b.dataset.m || x.m }; location.hash = 'mapa';
+    setTimeout(() => { const d = $('.mdet .bpl'); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); return; }
   if (a === 'smazat') { S.mazat = p.id; vykresli(); return; }
   if (a === 'smazat-ne') { S.mazat = null; vykresli(); return; }
   if (a === 'smazat-ano') { await smazPoz(p.id); S.mazat = null; toast('Smazáno. Ještě 30 dní je v koši (Záloha → Koš).'); location.hash = 'seznam'; return; }
