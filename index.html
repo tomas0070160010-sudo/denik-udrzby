@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v64"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v65"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -348,6 +348,30 @@ kbd{font:600 12px var(--f-mono);border:1px solid var(--line);border-bottom-width
 .ds-hod{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;border:1px solid var(--line);background:var(--plocha)}.ds-hod span{flex:1;font-size:17px}.ds-hod b{min-width:64px;text-align:center;font-size:20px}.ds-hod button{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:26px;cursor:pointer}.ds-hod button:disabled{opacity:.4}
 .ds-spl{min-height:62px;border-radius:16px;border:0;background:var(--ok);color:#fff;font:inherit;font-weight:700;font-size:21px;cursor:pointer}.ds-spl.zpet{background:transparent;color:var(--ink);border:1px solid var(--line);font-size:17px;min-height:52px}
 .ds-podr{margin:18px 0 6px;color:var(--mut)}
+.gm{position:relative;overflow:hidden;overflow:clip;aspect-ratio:var(--gar,1.6);width:100%;max-height:72vh;min-height:300px;border:1px solid var(--line);border-radius:12px;background:#dfe7d8;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;outline:none;overscroll-behavior:contain;box-sizing:border-box}
+.gm:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 55%,transparent)}.gm.gm-tah{cursor:grabbing}
+.gm-l{position:absolute;left:0;top:0;width:100%;transform-origin:0 0}.gm .gm-l.areal{position:absolute;min-width:0}
+.gm-plan{background:var(--bg)}.gm-shora{background:color-mix(in srgb,var(--ink) 4%,var(--plocha))}
+.gm .mk,.gm .mzak,.gm .alab{transform-origin:0 0;transform:scale(calc(1 / var(--gs,1))) translate(-50%,-50%)}.gm .alab.pod{transform:scale(calc(1 / var(--gs,1))) translate(-50%,14px)}
+.gm .ashora .ab,.gm .ashora .ak,.gm .ashora .ach,.gm .ashora .mtrs{vector-effect:non-scaling-stroke}
+.gm-ui{touch-action:manipulation;cursor:default;user-select:none}
+.gm-ctl{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:6}
+.gm-ctl button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--plocha) 94%,transparent);color:var(--ink);font:600 24px/1 var(--f-ui);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.18);padding:0}
+.gm-ctl button:disabled{opacity:.4;cursor:default}.gm-ctl svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gm .gm-pat{position:absolute;right:8px;top:60px;z-index:5;display:flex;flex-direction:column;flex-wrap:nowrap;gap:4px;margin:0;padding:4px;max-height:calc(100% - 68px);overflow:auto;border-radius:14px;background:color-mix(in srgb,var(--plocha) 94%,transparent);box-shadow:0 1px 6px rgba(0,0,0,.22);touch-action:pan-y}
+.gm .gm-pat button{position:relative;min-width:56px;min-height:46px;padding:4px 6px;border-radius:10px;font-size:13px;line-height:1.15;white-space:normal;flex:none}
+.gm .gm-pat button b{position:absolute;top:-2px;right:-2px;margin:0}
+.gm-sheet{position:absolute;left:8px;right:94px;bottom:8px;max-width:460px;max-height:48%;overflow:auto;z-index:5;touch-action:pan-y;border-radius:14px;background:var(--plocha);box-shadow:0 2px 14px rgba(0,0,0,.3);user-select:text;-webkit-user-select:text;cursor:auto}
+.gm-sheet .bpd{margin:0;border:0}
+.gm-bez{aspect-ratio:auto!important;height:auto!important;min-height:320px;max-height:none;touch-action:auto;cursor:default;user-select:text;background:var(--bg)}
+.gm-bezin{padding:12px 96px 12px 12px}.gm-bez .gm-pat{top:8px;max-height:calc(100% - 16px)}
+.gm-bez .gm-sheet{position:relative;left:auto;right:auto;bottom:auto;margin:0 96px 12px 12px;max-height:none}
+.gm.gm-full{position:fixed;inset:0;z-index:70;width:100vw;height:100vh;height:100dvh;max-height:none;min-height:0;aspect-ratio:auto;border-radius:0;border:0}
+html.gm-zamek,html.gm-zamek body{overflow:hidden}
+.gm-vstup .gm-l>*{animation:gmIn .42s cubic-bezier(.2,.8,.2,1);transform-origin:50% 50%}@keyframes gmIn{from{opacity:0;transform:scale(.55)}}
+@media (prefers-reduced-motion:reduce){.gm-vstup .gm-l>*{animation:none}}
+@media (max-width:700px){.gm{aspect-ratio:auto;height:min(64vh,560px);max-height:none}.gm .mk{height:max(26px,var(--v));min-width:max(26px,var(--v))}}
+.mbud .kh{flex-wrap:wrap}
 .dm{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:14px auto 0}.dm-hlav{display:flex;flex-direction:column;gap:2px}.dm-dat{color:var(--mut);font-size:15px}.dm-poz{font-weight:700;font-size:28px;line-height:1.15}
 .dm-doch{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;font-size:17px;text-align:left;text-decoration:none;cursor:pointer}.dm-doch>span:nth-child(2){flex:1}.dm-m{color:var(--mut);font-size:14px}
 .dm-ik{width:22px;height:22px;border-radius:50%;border:3px solid var(--mut);box-sizing:border-box;flex:none}.dm-ik.ok{border-color:var(--ok);background:var(--ok)}
@@ -1029,9 +1053,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v64';
+const VERZE = 'v65';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v65', 'Mapy jako Google Maps – mapou areálu i plánkem budovy posouváš tažením (i s doběhem), přibližuješ kolečkem, dvěma prsty, dvojklepnutím nebo + a −. Tlačítko s terčem ukáže celé, tlačítko s rohy celou obrazovku. Budova s plánkem se otevře přímo v mapě: patra vpravo nad sebou jako na kiosku, vybraná místnost dole i s požadavky, „← Areál“ zpět.'],
   ['v64', 'Přehlednější požadavek – nahoře stav třemi tlačítky, kde to je, co je potřeba, dnešní hodiny tlačítky − a + a velké Splněno. Všechny údaje jsou níž pod „Podrobnosti a úpravy“.'],
   ['v63', 'Pracovní den – úkol po úkolu: Domů → Začít den ukáže jeden úkol, co si vzít a velké Hotovo. „Později“ ho dá na konec, „Nejde – chybí věc“ ho přesune do Čeká na materiál.'],
   ['v62', 'Jednodušší Domů – jen dnešní práce, Nový požadavek, Najít, Mapa a jedno upozornění. Všechno ostatní je pod „Všechno ostatní“ (tam jde zapnout i Domů jako dřív).'],
@@ -3391,7 +3416,22 @@ function budPlanHtml(K) { const jm = budJmena(K); const nb = jm.find((n) => n ==
   const pk = S.bpP && S.bpP.b === nb && P.has(S.bpP.k) ? S.bpP.k : selK != null && P.has(selK) ? selK : pat.find((k) => k !== 'x' && otvP(k)) ?? pat.find((k) => k !== 'x') ?? pat[0];
   const chip = (r, k) => `<button class="bpc${r.otv ? ' ma' : ''}${r.uc ? ' uc' : ''}${norm(sel) === norm(r.m) ? ' on' : ''}" data-bpm="${esc(r.m)}" data-bpb="${esc(nb)}"${k != null ? ` data-bpk="${k}"` : ''} aria-pressed="${norm(sel) === norm(r.m)}" aria-label="Místnost ${esc(r.m)}${r.otv ? ': ' + r.otv + ' nesplněných' : ''}">${esc(r.m)}${r.otv ? `<b>${r.otv}</b>` : ''}</button>`;
   let o = `<div class="bpl"><div class="rada" style="justify-content:space-between;margin-bottom:6px"><b class="small">Plánek budovy</b>${jm.length > 1 ? `<div class="seg" role="group" aria-label="Budova">${jm.map((n) => `<button data-bptab="${esc(n)}" class="${n === nb ? 'on' : ''}" aria-pressed="${n === nb}">${esc(n)}</button>`).join('')}</div>` : ''}</div>`;
-  if (pat.length) { const ruc = pk !== 'x' && planRuc(nb, pk); const vPat = (P.get(pk) || []).slice().sort((a, b) => a.m.localeCompare(b.m, 'cs', { numeric: true }));
+  let bpdH = ''; const kiosk = planPatra(nb).length > 0;
+  if (sel) { const r = R.find((x) => norm(x.m) === norm(sel)) || { m: sel, patro: mistPatro(sel) }; const L = S.poz.filter((p) => !p.slouceno && norm(budovaKr(p)) === norm(nb) && norm(p.mistnost || p.mistoOdhad || '') === norm(sel)).sort((a, b) => (a.stav === 'hotovy') - (b.stav === 'hotovy') || String(b.datum || '').localeCompare(String(a.datum || '')));
+    const mk2 = mistoKlic({ budova: 'ČZU / Suchdol / ' + nb, mistnost: sel }); const maKartu = mk2 && mistaVse().has(mk2);
+    bpdH = `<div class="bpd"><div class="rada" style="gap:8px"><b>${esc(sel)}</b><span class="small mut">${esc(nb)} · ${esc(patroNaz(r.patro))}${r.uc ? ' · ' + esc(r.uc.typ || 'učebna') : ''}</span><button class="btn sm ghost" data-bpm="${esc(sel)}" data-bpb="${esc(nb)}" style="margin-left:auto" aria-label="Zavřít místnost">✕</button></div>
+      ${L.length ? '<div class="seznam" style="margin-top:6px">' + L.slice(0, 8).map(polozka).join('') + '</div>' + (L.length > 8 ? `<p class="small mut">…a dalších ${L.length - 8}</p>` : '') : '<p class="small mut" style="margin:6px 0">Tady zatím žádný požadavek nebyl.</p>'}
+      <div class="rada" style="margin-top:8px"><button class="btn sm p" data-a="bp-novy" data-bpb="${esc(nb)}" data-bpm="${esc(sel)}">+ Nový požadavek tady</button>${maKartu ? `<a class="btn sm" href="#misto=${encodeURIComponent(mk2)}">Karta místa →</a>` : ''}${r.uc ? `<a class="btn sm ghost" href="#ucebny" data-ucq="${esc(r.uc.k)}">🏫 Učebna ${esc(ucKod(r.uc.k))} →</a>` : ''}</div></div>`; }
+  if (pat.length && kiosk) { const ruc = pk !== 'x' && planRuc(nb, pk); const vPat = (P.get(pk) || []).slice().sort((a, b) => a.m.localeCompare(b.m, 'cs', { numeric: true }));
+    const patra = `<div class="seg bpp gm-pat gm-ui" role="group" aria-label="Patro – ${esc(nb)}">${pat.map((k) => `<button data-bpp="${k}" data-bpb="${esc(nb)}" class="${k === pk ? 'on' : ''}" aria-pressed="${k === pk}" aria-label="${esc(planNazev(nb, k) || patroNaz(k === 'x' ? null : k))}${otvP(k) ? ': ' + otvP(k) + ' nesplněných' : ''}">${esc(planNazev(nb, k) || patroKr(k))}${otvP(k) ? `<b>${otvP(k)}</b>` : ''}</button>`).join('')}</div>`; const sheet = bpdH ? `<div class="gm-sheet gm-ui">${bpdH}</div>` : ''; const pn = planNazev(nb, pk) || patroKr(pk);
+    if (ruc) { const bb = planBox(ruc); const mimo = vPat.filter((r) => !(ruc.m || []).some(([m]) => norm(m) === norm(r.m)));
+      const svg = planSvg(ruc, R, nb, sel, pk).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, ' style="width:100%"');
+      o += `<div class="gm gm-plan${S.gmVstup ? ' gm-vstup' : ''}" data-gm="plan|${esc(nb)}|${pk}" data-gmk="plan" data-gmu="${bb[2]}" data-gmr="94" data-gmf="${sel ? '.bpm.on' : '.bpm.ma'}" data-gmsel="${esc(sel)}" tabindex="0" role="region" aria-label="Plánek ${esc(nb)}, ${esc(pn)} – posouváš tažením, přiblížíš kolečkem, dvěma prsty nebo dvojklepnutím" style="--gar:${Math.round((bb[2] / bb[3]) * 1e4) / 1e4}"><div class="gm-l" style="aspect-ratio:${bb[2]} / ${bb[3]}">${svg}</div>${gmCtl('plan')}${patra}${sheet}</div>`
+        + (mimo.length ? `<p class="small" style="margin:6px 0 0">Ještě nejsou v plánku: ${mimo.map((r) => chip(r, pk)).join(' ')}</p>` : '')
+        + (ruc.vest ? planLeg(ruc) : `<p class="small mut bpleg">✏️ Plánek podle skutečného podkladu${ruc.pozn ? ' – ' + esc(ruc.pozn) : ''}. Číslo = nesplněné · čárkovaně = učebna ČZU.</p>`); }
+    else o += `<div class="gm gm-plan gm-bez" data-gmr="94"><div class="gm-bezin">${vPat.length ? `<div class="bpr bpx">${vPat.map((r) => chip(r, pk)).join('')}</div>` : '<p class="small mut" style="margin:0">Na tomhle patře zatím nic.</p>'}</div>${patra}${sheet}</div>`
+      + `<p class="small mut bpleg">${pk === 'x' ? 'U těchhle místností nepoznám patro z čísla. Číslo = nesplněné požadavky.' : 'Plánek tohohle patra zatím nemám – místnosti jsou jen seznam (patro podle čísla místnosti). Pošli mi fotku evakuačního plánu a nakreslím ho podle skutečnosti. Číslo = nesplněné · čárkovaně = učebna ČZU.'}</p>`; }
+  else   if (pat.length) { const ruc = pk !== 'x' && planRuc(nb, pk); const vPat = (P.get(pk) || []).slice().sort((a, b) => a.m.localeCompare(b.m, 'cs', { numeric: true }));
     o += `<div class="seg bpp" role="group" aria-label="Patro – ${esc(nb)}">${pat.map((k) => `<button data-bpp="${k}" data-bpb="${esc(nb)}" class="${k === pk ? 'on' : ''}" aria-pressed="${k === pk}" aria-label="${esc(planNazev(nb, k) || patroNaz(k === 'x' ? null : k))}${otvP(k) ? ': ' + otvP(k) + ' nesplněných' : ''}">${esc(planNazev(nb, k) || patroKr(k))}${otvP(k) ? `<b>${otvP(k)}</b>` : ''}</button>`).join('')}</div>`;
     if (pk === 'x') o += `<div class="bpr bpx">${vPat.map((r) => chip(r, 'x')).join('')}</div><p class="small mut bpleg">U těchhle místností nepoznám patro z čísla. Číslo = nesplněné požadavky.</p>`;
     else if (ruc) { const mimo = vPat.filter((r) => !(ruc.m || []).some(([m]) => norm(m) === norm(r.m)));
@@ -3399,21 +3439,101 @@ function budPlanHtml(K) { const jm = budJmena(K); const nb = jm.find((n) => n ==
         + (ruc.vest ? planLeg(ruc) : `<p class="small mut bpleg">✏️ Plánek podle skutečného podkladu${ruc.pozn ? ' – ' + esc(ruc.pozn) : ''}. Číslo = nesplněné · čárkovaně = učebna ČZU.</p>`); }
     else o += `<div class="bpr bpx">${vPat.map((r) => chip(r, pk)).join('')}</div><p class="small mut bpleg">Plánek tohohle patra zatím nemám – místnosti jsou jen seznam (patro podle čísla místnosti). Pošli mi fotku evakuačního plánu a nakreslím ho podle skutečnosti. Číslo = nesplněné · čárkovaně = učebna ČZU.</p>`; }
   else o += `<p class="small mut" style="margin:0 0 6px">V ${esc(nb)} zatím neznám žádnou místnost – napiš číslo níž a založ požadavek.</p>`;
-  if (sel) { const r = R.find((x) => norm(x.m) === norm(sel)) || { m: sel, patro: mistPatro(sel) }; const L = S.poz.filter((p) => !p.slouceno && norm(budovaKr(p)) === norm(nb) && norm(p.mistnost || p.mistoOdhad || '') === norm(sel)).sort((a, b) => (a.stav === 'hotovy') - (b.stav === 'hotovy') || String(b.datum || '').localeCompare(String(a.datum || '')));
-    const mk2 = mistoKlic({ budova: 'ČZU / Suchdol / ' + nb, mistnost: sel }); const maKartu = mk2 && mistaVse().has(mk2);
-    o += `<div class="bpd"><div class="rada" style="gap:8px"><b>${esc(sel)}</b><span class="small mut">${esc(nb)} · ${esc(patroNaz(r.patro))}${r.uc ? ' · ' + esc(r.uc.typ || 'učebna') : ''}</span><button class="btn sm ghost" data-bpm="${esc(sel)}" data-bpb="${esc(nb)}" style="margin-left:auto" aria-label="Zavřít místnost">✕</button></div>
-      ${L.length ? '<div class="seznam" style="margin-top:6px">' + L.slice(0, 8).map(polozka).join('') + '</div>' + (L.length > 8 ? `<p class="small mut">…a dalších ${L.length - 8}</p>` : '') : '<p class="small mut" style="margin:6px 0">Tady zatím žádný požadavek nebyl.</p>'}
-      <div class="rada" style="margin-top:8px"><button class="btn sm p" data-a="bp-novy" data-bpb="${esc(nb)}" data-bpm="${esc(sel)}">+ Nový požadavek tady</button>${maKartu ? `<a class="btn sm" href="#misto=${encodeURIComponent(mk2)}">Karta místa →</a>` : ''}${r.uc ? `<a class="btn sm ghost" href="#ucebny" data-ucq="${esc(r.uc.k)}">🏫 Učebna ${esc(ucKod(r.uc.k))} →</a>` : ''}</div></div>`; }
+  if (!kiosk) o += bpdH;
   o += `<div class="rada" style="margin-top:8px"><input id="bpNova" placeholder="Jiná místnost – např. 214" aria-label="Jiná místnost v ${esc(nb)}" style="flex:1 1 160px;min-width:0;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--plocha)"><button class="btn sm" data-a="bp-novy" data-bpb="${esc(nb)}">+ Nový požadavek</button></div></div>`;
   return o; }
 const shora0 = () => S.mapPohled !== 'plan';
 const MAP_KR = { SKL: 'Skleníky', STAJ: 'Stáj', CZV: 'CZV', POTR: 'Potravinářský p.', MCEV: 'MCEV', HT: 'Hi-tech p.', DP: 'Dřevařský p.', R: 'Rektorát', LIB: 'Knihovna', P1: 'Point One' };
 const mapKr = (k) => MAP_KR[k] || MAPA_B[k][2];
 const mapFak = (k) => (k === 'STAJ' ? 'FAPPZ' : k === 'CZV' || k === 'SKL' ? '' : fakBud(MAPA_B[k] ? MAPA_B[k][2] : ''));
+// v65: mapy jako Google Maps – posun tažením (s doběhem), přiblížení kolečkem, dvěma prsty, dvojklepnutím a tlačítky, celá obrazovka.
+// Každé okno si pamatuje pohled (GMV) i po překreslení: s = přiblížení (1 = šířka okna), cx/cy = bod obsahu uprostřed volné plochy (0–1).
+const GMV = {}; let GM_SCR = 0, GM_TAP = { t: 0, x: 0, y: 0, k: '' };
+addEventListener('scroll', () => { GM_SCR = performance.now(); }, { passive: true });
+const gmPomalu = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const budMaPlan = (K) => !!K && !!MAPA_B[K] && budJmena(K).some((n) => planPatra(n).length > 0);
+const GM_IK = { fit: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/></svg>', full: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>', zpet: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>' };
+const gmCtl = (druh) => { const f = S.gmFull === druh; return `<div class="gm-ctl gm-ui" role="group" aria-label="Ovládání mapy"><button type="button" data-gmz="-1" aria-label="Oddálit" title="Oddálit">−</button><button type="button" data-gmz="1" aria-label="Přiblížit" title="Přiblížit">+</button><button type="button" data-gmfit aria-label="Ukázat celé" title="Ukázat celé">${GM_IK.fit}</button><button type="button" data-gmfull aria-pressed="${f}" aria-label="${f ? 'Zavřít celou obrazovku' : 'Celá obrazovka'}" title="${f ? 'Zavřít celou obrazovku (Esc)' : 'Celá obrazovka'}">${f ? GM_IK.zpet : GM_IK.full}</button></div>`; };
+const GM_RO = window.ResizeObserver ? new ResizeObserver((L) => L.forEach((x) => { const el = x.target; if (el._gm && el.isConnected) el._gm.kresli(); })) : null;
+function gmVsechny() { if (GM_RO) GM_RO.disconnect(); document.querySelectorAll('.gm[data-gm]').forEach(gmInit); S.gmVstup = 0; S.gmLet = ''; S.gmZpet = '';
+  if (!document.querySelector('.gm.gm-full')) { document.documentElement.classList.remove('gm-zamek'); if (!document.querySelector('.gm[data-gm]')) S.gmFull = ''; } }
+// poloha prvku v obsahu (0–1) – z kresby SVG nebo z left/top značky, nezávisle na právě běžícím přiblížení
+function gmRel(L, x) { const sv = x.ownerSVGElement; if (sv && x.getBBox) { const b = x.getBBox(), vb = sv.viewBox.baseVal; if (vb && vb.width) return [(b.x + b.width / 2 - vb.x) / vb.width, (b.y + b.height / 2 - vb.y) / vb.height, b.width / vb.width, b.height / vb.height]; }
+  if (x.style && x.style.left.endsWith('%')) return [parseFloat(x.style.left) / 100, parseFloat(x.style.top) / 100, 0.02, 0.02];
+  const lb = L.getBoundingClientRect(), b = x.getBoundingClientRect(); return [(b.left + b.width / 2 - lb.left) / lb.width, (b.top + b.height / 2 - lb.top) / lb.height, b.width / lb.width, b.height / lb.height]; }
+function gmInit(el) {
+  if (el._gm) return; const L = el.querySelector('.gm-l'); if (!L) return; const key = el.dataset.gm, druh = el.dataset.gmk || 'areal';
+  if (S.gmFull === druh) { el.classList.add('gm-full'); document.documentElement.classList.add('gm-zamek'); }
+  const ul = GMV[key]; let v = ul ? { s: ul.s, cx: ul.cx, cy: ul.cy } : null, anim = 0;
+  const rozm = () => { const W = el.clientWidth, H = el.clientHeight, w = L.offsetWidth || W, h = L.offsetHeight || W; const sh = el.querySelector('.gm-sheet');
+    const l = 10, t = 60, r = +el.dataset.gmr || 10, b = sh && getComputedStyle(sh).position === 'absolute' ? sh.offsetHeight + 18 : 10; return { W, H, w, h, l, t, r, b, SW: Math.max(60, W - l - r), SH: Math.max(60, H - t - b) }; };
+  const cont = (R) => Math.min(R.SW / R.w, R.SH / R.h);
+  const meze = (R) => { const c = cont(R); return [c, Math.max(c * 3, +el.dataset.gmu ? (14 * +el.dataset.gmu) / R.w : 8)]; };
+  // obsah menší než volná plocha je uprostřed; větší ji musí pokrýt (mapa areálu smí zajet i pod tlačítka, plánek ne – místnosti by se schovaly pod patra)
+  const omez = (R, q) => { const [a, b] = meze(R); q.s = Math.max(a, Math.min(b, q.s || a)); const cw = R.w * q.s, ch = R.h * q.s, cel = druh === 'areal';
+    const osa = (c, sz, lo, SS, CC) => { const t = lo + SS / 2 - c * sz; if (sz <= SS) return lo + (SS - sz) / 2; const [mn, mx] = cel && sz >= CC ? [CC - sz, 0] : [lo + SS - sz, lo]; return Math.max(mn, Math.min(mx, t)); };
+    const tx = osa(q.cx, cw, R.l, R.SW, R.W), ty = osa(q.cy, ch, R.t, R.SH, R.H); q.cx = (R.l + R.SW / 2 - tx) / cw; q.cy = (R.t + R.SH / 2 - ty) / ch; return q; };
+  const kresli = () => { const R = rozm(); v = omez(R, v); const tx = R.l + R.SW / 2 - v.cx * R.w * v.s, ty = R.t + R.SH / 2 - v.cy * R.h * v.s;
+    L.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${v.s.toFixed(5)})`; L.style.setProperty('--gs', v.s.toFixed(5));
+    GMV[key] = { s: v.s, cx: v.cx, cy: v.cy, sel: el.dataset.gmsel || '' }; const mw = R.w * v.s; el.querySelectorAll('.alab[data-zw]').forEach((x) => { x.hidden = +x.dataset.zw > mw + 1; });
+    const [a, b] = meze(R); const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.s <= a * 1.002; if (zp) zp.disabled = v.s >= b * 0.998; };
+  const let_ = (cil, ms) => { cancelAnimationFrame(anim); const R = rozm(), z = { ...v }, k = omez(R, { ...cil }); if (!ms || gmPomalu()) { v = k; kresli(); return; }
+    const t0 = performance.now(); L.style.willChange = 'transform';
+    const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); v = { s: Math.exp(Math.log(z.s) + (Math.log(k.s) - Math.log(z.s)) * e), cx: z.cx + (k.cx - z.cx) * e, cy: z.cy + (k.cy - z.cy) * e }; kresli(); if (q < 1) anim = requestAnimationFrame(krok); else L.style.willChange = ''; };
+    anim = requestAnimationFrame(krok); };
+  const zoomBod = (f, px, py, ms) => { const R = rozm(), tx = R.l + R.SW / 2 - v.cx * R.w * v.s, ty = R.t + R.SH / 2 - v.cy * R.h * v.s; const ux = (px - tx) / (R.w * v.s), uy = (py - ty) / (R.h * v.s);
+    const [a, b] = meze(R), s2 = Math.max(a, Math.min(b, v.s * f)); let_({ s: s2, cx: ux - (px - R.l - R.SW / 2) / (R.w * s2), cy: uy - (py - R.t - R.SH / 2) / (R.h * s2) }, ms); };
+  const posun = (dx, dy) => { const R = rozm(); v.cx -= dx / (R.w * v.s); v.cy -= dy / (R.h * v.s); kresli(); };
+  const citelne = (R) => (+el.dataset.gmu ? (3.2 * +el.dataset.gmu) / R.w : 0);
+  const fokus = () => (el.dataset.gmf ? L.querySelector(el.dataset.gmf) : null);
+  const naEl = (x, s) => { const r = gmRel(L, x); return { s, cx: r[0], cy: r[1] }; };
+  el._gm = { kresli, let_, zoomBod, rozm, fit: (ms) => let_({ s: 0, cx: 0.5, cy: 0.5 }, ms), pohled: () => ({ ...v }) };
+  // první pohled: návrat z budovy (oddálení), uložený pohled, nebo celé / přiblížené na místnost
+  const R0 = rozm(), c0 = cont(R0); const naB = (k) => L.querySelector(`path[data-mk="${CSS.escape(k)}"]`) || L.querySelector(`[data-mk="${CSS.escape(k)}"]`);
+  const zp = S.gmZpet && druh === 'areal' ? naB(S.gmZpet) : null;
+  if (zp) { const cil = v || { s: c0, cx: 0.5, cy: 0.5 }; const r = gmRel(L, zp); const sb = Math.min(R0.SW / Math.max(1, r[2] * R0.w), R0.SH / Math.max(1, r[3] * R0.h)) * 0.5; v = { s: Math.max(cil.s * 2, sb), cx: r[0], cy: r[1] }; kresli(); let_(cil, 480); }
+  else if (!v) { const f = fokus(); const s0 = Math.max(c0, +el.dataset.gms0 ? Math.max(+el.dataset.gms0, (R0.H + 2) / R0.h, (R0.W + 2) / R0.w) : 0, citelne(R0)); v = f ? naEl(f, s0) : { s: s0, cx: 0.5, cy: 0.5 }; kresli(); }
+  else { kresli(); const f = fokus(); if (f && el.dataset.gmsel && el.dataset.gmsel !== (ul.sel || '')) let_(naEl(f, Math.max(v.s, citelne(rozm()))), 320); }
+  if (S.gmLet && druh === 'areal') { const x = naB(S.gmLet); if (x) { const g = el.getBoundingClientRect(), b = x.getBoundingClientRect(), R = rozm(); if (b.left < g.left + R.l || b.right > g.right - R.r || b.top < g.top + R.t || b.bottom > g.bottom - R.b) let_(naEl(x, v.s), 380); } }
+  if (GM_RO) GM_RO.observe(el);
+  // tažení, dva prsty, doběh, dvojklepnutí
+  const P = new Map(); let tah = false, st = null, pin = null, rv = { x: 0, y: 0, t: 0 };
+  const bod = (e) => { const g = el.getBoundingClientRect(); return [e.clientX - g.left, e.clientY - g.top]; };
+  const zacni = (e) => { if (tah) return; tah = true; el.classList.add('gm-tah'); L.style.willChange = 'transform'; try { el.setPointerCapture(e.pointerId); } catch {} };
+  const dobeh = (vx, vy) => { let t0 = performance.now(); const krok = (t) => { const dt = Math.min(40, t - t0); t0 = t; posun(vx * dt, vy * dt); const k = Math.pow(0.93, dt / 16); vx *= k; vy *= k; if (Math.hypot(vx, vy) > 0.02) anim = requestAnimationFrame(krok); else L.style.willChange = ''; }; anim = requestAnimationFrame(krok); };
+  el.addEventListener('pointerdown', (e) => { if (e.target.closest('.gm-ui') || (e.pointerType === 'mouse' && e.button !== 0)) return; cancelAnimationFrame(anim);
+    P.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (P.size === 1) { st = { x: e.clientX, y: e.clientY }; tah = false; rv = { x: 0, y: 0, t: performance.now() }; }
+    if (P.size === 2) { const [a, b] = [...P.values()]; pin = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; zacni(e); } });
+  el.addEventListener('pointermove', (e) => { const q = P.get(e.pointerId); if (!q) return;
+    if (P.size >= 2 && pin) { q.x = e.clientX; q.y = e.clientY; const [a, b] = [...P.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y) || 1, mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      posun(mx - pin.x, my - pin.y); const g = el.getBoundingClientRect(); zoomBod(d / pin.d, mx - g.left, my - g.top, 0); pin = { d, x: mx, y: my }; return; }
+    if (!tah) { if (Math.hypot(e.clientX - st.x, e.clientY - st.y) < 6) return; zacni(e); }
+    const dx = e.clientX - q.x, dy = e.clientY - q.y, now = performance.now(), dt = Math.max(1, now - rv.t); rv = { x: 0.6 * (dx / dt) + 0.4 * rv.x, y: 0.6 * (dy / dt) + 0.4 * rv.y, t: now };
+    q.x = e.clientX; q.y = e.clientY; posun(dx, dy); });
+  const konec = (e) => { if (!P.has(e.pointerId)) return; P.delete(e.pointerId); const now = performance.now();
+    if (P.size === 1) { pin = null; rv = { x: 0, y: 0, t: now }; return; } if (P.size) return; el.classList.remove('gm-tah');
+    if (tah) { el._potlac = now + 350; tah = false; if (e.type === 'pointerup' && Math.hypot(rv.x, rv.y) > 0.3 && now - rv.t < 90 && !gmPomalu()) dobeh(rv.x, rv.y); else L.style.willChange = ''; return; }
+    const [px, py] = bod(e); if (now - GM_TAP.t < 320 && GM_TAP.k === key && Math.hypot(e.clientX - GM_TAP.x, e.clientY - GM_TAP.y) < 30) { GM_TAP.t = 0; el._potlac = now + 400; zoomBod(2, px, py, 260); } else GM_TAP = { t: now, x: e.clientX, y: e.clientY, k: key }; };
+  el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
+  el.addEventListener('click', (e) => { if (performance.now() < (el._potlac || 0) && !e.target.closest('.gm-ui')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  // kolečko: přiblíží kolem kurzoru (když se zrovna neposouvá stránka), Ctrl + kolečko i dva prsty na touchpadu vždy
+  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-sheet,.gm-pat')) return; if (!e.ctrlKey && !el.classList.contains('gm-full') && performance.now() - GM_SCR < 400) return;
+    e.preventDefault(); cancelAnimationFrame(anim); const [px, py] = bod(e); const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; zoomBod(Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)), px, py, 0); }, { passive: false });
+  el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName) || e.altKey || e.ctrlKey || e.metaKey) return; const R = rozm(), k = e.key; let ok = true;
+    if (k === 'ArrowLeft') posun(80, 0); else if (k === 'ArrowRight') posun(-80, 0); else if (k === 'ArrowUp') posun(0, 80); else if (k === 'ArrowDown') posun(0, -80);
+    else if (k === '+' || k === '=') zoomBod(1.5, R.l + R.SW / 2, R.t + R.SH / 2, 200); else if (k === '-' || k === '_') zoomBod(1 / 1.5, R.l + R.SW / 2, R.t + R.SH / 2, 200); else if (k === '0') el._gm.fit(260); else ok = false;
+    if (ok) { e.preventDefault(); e.stopPropagation(); } });
+}
+function gmFull(el) { const druh = el.dataset.gmk || 'areal', na = S.gmFull !== druh; S.gmFull = na ? druh : ''; el.classList.toggle('gm-full', na); document.documentElement.classList.toggle('gm-zamek', na);
+  const b = el.querySelector('[data-gmfull]'); if (b) { b.setAttribute('aria-pressed', String(na)); b.setAttribute('aria-label', na ? 'Zavřít celou obrazovku' : 'Celá obrazovka'); b.title = na ? 'Zavřít celou obrazovku (Esc)' : 'Celá obrazovka'; b.innerHTML = na ? GM_IK.zpet : GM_IK.full; }
+  requestAnimationFrame(() => { if (el._gm) el._gm.kresli(); }); if (na) el.focus({ preventScroll: true }); }
+document.addEventListener('click', (e) => { const b = e.target.closest && e.target.closest('[data-gmz],[data-gmfit],[data-gmfull]'); if (!b) return; const el = b.closest('.gm'); if (!el || !el._gm) return; e.preventDefault(); const R = el._gm.rozm();
+  if (b.dataset.gmz != null) el._gm.zoomBod(+b.dataset.gmz > 0 ? 1.6 : 1 / 1.6, R.l + R.SW / 2, R.t + R.SH / 2, 220); else if (b.dataset.gmfit != null) el._gm.fit(300); else gmFull(el); });
+document.addEventListener('keydown', (e) => { if (e.key !== 'Escape' || !S.gmFull) return; const el = document.querySelector('.gm.gm-full'); e.preventDefault(); e.stopPropagation(); if (el) gmFull(el); else S.gmFull = ''; }, true);
 function arealHtml() {
   const otv = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno); const G = new Map(), bez = new Map();
   otv.forEach((p) => { const b = budovaKr(p) || '?'; const k = mapKlic(b); if (!k) { bez.set(b, (bez.get(b) || 0) + 1); return; } if (!G.has(k)) G.set(k, []); G.get(k).push(p); });
-  const rez = S.mapM || 'poz'; const z = S.mapZ || (shora0() && (window.innerWidth || 1000) < 600 ? 2 : 1); const shora = shora0(); const sel = S.mapSel || ''; const hl = S.mapHl || '';
+  const rez = S.mapM || 'poz'; const z = 1; const shora = shora0(); const sel = S.mapSel || ''; const hl = S.mapHl || '';
   const tp = trasaPlanu(); const tr = tp.zast.map((x) => mapKlic(x.b)).filter((k, i, a) => k && a.indexOf(k) === i);
   const barva = (k) => fakBarva(mapFak(k)) || '#7b857f'; const n = (k) => (G.get(k) || []).length;
   const V = AREAL_S.vb; const pc = (q) => [Math.round(((q[0] - V[0]) / V[2]) * 10000) / 100, Math.round(((q[1] - V[1]) / V[3]) * 10000) / 100];
@@ -3433,25 +3553,28 @@ function arealHtml() {
     pod = `<svg class="ashora" viewBox="${V.join(' ')}" preserveAspectRatio="none" role="group" aria-label="Mapa areálu shora"><path class="ak" d="${A.kamp}"/><path class="ap" d="${A.park}"/><path class="ah" d="${A.hriste}"/><path class="ac" d="${A.cesty}"/><path class="ach" d="${A.chod}"/>`
       + A.b.map(([k, nz, d]) => (k ? `<path class="ab abk${A.x[k] ? ' abx' : ''}${sel === k ? ' on' : ''}${hl === k ? ' hl' : ''}" d="${d}" fill-rule="evenodd" style="--fk:${barva(k)}" data-mk="${k}" tabindex="0" role="button" aria-label="${esc(MAPA_B[k][2])}: ${n(k)} nesplněných"><title>${esc(MAPA_B[k][2])}${nz && norm(nz) !== norm(MAPA_B[k][2]) ? ' – ' + esc(nz) : ''}</title></path>` : `<path class="ab" d="${d}" fill-rule="evenodd">${nz ? `<title>${esc(nz)}</title>` : ''}</path>`)).join('') + cara + '</svg>';
     // popisky bez překrývání: přednost má vybraná budova, pak ta s nejvíc požadavky, pak velké budovy
-    const W = Math.max(320, Math.min(1100, (window.innerWidth || 1000) - 40)) * z, sc = W / V[2], pl = keys.map((k) => { const q = AREAL_S.pos[k], r = 13; const x = (q[0] - V[0]) * sc, y = (q[1] - V[1]) * sc; return [x - r, y - r, x + r, y + r]; });
+    // v65: popisky pro různá přiblížení – každý se ukáže od šířky mapy (px), kdy už se s ničím nepřekrývá
+    const WS = [360, 520, 700, 900, 1150, 1500, 2000, 2700, 3600, 5000, 7000, 9000], kde = {};
     const por = Object.keys(A.pos).filter((k) => MAPA_B[k] && !A.bez.includes(k)).sort((a, b) => (b === sel) - (a === sel) || (b === hl) - (a === hl) || n(b) - n(a) || a.localeCompare(b));
-    lab = por.map((k) => { const q = A.pos[k], t = mapKr(k), ma = keys.includes(k); const w = t.length * 6.4 + 10, h = 16, x = (q[0] - V[0]) * sc, y = (q[1] - V[1]) * sc + (ma ? 22 : 0);
-      const bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2]; if (k !== sel && pl.some((o) => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) return ''; pl.push(bx);
-      const pp = pc(q); return `<span class="alab${ma ? ' pod' : ''}" style="left:${pp[0]}%;top:${pp[1]}%">${esc(t)}</span>`; }).join(''); }
-  let det = '';
+    WS.forEach((W) => { const sc = W / V[2], pl = keys.map((k) => { const q = AREAL_S.pos[k], r = 13; const x = (q[0] - V[0]) * sc, y = (q[1] - V[1]) * sc; return [x - r, y - r, x + r, y + r]; });
+      por.forEach((k) => { const q = A.pos[k], t = mapKr(k), ma = keys.includes(k); const w = t.length * 6.4 + 10, h = 16, x = (q[0] - V[0]) * sc, y = (q[1] - V[1]) * sc + (ma ? 22 : 0);
+        const bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2]; if (k !== sel && pl.some((o) => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) return; pl.push(bx); (kde[k] = kde[k] || new Set()).add(W); }); });
+    const odW = (k) => { let m = null; for (let i = WS.length - 1; i >= 0 && kde[k] && kde[k].has(WS[i]); i--) m = WS[i]; return m; };
+    lab = por.filter((k) => odW(k) != null).map((k) => { const ma = keys.includes(k), pp = pc(A.pos[k]); return `<span class="alab${ma ? ' pod' : ''}" data-zw="${odW(k)}" style="left:${pp[0]}%;top:${pp[1]}%">${esc(mapKr(k))}</span>`; }).join(''); }
+  let det = ''; const budMod = !!(sel && budMaPlan(sel));
   if (sel && MAPA_B[sel]) { const L = (G.get(sel) || []).slice().sort(SORT.dul[1]); const uc = UC.filter((u) => (UC2MAPA[u.b] || u.b) === sel || (sel === 'LIB' && u.b === 'LIB'));
-    det = `<div class="karta mdet" style="--fk:${barva(sel)}"><div class="kh"><b>${esc(MAPA_B[sel][2])}</b><span class="small mut">${L.length} nesplněných${uc.length ? ' · ' + uc.length + ' učeben' : ''}</span><button class="btn sm" data-tstart="${sel}" style="margin-left:auto" title="Dnešní trasa začne tady">📍 Začínám tady</button><button class="btn sm ghost" data-mk="${sel}" aria-label="Zavřít">✕</button></div>
+    det = `<div class="karta mdet${budMod ? ' mbud' : ''}" style="--fk:${barva(sel)}"><div class="kh">${budMod ? '<button class="btn sm" data-a="gm-areal" aria-label="Zpět na mapu areálu">← Areál</button>' : ''}<b>${esc(MAPA_B[sel][2])}</b><span class="small mut">${L.length} nesplněných${uc.length ? ' · ' + uc.length + ' učeben' : ''}</span><button class="btn sm" data-tstart="${sel}" style="margin-left:auto" title="Dnešní trasa začne tady">📍 Začínám tady</button><button class="btn sm ghost" data-mk="${sel}" aria-label="Zavřít">✕</button></div>
       ${budPlanHtml(sel)}
       ${L.length ? '<b class="small">Nesplněné v budově</b><div class="seznam">' + L.map(polozka).join('') + '</div>' : '<p class="small mut" style="margin:0">Tady teď nic nečeká.</p>'}</div>`; }
   return `<div class="mapnav"><input id="mapQ" type="search" placeholder="Najdi budovu nebo učebnu: E455, Kolej F, menza…" value="${esc(S.mapQ || '')}" aria-label="Najít na mapě" autocomplete="off">
       <div class="seg" role="group" aria-label="Co ukázat"><button data-mapm="poz" class="${rez === 'poz' ? 'on' : ''}">Nesplněné</button><button data-mapm="trasa" class="${rez === 'trasa' ? 'on' : ''}">Dnešní trasa${tr.length ? ' (' + tr.length + ')' : ''}</button></div>
       <div class="seg" role="group" aria-label="Pohled"><button data-mapv="shora" class="${shora ? 'on' : ''}" aria-pressed="${shora}">Shora</button><button data-mapv="plan" class="${shora ? '' : 'on'}" aria-pressed="${!shora}">Plán ČZU</button></div>
-      <button class="btn sm${S.mapZakl ? ' p' : ''}" data-a="map-zakl" aria-pressed="${!!S.mapZakl}" title="Klikni a pak ukaž do mapy, kde je základna">📍 Základna</button><div class="seg" role="group" aria-label="Přiblížení"><button data-mapz="-1" aria-label="Oddálit"${z <= 1 ? ' disabled' : ''}>−</button><button data-mapz="1" aria-label="Přiblížit"${z >= 3 ? ' disabled' : ''}>+</button></div></div>
+      <button class="btn sm${S.mapZakl ? ' p' : ''}" data-a="map-zakl" aria-pressed="${!!S.mapZakl}" title="Klikni a pak ukaž do mapy, kde je základna">📍 Základna</button></div>
     ${S.mapNasel ? `<p class="small" style="margin:4px 0 8px">${S.mapNasel}</p>` : ''}${S.mapZakl ? '<p class="small" style="margin:4px 0 8px"><b>Klikni do mapy, kde je základna.</b> Trasy se pak řadí od ní. <button class="btn sm ghost" data-a="map-zakl">Zrušit</button></p>' : ''}
-    <div class="arealw"><div class="areal${shora ? ' shora' : ''}${S.mapZakl ? ' zakl' : ''}" style="width:${z * 100}%;aspect-ratio:${shora ? V[2] + ' / ' + V[3] : PLAN_CZU.w + ' / ' + PLAN_CZU.h}">${shora ? pod + lab : `<img src="/_blob/${PLAN_CZU.id}" alt="Plán areálu ČZU (oficiální)" draggable="false">` + cara}${zakl}${keys.map(mk).join('')}</div></div>
+    ${budMod ? det : `<div class="gm gm-areal${shora ? ' gm-shora' : ''}" data-gm="areal-${shora ? 's' : 'p'}" data-gmk="areal" data-gms0="${shora && (window.innerWidth || 1000) < 600 ? 2 : 0}" tabindex="0" role="region" aria-label="Mapa areálu – posouváš tažením, přiblížíš kolečkem, dvěma prsty nebo dvojklepnutím" style="--gar:${shora ? V[2] / V[3] : PLAN_CZU.w / PLAN_CZU.h}"><div class="gm-l areal${shora ? ' shora' : ''}${S.mapZakl ? ' zakl' : ''}" style="aspect-ratio:${shora ? V[2] + ' / ' + V[3] : PLAN_CZU.w + ' / ' + PLAN_CZU.h}">${shora ? pod + lab : `<img src="/_blob/${PLAN_CZU.id}" alt="Plán areálu ČZU (oficiální)" draggable="false">` + cara}${zakl}${keys.map(mk).join('')}</div>${gmCtl('areal')}</div>`}
     ${rez === 'trasa' && !tr.length ? '<p class="small mut">Na dnes nic naplánované – trasa se ukáže, až si v Dnes vybereš úkoly.</p>' : ''}
     ${bez.size && rez !== 'trasa' ? `<p class="small mut" style="margin:6px 0 0">Bez místa na mapě: ${[...bez.entries()].map(([b, c]) => `<a href="#seznam" data-sf="${esc(JSON.stringify({ f: { bud: b }, s: 'otevrene' }))}">${esc(b)} (${c})</a>`).join(', ')}</p>` : ''}
-    ${det}<p class="small mut" style="margin:8px 0 0">${shora ? 'Mapa shora: obrysy budov a cest © přispěvatelé <b>OpenStreetMap</b> (licence ODbL), funguje i bez internetu. Barva = fakulta, klik na budovu = požadavky a plánek. Kolečko = počet nesplněných, ⌂ = základna.' : 'Podklad: oficiální „Plán areálu a učeben“ ČZU (2024) – jen pro tebe v aplikaci, bez internetu jen v „aplikaci s daty“. Kolečko = počet nesplněných, ⌂ = základna.'}</p>`; }
+    ${budMod ? '' : det}<p class="small mut" style="margin:8px 0 0">Mapou posouváš tažením, přiblížíš kolečkem, dvěma prsty nebo dvojklepnutím. ${shora ? 'Mapa shora: obrysy budov a cest © přispěvatelé <b>OpenStreetMap</b> (licence ODbL), funguje i bez internetu. Barva = fakulta, klik na budovu = požadavky a plánek. Kolečko = počet nesplněných, ⌂ = základna.' : 'Podklad: oficiální „Plán areálu a učeben“ ČZU (2024) – jen pro tebe v aplikaci, bez internetu jen v „aplikaci s daty“. Kolečko = počet nesplněných, ⌂ = základna.'}</p>`; }
 function vMapa() {
   const MP = S.mapa; let o = `<h2>Mapa areálu</h2>${arealHtml()}<h3 style="margin-top:22px">Vlastní plánek a trasa</h3><p class="mut small" style="max-width:64ch">Nahraj plánek areálu (třeba snímek obrazovky z mapy). Pak klepnutím umístíš základnu a budovy – trasa dne se seřadí podle plánku. Když nastavíš měřítko, spočítá se i délka cesty. Později sem napojíme ESP32 s GPS a kamerou.</p>`;
   const nahraj = `<label class="btn${MP && MP.img ? ' sm' : ' p'}" for="mapIn">${MP && MP.img ? 'Změnit plánek' : '🗺 Nahrát plánek areálu'}</label><input id="mapIn" type="file" accept="image/*" hidden>${S.ai.mapa ? '<span class="ai"></span>' : ''}`;
@@ -3496,14 +3619,14 @@ function vykresli() {
       const nav = document.createElement('nav'); nav.className = 'skok'; nav.setAttribute('aria-label', 'Přejít na část'); hs.forEach((h, i) => { h.id = h.id || 'sek-' + i; const b = document.createElement('button'); b.type = 'button'; b.dataset.skok = h.id; b.textContent = kr(h.textContent); nav.appendChild(b); });
       const pr = el.querySelector('.prior'); if (pr) pr.after(nav); else el.prepend(nav); } }
   stavRadek();
-  if (cesta() === 'mapa') bpVystred();
+  gmVsechny();
 }
 const aktP = () => { const c = cesta(); return c.startsWith('p-') ? S.poz.find((q) => q.id === c.slice(2)) : null; };
 const ctiForm = (sel, p) => { document.querySelectorAll(sel + ' [data-k]').forEach((i) => { p[i.dataset.k] = i.value.trim(); }); return p; };
 const POZ_SCR = {}; let navGesto = 0;
 addEventListener('scroll', () => { POZ_SCR[cesta()] = scrollY; }, { passive: true });
 document.addEventListener('pointerdown', (e) => { if (e.button < 3) navGesto = Date.now(); }, true); document.addEventListener('keydown', (e) => { if (!(e.altKey && e.key === 'ArrowLeft') && e.key !== 'Backspace') navGesto = Date.now(); }, true);
-window.addEventListener('hashchange', () => { const cc = cesta(); let zpatky = zpetJde; if (!zpatky && Date.now() - navGesto > 1500 && HIST.length > 1 && HIST[HIST.length - 2] === cc) { HIST.pop(); zpetJde = true; zpatky = true; } const yy = zpatky ? POZ_SCR[cc] || 0 : 0; navGesto = 0; zapisHist(); if (!$('#lb').hidden) zavriLb(); if (S.kZal && cesta() !== 'katalog') S.kZal = null; if (S.kPick && cesta() !== 'p-' + S.kPick.p) S.kPick = null; S.trOtevreno = false; S.planVse = false; S.skAkce = null; S.skEdit = null; S.mazat = null; S.edit = null; S.edFoto = null; S.poslOtevreno = null; vykresli(); window.scrollTo(0, yy); if (yy) { requestAnimationFrame(() => { if (cesta() === cc) window.scrollTo(0, yy); }); setTimeout(() => { if (cesta() === cc && Math.abs(scrollY - yy) > 4) window.scrollTo(0, yy); }, 250); } });
+window.addEventListener('hashchange', () => { const cc = cesta(); let zpatky = zpetJde; if (!zpatky && Date.now() - navGesto > 1500 && HIST.length > 1 && HIST[HIST.length - 2] === cc) { HIST.pop(); zpetJde = true; zpatky = true; } const yy = zpatky ? POZ_SCR[cc] || 0 : 0; navGesto = 0; zapisHist(); if (cc !== 'mapa') { S.mapSel = ''; S.mapHl = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; S.gmFull = ''; } if (!$('#lb').hidden) zavriLb(); if (S.kZal && cesta() !== 'katalog') S.kZal = null; if (S.kPick && cesta() !== 'p-' + S.kPick.p) S.kPick = null; S.trOtevreno = false; S.planVse = false; S.skAkce = null; S.skEdit = null; S.mazat = null; S.edit = null; S.edFoto = null; S.poslOtevreno = null; vykresli(); window.scrollTo(0, yy); if (yy) { requestAnimationFrame(() => { if (cesta() === cc) window.scrollTo(0, yy); }); setTimeout(() => { if (cesta() === cc && Math.abs(scrollY - yy) > 4) window.scrollTo(0, yy); }, 250); } });
 document.addEventListener('input', (e) => {
   if (e.target.id === 'filtr') { S.filtr = e.target.value; const pos = e.target.selectionStart; vykresli(); const f = $('#filtr'); f.focus(); f.setSelectionRange(pos, pos); }
   if (e.target.id === 'rfHledat') { S.rfQ = e.target.value; const pos = e.target.selectionStart; vykresli(); const f = $('#rfHledat'); f.focus(); f.setSelectionRange(pos, pos); }
@@ -3517,11 +3640,11 @@ document.addEventListener('input', (e) => {
   if (e.target.id === 'poslText') { const a = $('#poslWa'); if (a) a.href = waOdkaz(e.target.value); }
   if (e.target.id === 'najC' && S.naj) { S.naj.q = e.target.value; S.naj.zustat = true; const pos = e.target.selectionStart; vykresli(); const f = $('#najC'); if (f) { f.focus(); f.setSelectionRange(pos, pos); } return; }
   if (e.target.id === 'mapQ') { S.mapQ = e.target.value; const q = S.mapQ.trim(); S.mapHl = ''; S.mapNasel = '';
-    if (q) { const H = ucHledej(q); const u = H.presne[0]; if (u) { const k = UC2MAPA[u.b] || u.b; if (MAPA_B[k]) { S.mapHl = k; S.mapSel = k; S.bpB = budJmena(k)[0]; S.bpP = null; S.bpSel = { b: S.bpB, m: ucKod(u.k) }; S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(MAPA_B[k][2])}${u.patro != null ? ', ' + esc(ucPatroTx(u.patro)) : ''}`; } else S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(u.nazev)} (mimo tenhle plán)`; }
-      else if (planMistnost(q)) { const f = planMistnost(q); S.mapHl = f.K; S.mapSel = f.K; S.bpB = budJmena(f.K)[0]; S.bpP = { b: S.bpB, k: f.k }; S.bpSel = { b: S.bpB, m: f.m }; S.mapNasel = `📍 <b>${esc(f.m)}</b> → ${esc(MAPA_B[f.K][2])}, ${esc(planNazev(S.bpB, f.k) || patroKr(f.k))}${f.t && TYP_MIST[f.t] ? ' · ' + esc(TYP_MIST[f.t]) : ''}`; }
-      else { const nq = norm(q); const k = Object.keys(MAPA_B).find((x) => norm(MAPA_B[x][2]).includes(nq)) || (mapKlic(q) || ''); if (k && MAPA_B[k]) { S.mapHl = k; S.mapNasel = '→ ' + esc(MAPA_B[k][2]); } else if (q.length >= 2) S.mapNasel = '<span class="mut">Nic takového na plánu.</span>'; } }
+    if (q) { const H = ucHledej(q); const u = H.presne[0]; if (u) { const k = UC2MAPA[u.b] || u.b; if (MAPA_B[k]) { S.mapHl = k; S.mapSel = k; S.gmLet = k; S.bpB = budJmena(k)[0]; S.bpP = null; S.bpSel = { b: S.bpB, m: ucKod(u.k) }; S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(MAPA_B[k][2])}${u.patro != null ? ', ' + esc(ucPatroTx(u.patro)) : ''}`; } else S.mapNasel = `🏫 <b>${esc(ucKod(u.k))}</b> → ${esc(u.nazev)} (mimo tenhle plán)`; }
+      else if (planMistnost(q)) { const f = planMistnost(q); S.mapHl = f.K; S.mapSel = f.K; S.gmLet = f.K; S.bpB = budJmena(f.K)[0]; S.bpP = { b: S.bpB, k: f.k }; S.bpSel = { b: S.bpB, m: f.m }; S.mapNasel = `📍 <b>${esc(f.m)}</b> → ${esc(MAPA_B[f.K][2])}, ${esc(planNazev(S.bpB, f.k) || patroKr(f.k))}${f.t && TYP_MIST[f.t] ? ' · ' + esc(TYP_MIST[f.t]) : ''}`; }
+      else { const nq = norm(q); const k = Object.keys(MAPA_B).find((x) => norm(MAPA_B[x][2]).includes(nq)) || (mapKlic(q) || ''); if (k && MAPA_B[k]) { S.mapHl = k; S.mapSel = ''; S.bpSel = null; S.bpP = null; S.gmLet = k; S.mapNasel = '→ ' + esc(MAPA_B[k][2]); } else if (q.length >= 2) S.mapNasel = '<span class="mut">Nic takového na plánu.</span>'; } }
     const pos = e.target.selectionStart; vykresli(); const f = $('#mapQ'); if (f) { f.focus(); f.setSelectionRange(pos, pos); }
-    if (S.mapHl) { const m = $('.mk.hl'); if (m) m.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }); } return; }
+    return; }
   if (e.target.id === 'mapOf') { S.mapOf = e.target.checked; vykresli(); return; }
   if (e.target.id === 'ucQ') { S.ucQ = e.target.value; const pos = e.target.selectionStart; vykresli(); const f = $('#ucQ'); if (f) { f.focus(); f.setSelectionRange(pos, pos); } return; }
   if (e.target.id === 'hledN') { S.hledN = e.target.value; const pos = e.target.selectionStart; vykresli(); const f = $('#hledN'); f.focus(); f.setSelectionRange(pos, pos); }
@@ -3838,7 +3961,8 @@ document.addEventListener('click', async (e) => {
   if (b.dataset.trraz != null) { S.trOtevreno = true; await ulozNast('trasa', { ...trasaN(), razeni: b.dataset.trraz }); vykresli(); return; }
   if (b.dataset.tstart != null) { const k = b.dataset.tstart; if (k === '?') { S.startVyb = !S.startVyb; vykresli(); const f = $('#trStart'); if (f) f.focus(); return; } S.startVyb = false; await ulozNast('trasa', { ...trasaN(), start: k, startDen: k ? dnes() : '', pres: null, presDen: '' }); if (k) { toast('Dnes začínáš: ' + MAPA_B[k][2] + '.'); } vykresli(); return; }
   if (a === 'bp-novy') { const m = (($('#bpNova') || {}).value || '').trim() || b.dataset.bpm || ''; S.draft = { stav: 'novy', datum: dnes(), budova: 'ČZU / Suchdol / ' + b.dataset.bpb, mistnost: m }; S.foto = null; S.fotoFile = null; location.hash = 'novy'; return; }
-  if (a === 'map-zakl') { S.mapZakl = !S.mapZakl; vykresli(); return; }
+  if (a === 'gm-areal') { S.gmZpet = S.mapSel; S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; vykresli(); return; }
+  if (a === 'map-zakl') { S.mapZakl = !S.mapZakl; if (S.mapZakl && budMaPlan(S.mapSel)) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (a === 'plan-vse') { S.planVse = true; vykresli(); return; }
   if (a === 'plan-navrh') { const T = trasaN(); const kap = +T.hodin || 6; const ids = planDnes().slice(); const pred = ids.length; const hop = CESTA[T.vozitko ? 'vozitko' : 'pesky'].hop / 60;
     const kand = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno && !ids.includes(p.id) && !(p.material || []).some((x) => kObjednani(x) || objednano(x)) && lidiP(p) <= (+T.lidi || 1) && !(T.den === 'lehky' && obtiznost(p) === 3));
@@ -3853,13 +3977,14 @@ document.addEventListener('click', async (e) => {
   if (a === 'naj-novy' && S.naj) { const f = S.naj.file; S.naj = null; location.hash = 'novy'; S.foto = URL.createObjectURL(f); S.fotoFile = f; S.draft = null;
     if (S.sample) { S.ai.foto = true; vykresli(); try { const r = await ctiFoto(f); S.draft = odhadDo({ stav: 'novy', ...r, materialText: r.material || '', material: [] }); if (!S.draft.mistnost && S.draft.mistoOdhad) S.draft.mistoNejiste = true; toast('Hotovo – zkontroluj údaje.'); } catch (err) { toast(err.message || 'Fotku se nepodařilo přečíst. Vyplň ručně.'); S.draft = { stav: 'novy', datum: dnes() }; } S.ai.foto = false; }
     else S.draft = { stav: 'novy', datum: dnes() }; vykresli(); return; }
-  if (b.dataset.mapv != null) { S.mapPohled = b.dataset.mapv; vykresli(); return; }
+  if (b.dataset.mapv != null) { S.mapPohled = b.dataset.mapv; if (budMaPlan(S.mapSel)) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (b.dataset.bptab != null) { S.bpB = b.dataset.bptab; S.bpSel = null; S.bpP = null; vykresli(); return; }
   if (b.dataset.bpp != null) { const v = b.dataset.bpp; S.bpB = b.dataset.bpb; S.bpP = { b: b.dataset.bpb, k: v === 'x' ? 'x' : +v }; vykresli(); const t = document.querySelector('[data-bpp].on'); if (t) t.focus({ preventScroll: true }); return; }
   if (a === 'bp-zoom') { S.bpZoom = S.bpZoom === 'fit' ? '' : 'fit'; vykresli(); return; }
-  if (b.dataset.bpm != null && b.dataset.a !== 'bp-novy') { const x = { b: b.dataset.bpb, m: b.dataset.bpm }; S.bpB = x.b; if (S.bpZoom === 'fit' && b.closest('.bpsw')) S.bpZoom = ''; if (b.dataset.bpk != null) S.bpP = { b: x.b, k: b.dataset.bpk === 'x' ? 'x' : +b.dataset.bpk }; S.bpSel = S.bpSel && S.bpSel.b === x.b && norm(S.bpSel.m) === norm(x.m) ? null : x; vykresli(); const d = $('.bpd'); if (d && S.bpSel) d.scrollIntoView({ block: 'nearest' }); return; }
-  if (b.dataset.mk != null) { S.mapSel = S.mapSel === b.dataset.mk ? '' : b.dataset.mk; S.mapHl = ''; S.bpSel = null; S.bpB = ''; S.bpP = null; vykresli(); if (S.mapSel) setTimeout(() => { const d = $('.mdet'); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 30); return; }
-  if (b.dataset.mapm != null) { S.mapM = b.dataset.mapm; vykresli(); return; }
+  if (b.dataset.bpm != null && b.dataset.a !== 'bp-novy') { const x = { b: b.dataset.bpb, m: b.dataset.bpm }; S.bpB = x.b; if (b.dataset.bpk != null) S.bpP = { b: x.b, k: b.dataset.bpk === 'x' ? 'x' : +b.dataset.bpk }; S.bpSel = S.bpSel && S.bpSel.b === x.b && norm(S.bpSel.m) === norm(x.m) ? null : x; vykresli(); const d = $('.bpd'); if (d && S.bpSel) d.scrollIntoView({ block: 'nearest' }); return; }
+  if (b.dataset.mk != null) { const pred = S.mapSel; S.mapSel = pred === b.dataset.mk ? '' : b.dataset.mk; S.mapHl = ''; S.bpSel = null; S.bpB = ''; S.bpP = null; const bm = budMaPlan(S.mapSel); if (S.mapSel && bm) S.gmVstup = 1; else if (!S.mapSel && budMaPlan(pred)) S.gmZpet = pred;
+    vykresli(); const d = $('.mdet'); if (S.mapSel && d) { if (bm) { if (d.getBoundingClientRect().top < 0) d.scrollIntoView({ block: 'start' }); } else setTimeout(() => d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 30); } return; }
+  if (b.dataset.mapm != null) { S.mapM = b.dataset.mapm; if (budMaPlan(S.mapSel)) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (b.dataset.mapz != null) { const z0 = S.mapZ || (S.mapPohled !== 'plan' && (window.innerWidth || 1000) < 600 ? 2 : 1); S.mapZ = Math.max(1, Math.min(3, z0 + (+b.dataset.mapz) * 0.5)); vykresli(); return; }
   if (b.dataset.ucq != null) { S.ucQ = b.dataset.ucq; S.ucF = ''; if (location.hash !== '#ucebny') { if (b.tagName !== 'A') location.hash = 'ucebny'; } else { vykresli(); window.scrollTo({ top: 0, behavior: 'smooth' }); } return; }
   if (b.dataset.ucf != null) { S.ucF = b.dataset.ucf; vykresli(); return; }
