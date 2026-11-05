@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v53"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v54"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -238,7 +238,7 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpm text.bpbd{fill:#fff;font-size:3.2px}
 .bpven{fill:var(--ok,#2e7d32);font:600 3px var(--f-ui)}
 .bpd{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--plocha)}
-.kosL{display:flex;flex-direction:column;gap:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.kosL{display:flex;flex-direction:column;gap:6px}.zsrvSt summary{cursor:pointer;color:var(--mut);padding:4px 0}.zsrvSt .kosL{margin-top:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .t-poslucharna{--tm:#9ccccd}.t-ucebna{--tm:#ccccff}.t-kancelar{--tm:#ffcc00}.t-sekretariat{--tm:#ffe26a}.t-vedouci{--tm:#fdeeb5}.t-zasedaci{--tm:#ffff3a}.t-wc{--tm:#66cbff}.t-studio{--tm:#aa72b1}.t-odpocinkova{--tm:#e28100}.t-klub{--tm:#3b6ab2}.t-tech{--tm:#8c8c8c}.t-kavarna{--tm:#6e3d12}
 .bpvest .bpm[class*=" t-"] rect,.bpn0{fill:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha))}
 .bpn0{stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:.3}
@@ -946,7 +946,16 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
   })();
   const st = document.createElement('style'); st.id = 'srv-css'; st.textContent = CSS; (document.head || document.documentElement).appendChild(st);
-  window.__server = { odkazTelefon, stav: () => ({ ...stavTxt(), server: cfg ? host() : '', email: sez ? sez.email : '', fronta: S.fronta, fotek: S.fotek, online: S.online, rt: S.rt, sync: S.sync }), panel: otevriPanel, nacist: () => synchronizuj() };
+  // --- týdenní zálohy dat (soubory ve složce zalohy vedle fotek; jen pro přihlášeného majitele)
+  const cestaZ = (n) => 'fotky/' + enc(sez.uid) + '/zalohy/' + enc(n);
+  const prihlasen = () => { if (!sez) throw new Error('Nejsi přihlášený k serveru.'); };
+  const zalohy = {
+    async seznam() { prihlasen(); const r = await api('/storage/v1/object/list/fotky', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: sez.uid + '/zalohy', limit: 100, offset: 0, sortBy: { column: 'name', order: 'desc' } }) });
+      if (!r.ok) throw await chybaZ(r); return (await r.json()).filter((x) => x && x.name && x.id !== null).map((x) => ({ nazev: x.name, vel: +((x.metadata || {}).size || 0) })); },
+    async nahraj(n, b) { prihlasen(); const r = await api('/storage/v1/object/' + cestaZ(n), { method: 'POST', headers: { 'Content-Type': b.type || 'application/octet-stream', 'x-upsert': 'false' }, body: b }); if (!r.ok) throw await chybaZ(r); },
+    async stahni(n) { prihlasen(); const r = await api('/storage/v1/object/authenticated/' + cestaZ(n)); if (!r.ok) throw await chybaZ(r); return r.blob(); },
+    async smaz(L) { prihlasen(); if (!L.length) return; const r = await api('/storage/v1/object/fotky', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefixes: L.map((n) => sez.uid + '/zalohy/' + n) }) }); if (!r.ok && r.status !== 404) throw await chybaZ(r); } };
+  window.__server = { odkazTelefon, zalohy, stav: () => ({ ...stavTxt(), server: cfg ? host() : '', email: sez ? sez.email : '', fronta: S.fronta, fotek: S.fotek, online: S.online, rt: S.rt, sync: S.sync }), panel: otevriPanel, nacist: () => synchronizuj() };
   document.documentElement.setAttribute('data-server', '1');
   // webová verze: aplikace se otevře i bez signálu (ukládá jen soubory aplikace, ne data)
   try { if ('serviceWorker' in navigator && window.isSecureContext && document.querySelector('link[rel="manifest"]')) navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {}
@@ -959,7 +968,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v53';
+const VERZE = 'v54';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -1596,6 +1605,29 @@ async function obnovZalohu(Z) {
 }
 const zalZprava = (z, co) => { if (!z || !z.kdy) return ''; const ok = z.fotek >= z.celkem;
   return `<p class="small" style="margin:6px 0 0;${ok ? '' : 'color:var(--err);font-weight:600'}">${ok ? '✓' : '⚠'} ${co} ${fmtKdy(z.kdy)}: <b>${z.fotek} z ${z.celkem} fotek</b>${z.mb ? ', ' + z.mb.toFixed(1).replace('.', ',') + ' MB' : ''}${ok ? '' : ' – některé fotky se nepřibalily. Zkus to znovu, případně stáhni ZIP.'}</p>`; };
+// zálohy na serveru (jen verze se serverem): jednou za 7 dní sama, drží se 8 posledních (asi 2 měsíce)
+const ZSRV_DNI = 7, ZSRV_DRZET = 8;
+const zsrv = () => window.__server && window.__server.zalohy;
+const zsrvNazev = (d, pr) => 'zaloha-' + d.toISOString().slice(0, 16).replace(/[:T]/g, '-') + pr;
+const zsrvKdy = (n) => { const m = /^zaloha-(\d{4})-(\d\d)-(\d\d)-(\d\d)-(\d\d)/.exec(n || ''); return m ? new Date(Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5])) : null; };
+async function zsrvBlob() { const t = JSON.stringify(dataVse()); if (typeof CompressionStream === 'function') { try { const g = await new Response(new Blob([t]).stream().pipeThrough(new CompressionStream('gzip'))).blob(); return { b: new Blob([g], { type: 'application/gzip' }), pr: '.json.gz' }; } catch {} } return { b: new Blob([t], { type: 'application/json' }), pr: '.json' }; }
+async function zsrvSeznam() { const z = zsrv(); if (!z) return []; const L = (await z.seznam()).filter((x) => zsrvKdy(x.nazev)).sort((a, b) => b.nazev.localeCompare(a.nazev)); S.zsrv = { L, chyba: '', t: Date.now() }; return L; }
+async function zsrvUdelat(rucne) { const z = zsrv(); if (!z || S.zsrvBezi) return; S.zsrvBezi = true; if (rucne && cesta() === 'zaloha') prekresli();
+  try { let L = await zsrvSeznam(); const posl = L[0] && zsrvKdy(L[0].nazev);
+    if (!rucne) { if (posl && Date.now() - posl.getTime() < ZSRV_DNI * 864e5) return; if ((window.__server.stav().fronta || 0) > 0) return; if (!Object.values(dataVse().pocty).some((n) => n)) return; }
+    const { b, pr } = await zsrvBlob(); await z.nahraj(zsrvNazev(new Date(), pr), b);
+    L = await zsrvSeznam(); const stare = L.slice(ZSRV_DRZET).map((x) => x.nazev); if (stare.length) { await z.smaz(stare); await zsrvSeznam(); }
+    if (rucne) toast('Záloha na serveru je hotová.');
+  } catch (e) { S.zsrv = { ...(S.zsrv || { L: [] }), chyba: String(e.message || e) }; if (rucne) toast('Zálohu na server uložit nešlo: ' + (e.message || e)); }
+  finally { S.zsrvBezi = false; if (cesta() === 'zaloha') prekresli(); } }
+async function zsrvText(n) { const b = await zsrv().stahni(n); if (/\.gz$/.test(n)) return new Response(b.stream().pipeThrough(new DecompressionStream('gzip'))).text(); return b.text(); }
+function zsrvKarta() { if (!zsrv()) return ''; const Z = S.zsrv;
+  if ((!Z || Date.now() - (Z.t || 0) > 60000) && !S.zsrvNac && !S.zsrvBezi) { S.zsrvNac = true; zsrvSeznam().catch((e) => { S.zsrv = { L: [], chyba: String(e.message || e), t: Date.now() }; }).finally(() => { S.zsrvNac = false; if (cesta() === 'zaloha') prekresli(); }); }
+  const L = Z ? Z.L : []; const kb = (v) => v >= 1048576 ? (v / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(v / 1024)) + ' kB';
+  return `<h3 id="zsrv">Zálohy na serveru</h3><div class="karta"><p class="small mut" style="margin:0 0 8px;max-width:66ch">Jednou týdně se na tvůj server sama uloží záloha všech dat (fotky jsou na serveru zvlášť). Drží se ${ZSRV_DRZET} posledních – asi 2 měsíce zpátky. Pojistka, když se něco omylem smaže nebo přepíše; Supabase zdarma sám zálohy nedělá.</p>
+    ${!Z ? '<p class="small mut" style="margin:0"><span class="ai"></span> Načítám seznam záloh…</p>' : L.length ? `<div class="kosL">${L.map((x, i) => `${i === 3 ? `<details class="zsrvSt"><summary class="small">Starší zálohy (${L.length - 3})</summary><div class="kosL">` : ''}<div class="kosR"><span class="kosT"><b>${fmtKdy(zsrvKdy(x.nazev))}</b> <span class="small mut">· ${kb(x.vel)}</span></span><button class="btn sm" data-a="zsrv-obnov" data-n="${esc(x.nazev)}">Prohlédnout a obnovit</button><button class="btn sm ghost" data-a="zsrv-stahni" data-n="${esc(x.nazev)}">⤓ Stáhnout</button></div>`).join('')}${L.length > 3 ? '</div></details>' : ''}</div>` : '<p class="small mut" style="margin:0">Zatím tu žádná záloha není – první se uloží sama, nebo klikni na Zálohovat teď.</p>'}
+    ${Z && Z.chyba ? `<p class="small" style="margin:6px 0 0;color:var(--err)">⚠ ${esc(Z.chyba)}</p>` : ''}
+    <div class="rada" style="margin-top:10px"><button class="btn sm" data-a="zsrv-ted"${S.zsrvBezi ? ' disabled' : ''}>${S.zsrvBezi ? '<span class="ai"></span> Ukládám zálohu…' : '☁ Zálohovat teď'}</button></div></div>`; }
 // karta Server (jen ve verzi se serverem); na claude.ai a offline jen jak data přenést na server
 function srvKarta() { const sv = window.__server; if (!sv) return window.__offline ? '' : `<p class="small mut" style="max-width:66ch;margin:-2px 0 10px">☁ Přecházíš na verzi se serverem? Stáhni tady <b>Všechno (ZIP s fotkami)</b> a ve verzi se serverem ho dej do <b>Obnovit ze zálohy</b>.</p>`;
   const x = sv.stav(); return `<div class="karta srvk" style="margin:0 0 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="flex:1 1 240px">☁ <b>Server</b> ${esc(x.server)}${x.email ? ' · ' + esc(x.email) : ''}<br><span class="small">${esc(x.t)}</span></span><button class="btn sm" data-srv="panel">Stav serveru</button></div>`; }
@@ -1614,9 +1646,9 @@ ${zalZprava(ls.get('zalApp', null), 'Aplikace s daty')}
     <h3>Obnovit ze zálohy</h3><div class="karta"><label class="btn" for="zalIn">⇪ Vybrat zálohu (ZIP, data.json nebo HTML s daty)</label><input id="zalIn" type="file" accept=".zip,.json,.html,.htm,application/zip,application/json,text/html" hidden>
     <p class="small mut" style="margin:8px 0 0">Načte se jen to, co v deníku chybí nebo je v záloze novější. Novější změny v deníku se nepřepíšou. Jde načíst i soubor „aplikace s daty“ (HTML).</p>`;
   if (S.zal && S.zal.Z) { const Z = S.zal.Z; const sum = Object.values(Z.sh).reduce((a, x) => a + x.nove + x.novejsi, 0);
-    o += `<div class="upoz ${sum ? 'warn' : ''}" style="margin-top:10px"><span class="ik">⇪</span><div><b>${esc(Z.soubor)}</b> – záloha z ${fmtD(String(Z.data.exportovano || '').slice(0, 10))}<br>${Object.entries(Z.sh).filter(([, x]) => x.nove || x.novejsi).map(([k, x]) => KOL[k] + ': ' + (x.nove ? x.nove + ' nových' : '') + (x.nove && x.novejsi ? ', ' : '') + (x.novejsi ? x.novejsi + ' novějších' : '')).join(' · ') || 'Všechno už v deníku je – není co načítat.'}${Z.fotky.size ? '<br>Fotek v záloze: ' + Z.fotky.size : ''}
+    o += `<div class="upoz ${sum ? 'warn' : ''}" id="zalNahled" style="margin-top:10px"><span class="ik">⇪</span><div><b>${esc(Z.soubor)}</b> – záloha z ${fmtD(String(Z.data.exportovano || '').slice(0, 10))}<br>${Object.entries(Z.sh).filter(([, x]) => x.nove || x.novejsi).map(([k, x]) => KOL[k] + ': ' + (x.nove ? x.nove + ' nových' : '') + (x.nove && x.novejsi ? ', ' : '') + (x.novejsi ? x.novejsi + ' novějších' : '')).join(' · ') || 'Všechno už v deníku je – není co načítat.'}${Z.fotky.size ? '<br>Fotek v záloze: ' + Z.fotky.size : ''}
       <div class="rada" style="margin-top:8px">${sum ? `<button class="btn p" data-a="zal-obnov">Načíst ${sum} záznamů</button>` : ''}<button class="btn sm ghost" data-a="zal-zrus">Zavřít</button></div></div></div>`; }
-  return o + kosHtml() + '</div>';
+  return o + zsrvKarta() + kosHtml() + '</div>';
 }
 // --- co si vzít a odkud: materiál (kde vzít), nářadí, rady od kolegů; plán na dnes; arch k doplnění
 const ZDROJE0 = ['sklad', 'dílna', 'objednat'];
@@ -3479,6 +3511,13 @@ document.addEventListener('click', async (e) => {
     catch (err) { S.zal = null; toast('Export se nepovedl: ' + (err.message || err.code || err)); } vykresli(); return; }
   if (a === 'zal-json') { await stahni('denik-udrzby-' + dnes() + '.json', JSON.stringify(dataVse(), null, 1)); ls.set('zaloha', dnes()); vykresli(); return; }
   if (a === 'zal-zrus') { S.zal = null; vykresli(); return; }
+  if (a === 'zsrv-ted') { await zsrvUdelat(true); return; }
+  if (a === 'zsrv-obnov' || a === 'zsrv-stahni') { const n = b.dataset.n; const kdy = zsrvKdy(n); b.disabled = true;
+    try { const t = await zsrvText(n);
+      if (a === 'zsrv-stahni') { await stahni('denik-udrzby-server-' + kdy.toISOString().slice(0, 10) + '.json', t); b.disabled = false; return; }
+      const Z = await nactiZalohu(new File([t], 'zaloha.json', { type: 'application/json' })); Z.soubor = 'Záloha na serveru'; S.zal = { Z }; vykresli();
+      const el = $('#zalNahled'); if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } catch (e) { b.disabled = false; toast('Zálohu ze serveru načíst nešlo: ' + (e.message || e)); } return; }
   if (a === 'zal-app') { S.zal = { prubeh: 'Připravuji aplikaci s daty…' }; vykresli(); blobCestyNuluj();
     try { const r = await aplikaceSDaty(); zapisDiag('aplikace s daty', r); S.zal = null; await stahni('denik-udrzby-s-daty-' + dnes() + '.html', r.blob); ls.set('zaloha', dnes()); ls.set('zalApp', { kdy: new Date().toISOString(), fotek: r.fotek, celkem: r.celkem, mb: r.mb });
       toast('Aplikace s daty: ' + r.fotek + ' z ' + r.celkem + ' fotek, ' + r.mb.toFixed(1).replace('.', ',') + ' MB' + (r.chybi ? ' · ' + r.chybi + ' fotek se nepodařilo přibalit' : '') + '.'); }
@@ -3874,6 +3913,7 @@ vykresli();
   db.collection('nastaveni').onSnapshot((snap) => { const g = (id) => { const d = snap.docs.find((x) => x.id === id); return d ? d.data() : null; }; S.nastV = g('vykaz'); S.zdroje = g('zdroje'); S.plan = g('plan'); S.trasa = g('trasa'); S.tyden = g('tyden'); S.mapa = g('mapa'); S.plany = g('plany'); if (S.nacteno) prekresli(); }, () => {});
   db.collection('napady').onSnapshot((snap) => { const m = {}; snap.docs.forEach((d) => { m[d.id] = d.data(); }); S.napady = m; if (S.nacteno) prekresli(); }, () => {});
   ['naradi', 'lide', 'sklad', 'pohyby', 'katalog', 'ulozky'].forEach((k) => db.collection(k).onSnapshot((snap) => { S[k] = snap.docs.map((d) => ({ id: d.id, ...d.data() })); if (S.nacteno) prekresli(); }, () => {}));
+  if (zsrv()) { setTimeout(() => { zsrvUdelat(false); }, 30000); setInterval(() => { zsrvUdelat(false); }, 6 * 36e5); }
   let kosPrvni = true; try { db.collection('kos').onSnapshot((snap) => { S.kos = snap.docs.map((d) => ({ ...d.data(), id: d.id })); if (kosPrvni) { kosPrvni = false; setTimeout(() => { kosUklid().catch(() => {}); }, 3000); } if (S.nacteno && cesta() === 'zaloha') prekresli(); }, () => {}); } catch {}
 })();
 })();
