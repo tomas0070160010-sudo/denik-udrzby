@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v50"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v51"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -609,7 +609,8 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   function odkazTelefon() { if (!cfg) return ''; const zak = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : (/^https:\/\//.test(WEB) ? WEB : '');
     if (!zak) return ''; const r = /^https:\/\/([a-z0-9]{20})\.supabase\.co$/.exec(cfg.url); return zak + '#srv=' + (r ? r[1] : enc(cfg.url)) + '~' + enc(cfg.key); }
   const ulozSez = (j) => { sez = { at: j.access_token, rt: j.refresh_token, exp: j.expires_at ? j.expires_at * 1000 : Date.now() + (j.expires_in || 3600) * 1000, uid: j.user && j.user.id || (sez && sez.uid), email: j.user && j.user.email || (sez && sez.email) }; lsS(LS_SEZ, sez); planujObnovu(); };
-  async function volej(cesta, o) { try { return await puvFetch(cfg.url + cesta, o); } catch (e) { throw new SitChyba('bez spojení'); } }
+  let selhani = 0;
+  async function volej(cesta, o) { try { const r = await puvFetch(cfg.url + cesta, o); selhani = 0; if (S.spi) { S.spi = false; kresliStav(); } if (r.status === 540) { S.spi = true; throw new SitChyba('server spí'); } return r; } catch (e) { if (e instanceof SitChyba) throw e; selhani++; if (selhani >= 3 && navigator.onLine !== false && !S.spi) { S.spi = true; kresliStav(); } throw new SitChyba('bez spojení'); } }
   async function prihlas(email, heslo) {
     const r = await volej('/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: cfg.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: heslo }) });
     let j = {}; try { j = await r.json(); } catch (e) {}
@@ -650,11 +651,11 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     if (r.ok) return; const e = await chybaZ(r); if (r.status === 409 || /duplicate|already exists/i.test(e.message)) return; throw e; }
   async function stahniFoto(id) { const r = await api('/storage/v1/object/authenticated/' + cestaF(id)); if (r.ok) return r.blob(); if (r.status === 404 || r.status === 400) return null; throw await chybaZ(r); }
   async function smazFoto(id) { const r = await api('/storage/v1/object/fotky', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefixes: [sez.uid + '/' + id] }) }); if (!r.ok && r.status !== 404) throw await chybaZ(r); }
-  let fotkySrv = null, fotkySrvP = null;
+  let fotkySrv = null, fotkySrvP = null; const fotkyVel = new Map();
   function fotkyNaServeru() { if (fotkySrv) return Promise.resolve(fotkySrv); if (fotkySrvP) return fotkySrvP;
     fotkySrvP = (async () => { const set = new Set(); let od = 0;
       for (;;) { const r = await api('/storage/v1/object/list/fotky', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: sez.uid, limit: STRANA, offset: od, sortBy: { column: 'name', order: 'asc' } }) });
-        if (!r.ok) throw await chybaZ(r); const L = await r.json(); L.forEach((x) => { if (x && x.name && x.id !== null) set.add(x.name); }); if (L.length < STRANA) break; od += L.length; }
+        if (!r.ok) throw await chybaZ(r); const L = await r.json(); L.forEach((x) => { if (x && x.name && x.id !== null) { set.add(x.name); fotkyVel.set(x.name, +((x.metadata || {}).size || 0)); } }); if (L.length < STRANA) break; od += L.length; }
       fotkySrv = set; return set; })().finally(() => { fotkySrvP = null; }); return fotkySrvP; }
 
   // --- fronta změn: co se ještě neodeslalo (přežije zavření i vypnutí telefonu)
@@ -780,7 +781,12 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     if (m && !(cfg && s.startsWith(cfg.url))) { const b = await blobGet(m[1]); if (!b) return new Response(null, { status: 404 }); return new Response(o && o.method === 'HEAD' ? null : b, { status: 200, headers: { 'Content-Type': b.type || 'application/octet-stream' } }); }
     return puvFetch(u, o); };
   const PRAZDNY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-  function oprav(el, a, id) { const u = urls.get(id); if (u) { el.setAttribute(a, u); return; } el.setAttribute(a, a === 'src' ? PRAZDNY : '#'); blobUrl(id).then((u2) => { if (u2 && el.isConnected) el.setAttribute(a, u2); }).catch(() => {}); }
+  const cekaVid = new WeakMap();
+  const vid = 'IntersectionObserver' in window ? new IntersectionObserver((E) => E.forEach((e) => { if (!e.isIntersecting) return; vid.unobserve(e.target); const L = cekaVid.get(e.target) || []; cekaVid.delete(e.target); L.forEach(([a, id]) => nacti(e.target, a, id)); }), { rootMargin: '400px 0px' }) : null;
+  function nacti(el, a, id) { blobUrl(id).then((u2) => { if (u2 && el.isConnected && el.getAttribute(a) !== u2) el.setAttribute(a, u2); }).catch(() => {}); }
+  function oprav(el, a, id) { const u = urls.get(id); if (u) { el.setAttribute(a, u); return; } el.setAttribute(a, a === 'src' ? PRAZDNY : '#');
+    if (!el.isConnected) return; // mezitím překreslené – stahovat se nebude
+    if (vid) { const L = cekaVid.get(el) || []; L.push([a, id]); cekaVid.set(el, L); vid.observe(el); } else nacti(el, a, id); }
   const SEL = '[src^="/_blob/"],[href^="/_blob/"]';
   function projdi(n) { if (!n || n.nodeType !== 1) return; const L = n.matches(SEL) ? [n] : []; L.push(...n.querySelectorAll(SEL));
     L.forEach((el) => ['src', 'href'].forEach((a) => { const v = el.getAttribute(a); if (v && v.startsWith('/_blob/')) oprav(el, a, v.slice(7)); })); }
@@ -825,10 +831,22 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     panel.innerHTML = `<h3 id="srvPh">☁ Server</h3><p class="srvmut">${esc(host())}${sez && sez.email ? ' · ' + esc(sez.email) : ''}</p>
       <p><b>${esc(x.t)}</b></p><p class="srvmut">Naposledy načteno ze serveru: ${esc(predChvili(S.sync))}. Živé změny z jiných zařízení: ${S.rt === 'ok' ? 'zapnuté' : 'teď ne (doplní se při dalším načtení)'}.</p>
       ${S.chyby.length ? '<p class="srvch">' + S.chyby.slice(0, 3).map((c) => esc(c.co) + ': ' + esc(c.proc)).join('<br>') + '</p>' : ''}
-      <p class="srvmut">Fotky, které si otevřeš, zůstanou i v tomhle zařízení – půjdou zobrazit bez signálu.</p>
+      ${S.spi ? '<p class="srvch">Server neodpovídá. Když jinde internet jde, projekt na Supabase možná usnul (stává se po týdnu bez použití) – otevři supabase.com, svůj projekt a dej Resume project. Data zůstávají.</p>' : ''}
+      <p class="srvmut" id="srvMisto">${mistoTxt()}</p>
+      <p class="srvmut">Fotky, které si otevřeš, zůstanou i v tomhle zařízení – půjdou zobrazit bez signálu.${S.prihlasit ? '' : S.stahuji ? ` <b>Ukládám fotky do zařízení: ${S.stahuji.hotovo} / ${S.stahuji.celkem}</b> <button class="srvlink" data-srv="stahni-stop">Zastavit</button>` : ' <button class="srvlink" data-srv="stahni-vse">📥 Uložit všechny fotky do zařízení</button>'}</p>
       <div class="srvbtns">${S.prihlasit ? '<button class="btn sm p" data-srv="prihlasit">Přihlásit</button>' : '<button class="btn sm" data-srv="nacist">↻ Načíst znovu</button>'}${S.fronta + S.fotek && !S.prihlasit ? '<button class="btn sm p" data-srv="odeslat">Odeslat teď</button>' : ''}${S.chyby.length ? '<button class="btn sm ghost" data-srv="chyby-pryc">Skrýt chyby</button>' : ''}${S.prihlasit ? '' : '<button class="btn sm" data-srv="telefon">📱 Telefon</button>'}<button class="btn sm ghost" data-srv="odhlasit">Odhlásit</button><button class="btn sm ghost" data-srv="zavrit">Zavřít</button></div>
       ${panel.dataset.tel ? telHtml() : ''}
       ${panel.dataset.odhl ? `<p class="srvch" role="alert">${S.fronta + S.fotek ? 'Ještě se neodeslalo: ' + esc(stavTxt().t.replace(/^[^:]*: /, '')) + ' Po odhlášení se to ztratí. ' : ''}Odhlášením se z tohoto zařízení smaže kopie dat (na serveru zůstanou).</p><div class="srvbtns"><button class="btn sm p" data-srv="odhlasit-ano">Odhlásit</button><button class="btn sm ghost" data-srv="odhlasit-ne">Ne</button></div>` : ''}`; }
+  const MB = (b) => (b / 1048576).toLocaleString('cs-CZ', { maximumFractionDigits: b < 10485760 ? 1 : 0 }) + ' MB';
+  let mistoZ = null, mistoP = null;
+  function mistoTxt() { if (!mistoZ) { if (!mistoP && sez && !S.prihlasit) mistoP = mistoZjisti().catch(() => null).finally(() => { mistoP = null; }); return 'Místo na serveru zjišťuji…'; }
+    const z = mistoZ; return `Na serveru: ${z.zaznamu} záznamů a ${z.fotek} fotek (${MB(z.bajtu)} z 1 GB zdarma, ${Math.max(1, Math.round(z.bajtu / 1073741824 * 100))} %).${z.vZarizeni != null ? ' V tomhle zařízení: ' + z.vZarizeni + ' fotek.' : ''}`; }
+  async function mistoZjisti() { const F = await fotkyNaServeru(); let b = 0; fotkyVel.forEach((v) => { b += v; }); let n = 0; C.forEach((m) => { n += m.size; });
+    let vz = null; try { vz = (await vse('blobs')).length; } catch (e) {} mistoZ = { zaznamu: n, fotek: F.size, bajtu: b, vZarizeni: vz }; if (panel) kresliPanel(); }
+  async function stahniVse() { if (S.stahuji) return; let F; try { F = [...(await fotkyNaServeru())]; } catch (e) { return; }
+    const maj = new Set((await vse('blobs')).map((x) => x.k)); const L = F.filter((id) => !maj.has(id)); S.stahuji = { celkem: L.length, hotovo: 0, stop: false }; if (panel) kresliPanel();
+    for (const id of L) { if (S.stahuji.stop) break; try { const b = await stahniFoto(id); if (b) await put('blobs', id, b); } catch (e) { if (e instanceof SitChyba) break; } S.stahuji.hotovo++; if (panel) kresliPanel(); }
+    S.stahuji = null; mistoZ = null; if (panel) kresliPanel(); }
   function telHtml() { const o = odkazTelefon(); if (!o) return '<p class="srvch">Odkaz pro telefon jde udělat jen z webové verze Deníku.</p>';
     let q = ''; try { q = window.__denikQR ? window.__denikQR(o, 4) : ''; } catch (e) { q = ''; }
     return `<div class="srvtel" data-odkaz="${esc(o)}"><p><b>Naskenuj fotoaparátem telefonu.</b> Otevře se Deník s vyplněnou adresou serveru a klíčem – zadáš jen e-mail a heslo.</p>${q ? '<div class="srvqr">' + q + '</div>' : ''}<p class="srvmut">Heslo ani přihlášení v kódu není. Ukaž ho jen svému telefonu.</p></div>`; }
@@ -837,7 +855,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   document.addEventListener('click', async (e) => { const b = e.target.closest && e.target.closest('[data-srv]'); if (b) { e.preventDefault(); e.stopPropagation(); const a = b.dataset.srv;
       if (a === 'zavrit') zavriPanel(); else if (a === 'odeslat') { pokus = 0; odesli(); } else if (a === 'nacist') { synchronizuj().catch(() => {}); rtPripoj(); }
       else if (a === 'chyby-pryc') { S.chyby = []; lsS('denik-srv-chyby', []); kresliStav(); } else if (a === 'prihlasit') { zavriPanel(); ukazPrihlaseni(); }
-      else if (a === 'odhlasit') { panel.dataset.odhl = '1'; kresliPanel(); } else if (a === 'telefon') { if (panel.dataset.tel) delete panel.dataset.tel; else panel.dataset.tel = '1'; kresliPanel(); } else if (a === 'odhlasit-ne') { delete panel.dataset.odhl; kresliPanel(); } else if (a === 'odhlasit-ano') await odhlasit();
+      else if (a === 'stahni-vse') stahniVse(); else if (a === 'stahni-stop') { if (S.stahuji) S.stahuji.stop = true; } else if (a === 'odhlasit') { panel.dataset.odhl = '1'; kresliPanel(); } else if (a === 'telefon') { if (panel.dataset.tel) delete panel.dataset.tel; else panel.dataset.tel = '1'; kresliPanel(); } else if (a === 'odhlasit-ne') { delete panel.dataset.odhl; kresliPanel(); } else if (a === 'odhlasit-ano') await odhlasit();
       else if (a === 'panel') otevriPanel();
       return; }
     if (panel && !panel.contains(e.target) && !(stavBtn && stavBtn.contains(e.target))) zavriPanel(); }, true);
@@ -918,7 +936,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v50';
+const VERZE = 'v51';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
