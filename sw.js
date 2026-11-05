@@ -1,6 +1,6 @@
 // Deník údržby – service worker webové verze: aplikace se otevře i bez signálu.
 // Ukládá jen soubory aplikace (stránka, ikony). Data a fotky sem nepatří – ty má aplikace ve svém úložišti; spojení na server se nechává být.
-const CACHE = 'denik-v51';
+const CACHE = 'denik-v52';
 const SOUBORY = ['./', './index.html', './manifest.webmanifest', './ikona-192.png', './ikona-512.png', './ikona-maskable-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SOUBORY)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((L) => Promise.all(L.filter((k) => k.startsWith('denik-') && k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

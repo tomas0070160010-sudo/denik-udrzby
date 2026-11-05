@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v51"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v52"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -675,6 +675,26 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   let odesliP = null, cekejT = null, pokus = 0, behem = false, dotceno = new Set();
   const PAUZY = [2000, 5000, 15000, 30000, 60000];
   function znovuZa() { clearTimeout(cekejT); const ms = PAUZY[Math.min(pokus, PAUZY.length - 1)]; pokus++; cekejT = setTimeout(() => { odesli(); }, ms); }
+  // sloučení se změnou z jiného zařízení: pole, které změnilo jen jedno zařízení, vyhrává; u seznamů se spojí položky (podle id),
+  // smazané na kterékoli straně zůstanou smazané; když obě změnily totéž pole jinak, vyhraje tohle zařízení (změna je novější)
+  const stejne = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const idPol = (x) => (x && typeof x === 'object' && x.id != null ? 'id:' + x.id : 'j:' + JSON.stringify(x));
+  function sloucit(srv, zakl, moje) { if (!zakl || typeof srv !== 'object' || !srv || typeof moje !== 'object' || !moje) return moje;
+    const R = {}; const K = new Set([...Object.keys(srv), ...Object.keys(moje), ...Object.keys(zakl)]);
+    for (const k of K) { const s0 = srv[k], b0 = zakl[k], m0 = moje[k];
+      if (stejne(m0, b0)) { if (s0 !== undefined) R[k] = s0; continue; }
+      if (stejne(s0, b0) || stejne(s0, m0)) { if (m0 !== undefined) R[k] = m0; continue; }
+      if (Array.isArray(s0) && Array.isArray(m0)) { const B = new Set((Array.isArray(b0) ? b0 : []).map(idPol)), Sm = new Map(s0.map((x) => [idPol(x), x])), Mm = new Map(m0.map((x) => [idPol(x), x]));
+        const out = []; s0.forEach((x) => { const i = idPol(x); if (B.has(i) && !Mm.has(i)) return; out.push(Mm.has(i) && !stejne(Mm.get(i), x) && B.has(i) ? Mm.get(i) : x); });
+        m0.forEach((x) => { const i = idPol(x); if (!Sm.has(i) && !B.has(i)) out.push(x); }); R[k] = out; continue; }
+      if (m0 !== undefined) R[k] = m0; }
+    return R; }
+  async function zapisSloucit(op) { let d = op.d;
+    if (op.z != null && op.b) { const r = await nactiJeden(op.col, op.id); if (r && cas(r.upraveno) > op.z + 1 && !stejne(r.data, op.b)) { d = sloucit(r.data, op.b, op.d);
+        const n = { d, u: Date.now() }; mapa(op.col).set(op.id, n); await put('docs', klic(op.col, op.id), n); oznam(op.col); S.slouceno = (S.slouceno || 0) + 1; hlaska('Sloučeno se změnou z jiného zařízení (' + op.col + ').'); } }
+    await zapisDoc(op.col, op.id, d, d === op.d ? op.u : Date.now()); }
+  function hlaska(t) { let el = document.getElementById('srvToast'); if (!el) { el = document.createElement('div'); el.id = 'srvToast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+    el.textContent = t; el.hidden = false; clearTimeout(hlaska.t); hlaska.t = setTimeout(() => { el.hidden = true; }, 4000); }
   // dávka: víc zápisů dokumentů najednou (obnova ze zálohy = stovky záznamů), jinak po jednom
   const DAVKA = 100, DAVKA_B = 1500000;
   async function zapisDavku(L) { const pos = new Map(); L.forEach((x) => pos.set(klic(x.op.col, x.op.id), x)); const rows = [...pos.values()].map(({ op }) => ({ vlastnik: sez.uid, kolekce: op.col, id: op.id, data: op.d, upraveno: new Date(op.u).toISOString() }));
@@ -684,7 +704,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
         let D = [L[0]]; if (L[0].op.typ === 'set' && !jednotlive) { let b = 0; D = []; for (const x of L) { if (x.op.typ !== 'set' || D.length >= DAVKA) break; const v = JSON.stringify(x.op.d).length; if (D.length && b + v > DAVKA_B) break; b += v; D.push(x); } }
         D.forEach((x) => vLetu.add(x.n)); S.odesila = true; kresliStav(); const op = D[0].op;
         try {
-          if (op.typ === 'set') { if (D.length > 1) await zapisDavku(D); else await zapisDoc(op.col, op.id, op.d, op.u); }
+          if (op.typ === 'set') { if (D.length > 1) await zapisDavku(D); else await zapisSloucit(op); }
           else if (op.typ === 'del') await smazDoc(op.col, op.id);
           else if (op.typ === 'foto') { const b = await get('blobs', op.id); if (b) { await nahrajFoto(op.id, b, op.t); if (fotkySrv) fotkySrv.add(op.id); } }
           else if (op.typ === 'fotodel') { await smazFoto(op.id); if (fotkySrv) fotkySrv.delete(op.id); }
@@ -752,7 +772,9 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     collection: (col) => ({ onSnapshot(fn, err) { (posl[col] = posl[col] || []).push(fn); jePripraven.then(() => prvniData).then(() => fn(snap(col))).catch((e) => err && err(e));
       return () => { posl[col] = (posl[col] || []).filter((x) => x !== fn); }; } }),
     doc(path) { const i = path.indexOf('/'); const col = path.slice(0, i), id = path.slice(i + 1);
-      return { async set(data) { const u = Date.now(); const n = { d: kopie(data), u }; mapa(col).set(id, n); await put('docs', klic(col, id), n); oznam(col); await doFronty({ typ: 'set', col, id, d: n.d, u }); },
+      return { async set(data) { const u = Date.now(); const st = mapa(col).get(id); const ceka = Q.find((x) => !vLetu.has(x.n) && x.op.typ === 'set' && x.op.col === col && x.op.id === id);
+          const zakl = ceka ? { b: ceka.op.b, z: ceka.op.z } : st ? { b: st.d, z: st.u } : { b: null, z: null };
+          const n = { d: kopie(data), u }; mapa(col).set(id, n); await put('docs', klic(col, id), n); oznam(col); await doFronty({ typ: 'set', col, id, d: n.d, u, b: zakl.b, z: zakl.z }); },
         async delete() { mapa(col).delete(id); await del('docs', klic(col, id)); oznam(col); await doFronty({ typ: 'del', col, id, u: Date.now() }); } }; },
   };
   const urls = new Map(), stahuji = new Map();
@@ -936,7 +958,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v51';
+const VERZE = 'v52';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
