@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v56"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v57"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -540,7 +540,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   function oprav(el, a, id) { const u = urls.get(id); if (u) { el.setAttribute(a, u); return; } el.setAttribute(a, a === 'src' ? PRAZDNY : '#'); blobUrl(id).then((u2) => { if (u2 && el.isConnected) el.setAttribute(a, u2); }).catch(() => {}); }
   const SEL = '[src^="/_blob/"],[href^="/_blob/"]';
   function projdi(n) { if (!n || n.nodeType !== 1) return; const L = n.matches(SEL) ? [n] : []; L.push(...n.querySelectorAll(SEL));
-    L.forEach((el) => ['src', 'href'].forEach((a) => { const v = el.getAttribute(a); if (v && v.startsWith('/_blob/')) oprav(el, a, v.slice(7)); })); }
+    L.forEach((el) => ['src', 'href'].forEach((a) => { const v = el.getAttribute(a); if (v && v.startsWith('/_blob/')) oprav(el, a, v.slice(7, 39)); })); }
   new MutationObserver((ms) => ms.forEach((m) => { if (m.type === 'attributes') projdi(m.target); else m.addedNodes.forEach(projdi); }))
     .observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'href'] });
   // --- trvalé úložiště (prohlížeč ho pak sám nemaže)
@@ -560,7 +560,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 (() => {
   'use strict';
   const WEB = "https://tomas0070160010-sudo.github.io/denik-udrzby/"; // adresa webové verze (doplní sestavení), pro odkaz do telefonu
-  const LS_CFG = 'denik-srv', LS_SEZ = 'denik-srv-sezeni', DBN = 'denik-udrzby-server', VER = 1, STRANA = 1000, TOPIC = 'realtime:denik';
+  const LS_CFG = 'denik-srv', LS_SEZ = 'denik-srv-sezeni', DBN = 'denik-udrzby-server', VER = 2, STRANA = 1000, TOPIC = 'realtime:denik';
   const lsG = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
   const lsS = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   const kopie = (x) => JSON.parse(JSON.stringify(x));
@@ -574,12 +574,13 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   const S = { chybaSync: '', online: null, rt: 'off', sync: 0, chyby: [], fronta: 0, fotek: 0, odesila: false, prihlasit: false, prohlizet: false };
 
   // --- úložiště v zařízení: IndexedDB (dokumenty, fotky, fronta k odeslání), nebo náhradní v paměti
-  const pamet = { docs: new Map(), blobs: new Map(), fronta: new Map(), meta: new Map() };
+  const pamet = { docs: new Map(), blobs: new Map(), nahledy: new Map(), fronta: new Map(), meta: new Map() };
   let dbp = null, pametN = 0;
   const idb = () => (dbp = dbp || new Promise((ok) => { let r; const nahrad = () => { window.__serverPamet = true; ok(null); };
     try { r = indexedDB.open(DBN, VER); } catch (e) { nahrad(); return; }
-    r.onupgradeneeded = () => { const d = r.result; ['docs', 'blobs', 'meta'].forEach((n) => { if (!d.objectStoreNames.contains(n)) d.createObjectStore(n); }); if (!d.objectStoreNames.contains('fronta')) d.createObjectStore('fronta', { autoIncrement: true }); };
-    r.onsuccess = () => ok(r.result); r.onerror = () => nahrad(); r.onblocked = () => nahrad(); }));
+    r.onupgradeneeded = () => { const d = r.result; ['docs', 'blobs', 'nahledy', 'meta'].forEach((n) => { if (!d.objectStoreNames.contains(n)) d.createObjectStore(n); }); if (!d.objectStoreNames.contains('fronta')) d.createObjectStore('fronta', { autoIncrement: true }); };
+    r.onsuccess = () => { const d = r.result; d.onversionchange = () => { try { d.close(); } catch (e) {} try { hlaska('Deník se aktualizoval v jiné záložce – obnov tuhle stránku.'); } catch (e) {} }; ok(d); }; r.onerror = () => nahrad();
+    r.onblocked = () => { try { hlaska('Deník je otevřený i v jiné záložce nebo okně – zavři je, ať se dokončí aktualizace.'); } catch (e) {} setTimeout(nahrad, 15000); }; }));
   const rq = (r) => new Promise((ok, ko) => { r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error); });
   const hotovo = (t) => new Promise((ok, ko) => { t.oncomplete = () => ok(); t.onerror = () => ko(t.error); t.onabort = () => ko(t.error); });
   async function put(st, key, val) { const d = await idb(); if (!d) { pamet[st].set(key, val); return; } const t = d.transaction(st, 'readwrite'); t.objectStore(st).put(val, key); await hotovo(t); }
@@ -590,7 +591,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   async function pridejDoFronty(op) { const d = await idb(); if (!d) { pamet.fronta.set(++pametN, op); return pametN; } const t = d.transaction('fronta', 'readwrite'); const r = t.objectStore('fronta').add(op); await hotovo(t); return r.result; }
   async function putMnoho(st, L) { if (!L.length) return; const d = await idb(); if (!d) { L.forEach(([k, v]) => pamet[st].set(k, v)); return; } const t = d.transaction(st, 'readwrite'); const o = t.objectStore(st); L.forEach(([k, v]) => o.put(v, k)); await hotovo(t); }
   async function delMnoho(st, L) { if (!L.length) return; const d = await idb(); if (!d) { L.forEach((k) => pamet[st].delete(k)); return; } const t = d.transaction(st, 'readwrite'); const o = t.objectStore(st); L.forEach((k) => o.delete(k)); await hotovo(t); }
-  async function vymazVse() { const d = await idb(); if (!d) { Object.values(pamet).forEach((m) => m.clear()); return; } const t = d.transaction(['docs', 'blobs', 'fronta', 'meta'], 'readwrite'); ['docs', 'blobs', 'fronta', 'meta'].forEach((n) => t.objectStore(n).clear()); await hotovo(t); }
+  async function vymazVse() { const d = await idb(); if (!d) { Object.values(pamet).forEach((m) => m.clear()); return; } const t = d.transaction(['docs', 'blobs', 'nahledy', 'fronta', 'meta'], 'readwrite'); ['docs', 'blobs', 'nahledy', 'fronta', 'meta'].forEach((n) => t.objectStore(n).clear()); await hotovo(t); }
 
   // --- dokumenty v paměti (kolekce → id → { d, u }), oznámení aplikaci
   const C = new Map(); const mapa = (col) => { if (!C.has(col)) C.set(col, new Map()); return C.get(col); };
@@ -655,7 +656,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   async function nahrajFoto(id, b, typ) { const r = await api('/storage/v1/object/' + cestaF(id), { method: 'POST', headers: { 'Content-Type': typ || b.type || 'application/octet-stream', 'x-upsert': 'false', 'cache-control': 'max-age=31536000' }, body: b });
     if (r.ok) return; const e = await chybaZ(r); if (r.status === 409 || /duplicate|already exists/i.test(e.message)) return; throw e; }
   async function stahniFoto(id) { const r = await api('/storage/v1/object/authenticated/' + cestaF(id)); if (r.ok) return r.blob(); if (r.status === 404 || r.status === 400) return null; throw await chybaZ(r); }
-  async function smazFoto(id) { const r = await api('/storage/v1/object/fotky', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefixes: [sez.uid + '/' + id] }) }); if (!r.ok && r.status !== 404) throw await chybaZ(r); }
+  async function smazFoto(id) { const r = await api('/storage/v1/object/fotky', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefixes: [sez.uid + '/' + id, sez.uid + '/n/' + id] }) }); if (!r.ok && r.status !== 404) throw await chybaZ(r); }
   let fotkySrv = null, fotkySrvP = null; const fotkyVel = new Map();
   function fotkyNaServeru() { if (fotkySrv) return Promise.resolve(fotkySrv); if (fotkySrvP) return fotkySrvP;
     fotkySrvP = (async () => { const set = new Set(); let od = 0;
@@ -711,7 +712,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
         try {
           if (op.typ === 'set') { if (D.length > 1) await zapisDavku(D); else await zapisSloucit(op); }
           else if (op.typ === 'del') await smazDoc(op.col, op.id);
-          else if (op.typ === 'foto') { const b = await get('blobs', op.id); if (b) { await nahrajFoto(op.id, b, op.t); if (fotkySrv) fotkySrv.add(op.id); } }
+          else if (op.typ === 'foto') { const b = await get('blobs', op.id); if (b) { await nahrajFoto(op.id, b, op.t); if (fotkySrv) fotkySrv.add(op.id); nahledPro(op.id, b).catch(() => {}); } }
           else if (op.typ === 'fotodel') { await smazFoto(op.id); if (fotkySrv) fotkySrv.delete(op.id); }
           if (behem) D.forEach((x) => { if (x.op.col) dotceno.add(klic(x.op.col, x.op.id)); });
           await delMnoho('fronta', D.map((x) => x.n)); pokus = 0; S.online = true; if (jednotlive) jednotlive--;
@@ -789,6 +790,31 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     if (stahuji.has(id)) return stahuji.get(id);
     const p = (async () => { try { const x = await stahniFoto(id); if (x) { await put('blobs', id, x).catch(() => {}); S.online = true; } return x; } catch (e) { if (e instanceof SitChyba) S.online = false; return null; } finally { stahuji.delete(id); } })();
     stahuji.set(id, p); return p; }
+  // --- náhledy (v57): max 320 px, na serveru n/<id>; v zařízení sklad „nahledy“
+  const NAHL = 320; const urlsN = new Map(), stahujiN = new Map(); let nahledySrv = null, nahledySrvP = null, nahrN = Promise.resolve();
+  const cestaN = (id) => 'fotky/' + enc(sez.uid) + '/n/' + enc(id);
+  function nahledyNaServeru() { if (nahledySrv) return Promise.resolve(nahledySrv); if (nahledySrvP) return nahledySrvP;
+    nahledySrvP = (async () => { const set = new Set(); let od = 0;
+      for (;;) { const r = await api('/storage/v1/object/list/fotky', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefix: sez.uid + '/n', limit: STRANA, offset: od, sortBy: { column: 'name', order: 'asc' } }) });
+        if (!r.ok) throw await chybaZ(r); const L = await r.json(); L.forEach((x) => { if (x && x.name && x.id !== null) set.add(x.name); }); if (L.length < STRANA) break; od += L.length; }
+      nahledySrv = set; return set; })().finally(() => { nahledySrvP = null; }); return nahledySrvP; }
+  async function zmensi(b) { if (!b || !/^image\//.test(b.type || '') || typeof createImageBitmap !== 'function') return null; let bm = null; try { bm = await createImageBitmap(b); } catch (e) { return null; }
+    const k = Math.min(1, NAHL / Math.max(bm.width, bm.height)); const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(bm.width * k)); c.height = Math.max(1, Math.round(bm.height * k));
+    c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height); if (bm.close) bm.close(); const n = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.72)); return n && n.size < b.size ? n : b; }
+  // náhled z celé fotky: uložit v zařízení a (jednou, po řadě) poslat na server pro ostatní zařízení
+  async function nahledPro(id, full) { let n = null; try { n = await get('nahledy', id); } catch (e) {} if (!n) { n = await zmensi(full); if (!n) return null; await put('nahledy', id, n).catch(() => {}); }
+    if (sez && cfg && !S.prihlasit) { const srv = nahledySrv; if (!srv || !srv.has(id)) nahrN = nahrN.then(async () => { try { const r = await api('/storage/v1/object/' + cestaN(id), { method: 'POST', headers: { 'Content-Type': 'image/jpeg', 'x-upsert': 'false', 'cache-control': 'max-age=31536000' }, body: n });
+        if (r.ok || r.status === 409 || r.status === 400) { if (nahledySrv) nahledySrv.add(id); } } catch (e) {} }); }
+    return n; }
+  async function nahledGet(id) { let n = null; try { n = await get('nahledy', id); } catch (e) {} if (n) return n;
+    let full = null; try { full = await get('blobs', id); } catch (e) {} if (full) return (await nahledPro(id, full)) || full;
+    if (!sez || !cfg || S.prihlasit) return null; if (stahujiN.has(id)) return stahujiN.get(id);
+    const pr = (async () => { try { let ma = false; try { ma = (await nahledyNaServeru()).has(id); } catch (e) { if (e instanceof SitChyba) throw e; }
+        if (ma) { const r = await api('/storage/v1/object/authenticated/' + cestaN(id)); if (r.ok) { const b = await r.blob(); await put('nahledy', id, b).catch(() => {}); S.online = true; return b; } }
+        const f = await blobGet(id); if (!f) return null; return (await nahledPro(id, f)) || f; }
+      catch (e) { if (e instanceof SitChyba) S.online = false; return null; } finally { stahujiN.delete(id); } })();
+    stahujiN.set(id, pr); return pr; }
+  async function nahledUrl(id) { if (urls.has(id)) return urls.get(id); if (urlsN.has(id)) return urlsN.get(id); const b = await nahledGet(id); if (!b) return null; const u = URL.createObjectURL(b); urlsN.set(id, u); return u; }
   async function blobUrl(id) { if (urls.has(id)) return urls.get(id); const b = await blobGet(id); if (!b) return null; const u = URL.createObjectURL(b); urls.set(id, u); return u; }
   const assets = {
     async upload(blob, o) { const typ = typ0(blob, o); const b = blob.type === typ ? blob : new Blob([blob], { type: typ }); const id = hex();
@@ -797,7 +823,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     async __ulozId(id, blob, o) { if (!/^[0-9a-f]{32}$/.test(id)) throw new Error('špatné id'); const typ = typ0(blob, o); const b = blob.type === typ ? blob : new Blob([blob], { type: typ });
       await put('blobs', id, b); if (!(fotkySrv && fotkySrv.has(id))) await doFronty({ typ: 'foto', id, t: typ }); return { id }; },
     async __ma(id) { try { if (await get('blobs', id)) return true; } catch (e) {} try { return (await fotkyNaServeru()).has(id); } catch (e) { return false; } },
-    async delete(id) { await del('blobs', id); if (urls.has(id)) { URL.revokeObjectURL(urls.get(id)); urls.delete(id); } await doFronty({ typ: 'fotodel', id }); },
+    async delete(id) { await del('blobs', id); await del('nahledy', id).catch(() => {}); if (urls.has(id)) { URL.revokeObjectURL(urls.get(id)); urls.delete(id); } if (urlsN.has(id)) { URL.revokeObjectURL(urlsN.get(id)); urlsN.delete(id); } if (nahledySrv) nahledySrv.delete(id); await doFronty({ typ: 'fotodel', id }); },
     async list() { const ids = new Set((await vse('blobs')).map((x) => x.k)); try { (await fotkyNaServeru()).forEach((x) => ids.add(x)); } catch (e) {} return { assets: [...ids].map((id) => ({ id })), usage: {} }; },
   };
   const TYP = [[/\.html?$/i, 'text/html;charset=utf-8'], [/\.csv$/i, 'text/csv;charset=utf-8'], [/\.json$/i, 'application/json'], [/\.txt$/i, 'text/plain;charset=utf-8'], [/\.zip$/i, 'application/zip']];
@@ -809,14 +835,14 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     return puvFetch(u, o); };
   const PRAZDNY = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   const cekaVid = new WeakMap();
-  const vid = 'IntersectionObserver' in window ? new IntersectionObserver((E) => E.forEach((e) => { if (!e.isIntersecting) return; vid.unobserve(e.target); const L = cekaVid.get(e.target) || []; cekaVid.delete(e.target); L.forEach(([a, id]) => nacti(e.target, a, id)); }), { rootMargin: '400px 0px' }) : null;
-  function nacti(el, a, id) { blobUrl(id).then((u2) => { if (u2 && el.isConnected && el.getAttribute(a) !== u2) el.setAttribute(a, u2); }).catch(() => {}); }
-  function oprav(el, a, id) { const u = urls.get(id); if (u) { el.setAttribute(a, u); return; } el.setAttribute(a, a === 'src' ? PRAZDNY : '#');
+  const vid = 'IntersectionObserver' in window ? new IntersectionObserver((E) => E.forEach((e) => { if (!e.isIntersecting) return; vid.unobserve(e.target); const L = cekaVid.get(e.target) || []; cekaVid.delete(e.target); L.forEach(([a, id, n]) => nacti(e.target, a, id, n)); }), { rootMargin: '400px 0px' }) : null;
+  function nacti(el, a, id, n) { (n ? nahledUrl(id) : blobUrl(id)).then((u2) => { if (!u2 && !n) u2 = urlsN.get(id); if (u2 && el.isConnected && el.getAttribute(a) !== u2) el.setAttribute(a, u2); }).catch(() => {}); }
+  function oprav(el, a, id, n) { const u = urls.get(id) || (n && urlsN.get(id)); if (u) { el.setAttribute(a, u); return; } el.setAttribute(a, a === 'src' ? PRAZDNY : '#');
     if (!el.isConnected) return; // mezitím překreslené – stahovat se nebude
-    if (vid) { const L = cekaVid.get(el) || []; L.push([a, id]); cekaVid.set(el, L); vid.observe(el); } else nacti(el, a, id); }
+    if (vid) { const L = cekaVid.get(el) || []; L.push([a, id, n]); cekaVid.set(el, L); vid.observe(el); } else nacti(el, a, id, n); }
   const SEL = '[src^="/_blob/"],[href^="/_blob/"]';
   function projdi(n) { if (!n || n.nodeType !== 1) return; const L = n.matches(SEL) ? [n] : []; L.push(...n.querySelectorAll(SEL));
-    L.forEach((el) => ['src', 'href'].forEach((a) => { const v = el.getAttribute(a); if (v && v.startsWith('/_blob/')) oprav(el, a, v.slice(7)); })); }
+    L.forEach((el) => ['src', 'href'].forEach((a) => { const v = el.getAttribute(a); if (v && v.startsWith('/_blob/')) oprav(el, a, v.slice(7, 39), a === 'src' && v.slice(39) === '#n'); })); }
   new MutationObserver((ms) => ms.forEach((m) => { if (m.type === 'attributes') projdi(m.target); else m.addedNodes.forEach(projdi); }))
     .observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'href'] });
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
@@ -873,6 +899,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   async function stahniVse() { if (S.stahuji) return; let F; try { F = [...(await fotkyNaServeru())]; } catch (e) { return; }
     const maj = new Set((await vse('blobs')).map((x) => x.k)); const L = F.filter((id) => !maj.has(id)); S.stahuji = { celkem: L.length, hotovo: 0, stop: false }; if (panel) kresliPanel();
     for (const id of L) { if (S.stahuji.stop) break; try { const b = await stahniFoto(id); if (b) await put('blobs', id, b); } catch (e) { if (e instanceof SitChyba) break; } S.stahuji.hotovo++; if (panel) kresliPanel(); }
+    try { const N = await nahledyNaServeru(); for (const id of F) { if (S.stahuji.stop) break; if (N.has(id)) continue; const b = await get('blobs', id).catch(() => null); if (b) await nahledPro(id, b); } await nahrN; } catch (e) {}
     S.stahuji = null; mistoZ = null; if (panel) kresliPanel(); }
   function telHtml() { const o = odkazTelefon(); if (!o) return '<p class="srvch">Odkaz pro telefon jde udělat jen z webové verze Deníku.</p>';
     let q = ''; try { q = window.__denikQR ? window.__denikQR(o, 4) : ''; } catch (e) { q = ''; }
@@ -972,7 +999,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v56';
+const VERZE = 'v57';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -1042,8 +1069,9 @@ const selMat = (pole, val, data) => { const opt = pole === 'potreba' ? POTREBA :
   const cls = pole === 'potreba' ? (v === '?' ? 'v-q' : 'v-' + v) : (v === '' ? 'v-chybi' : 'v-' + v);
   return `<select class="${cls}" ${data} aria-label="${pole === 'potreba' ? 'Potřebuji?' : 'Objednávka'}">${Object.entries(opt).map(([k, t]) => `<option value="${k}"${k === v ? ' selected' : ''}>${t}</option>`).join('')}</select>`; };
 const fotoUrl = (f) => f.id ? '/_blob/' + f.id : '';
+const fotoN = (f) => f.id ? '/_blob/' + f.id + '#n' : ''; // náhled (ve verzi se serverem malá kopie)
 const popisKr = (p) => { const t = String(p.popisOpraveny || p.popis || '').replace(/\s+/g, ' ').trim(); if (!t || norm(t) === norm(p.nazev)) return ''; return t.length > 130 ? t.slice(0, 127) + '…' : t; };
-const papirNahled = (p) => { const hf = typeof hlFoto === 'function' ? hlFoto(p) : null; return hf ? `<span class="dnf" data-lbp="${esc(p.id)}" data-lbi="${hf.i}" title="Klik = ${hf.f.typ === 'formular' ? 'papír' : 'fotka'} ve velkém · dvojklik = otevřít požadavek"><img src="${fotoUrl(hf.f)}" alt="${hf.f.typ === 'formular' ? 'papír' : 'fotka'} ${esc(p.cislo || '')}" loading="lazy"></span>` : '<span class="dnf bez" aria-hidden="true">📄</span>'; };
+const papirNahled = (p) => { const hf = typeof hlFoto === 'function' ? hlFoto(p) : null; return hf ? `<span class="dnf" data-lbp="${esc(p.id)}" data-lbi="${hf.i}" title="Klik = ${hf.f.typ === 'formular' ? 'papír' : 'fotka'} ve velkém · dvojklik = otevřít požadavek"><img src="${fotoN(hf.f)}" alt="${hf.f.typ === 'formular' ? 'papír' : 'fotka'} ${esc(p.cislo || '')}" loading="lazy"></span>` : '<span class="dnf bez" aria-hidden="true">📄</span>'; };
 const lidiP = (p) => Math.max(1, +p.lidi || 1);
 const DEN_T = { lehky: '🙂 Lehčí', normal: 'Běžný', tezky: '💪 Náročný' };
 const rezervaH = (tp) => r1((+tp.T.hodin || 6) - tp.praceH - tp.cestaH);
@@ -2696,7 +2724,7 @@ const pocetTxt = (n) => n + ' ' + (n === 1 ? 'požadavek' : n > 1 && n < 5 ? 'po
 function polozka(p) {
   const d = duplikaty(p); const st = STAV[p.stav || 'novy']; const ob = obtiznost(p), du = dulezitost(p), dn = p.stav === 'hotovy' ? 0 : dniOd(p.datum);
   const fs = (p.fotky || []).filter((x) => x.id); const hf = hlFoto(p); const nf = hf && hf.f;
-  return `<button class="pol${nf ? ' sf' : ''}" data-otevri="${esc(p.id)}">${nf ? `<span class="nf" data-lbp="${esc(p.id)}" data-lbi="${hf.i}" title="Klik = ${nf.typ === 'formular' ? 'papír' : 'fotka'} ve velkém · dvojklik = otevřít požadavek"><img src="${fotoUrl(nf)}" alt="" loading="lazy">${fs.length > 1 ? `<b>${fs.length}</b>` : ''}</span>` : ''}<span class="t"><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || p.popis || 'Bez popisu')}</span><span class="h">${fmtH(hodinyCelkem(p))} h</span>
+  return `<button class="pol${nf ? ' sf' : ''}" data-otevri="${esc(p.id)}">${nf ? `<span class="nf" data-lbp="${esc(p.id)}" data-lbi="${hf.i}" title="Klik = ${nf.typ === 'formular' ? 'papír' : 'fotka'} ve velkém · dvojklik = otevřít požadavek"><img src="${fotoN(nf)}" alt="" loading="lazy">${fs.length > 1 ? `<b>${fs.length}</b>` : ''}</span>` : ''}<span class="t"><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || p.popis || 'Bez popisu')}</span><span class="h">${fmtH(hodinyCelkem(p))} h</span>
     <span class="m">${p.slouceno ? '<span class="chip mu">sloučeno – duplikát</span>' : `<span class="chip ${st[1]}">${st[0]}</span>`}${du === 3 ? '<span class="chip err">! Důležité</span>' : du === 1 ? '<span class="chip mu">Počká</span>' : ''}<span class="chip mu" title="Obtížnost: ${OBT[ob]}"><span class="tecky">${tecky(ob)}</span> ${OBT[ob]}</span>
     ${fakStitek(budovaKr(p))}${esc(budovaKr(p))}${p.mistnost || p.mistoOdhad ? ' · ' + esc(p.mistnost || p.mistoOdhad) : ''}${dn ? ` · <span style="color:${dn > 60 ? 'var(--err)' : dn > 21 ? 'var(--warn)' : 'inherit'};font-weight:${dn > 21 ? 600 : 400}">čeká ${dn} d</span>` : ''}
     ${matChip(p)}${nejiste(p) ? '<span class="chip warn">místo nejisté</span>' : ''}${d.length ? `<span class="chip err">možný duplikát ${esc(d[0].q.cislo || '')}</span>` : ''}${!nf && (p.fotky || []).length ? `<span class="chip mu">📷 ${p.fotky.length}</span>` : ''}${verzePapiru(p).length > 1 ? `<span class="chip acc">papír v${verzePapiru(p).length}</span>` : ''}</span></button>`;
@@ -2777,7 +2805,7 @@ function vDetail(id) {
     <span class="mut">${p.stav === 'hotovy' ? 'Splněno' + (p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : '') : p.datum ? 'Čeká ' + dniOd(p.datum) + ' dní' : ''} · ${fakulta(p) !== budovaKr(p) ? esc(fakulta(p)) + ' › ' : ''}${esc(budovaKr(p))}${patro(p) ? ' › ' + esc(patro(p)) : ''}</span>${ucChip(p)}</div>`;
   const tp = textPoslat(p, S.poslKontakt);
   { const L = (p.fotky || []).map((f, i) => ({ f, i })).filter((x) => x.f.id).sort((a, b) => (b.f.typ === 'formular') - (a.f.typ === 'formular') || String(a.f.kdy || '').localeCompare(String(b.f.kdy || '')));
-    if (L.length || S.assets) o += `<div class="fpas" role="group" aria-label="Fotky požadavku">${L.map(({ f, i }) => `<button data-foto="${i}" aria-label="Fotka ${i + 1}${f.typ === 'formular' ? ' – papír' : ''}"><img src="${fotoUrl(f)}" alt="" loading="lazy">${f.typ === 'formular' ? '<span class="tag">papír</span>' : ''}</button>`).join('')}${S.assets ? `<label class="fdal" for="fotoPridat" title="Přidat fotku">📷<span>Přidat fotku</span></label>` : ''}</div>`; }
+    if (L.length || S.assets) o += `<div class="fpas" role="group" aria-label="Fotky požadavku">${L.map(({ f, i }) => `<button data-foto="${i}" aria-label="Fotka ${i + 1}${f.typ === 'formular' ? ' – papír' : ''}"><img src="${fotoN(f)}" alt="" loading="lazy">${f.typ === 'formular' ? '<span class="tag">papír</span>' : ''}</button>`).join('')}${S.assets ? `<label class="fdal" for="fotoPridat" title="Přidat fotku">📷<span>Přidat fotku</span></label>` : ''}</div>`; }
   o += kdeHtml(p);
   o += `<details class="karta posl" style="margin-top:10px"${S.poslOtevreno === p.id ? ' open' : ''}><summary>📤 Poslat do WhatsAppu nebo jinam</summary>
     <p class="small mut" style="margin:6px 0">Text si můžeš upravit. Jméno a telefon objednatele se přidají, jen když zaškrtneš.</p>
@@ -2829,11 +2857,11 @@ function vDetail(id) {
   // verze papíru (nejnovější nahoře)
   const vz = verzePapiru(p); const vOf = {}; vz.forEach((v) => v.fotky.forEach((x) => { vOf[x.i] = v.n; }));
   if (vz.length) o += `<h3>Verze papíru · ${vz.length}</h3><div class="karta">${vz.slice().reverse().map((v) => `<div class="verze"><div class="vh"><span class="vn">v${v.n}</span> <b>${v.kdy ? fmtKdy(v.kdy) : ''}</b> <span class="mut small">· ${v.fotky.length} ${v.fotky.length === 1 ? 'fotka' : v.fotky.length < 5 ? 'fotky' : 'fotek'}</span></div>
-    <div class="vb"><div class="fotky mini2">${v.fotky.map((x) => `<button data-foto="${x.i}" aria-label="Papír v${v.n}">${x.f.id ? `<img src="${fotoUrl(x.f)}" alt="" loading="lazy">` : '<span class="bez">neuložená</span>'}</button>`).join('')}</div>
+    <div class="vb"><div class="fotky mini2">${v.fotky.map((x) => `<button data-foto="${x.i}" aria-label="Papír v${v.n}">${x.f.id ? `<img src="${fotoN(x.f)}" alt="" loading="lazy">` : '<span class="bez">neuložená</span>'}</button>`).join('')}</div>
     <div class="small">${v.n === 1 ? (v.rucne ? 'Ručně: ' + esc(v.rucne) : '<span class="mut">První fotka papíru.</span>') : (v.zmeny.length ? v.zmeny.map((z) => '• ' + esc(z)).join('<br>') : '<span class="mut">Beze změny.</span>')}</div></div></div>`).join('')}</div>`;
   // fotky
   const ff = p.fotky || [];
-  o += `<h3>Fotky${ff.length ? ' · ' + ff.length : ''}</h3><div class="karta">${ff.length ? `<div class="fotky">${ff.map((f, i) => `<button data-foto="${i}" aria-label="Fotka ${i + 1}${f.typ === 'formular' ? ' – papír' : ''}">${f.id ? `<img src="${fotoUrl(f)}" alt="" loading="lazy">` : `<span class="bez">${esc(f.soubor || 'fotka')}<br>neuložená</span>`}${f.typ === 'formular' ? `<span class="tag">papír${vz.length > 1 ? ' v' + vOf[i] : ''}</span>` : ''}</button>`).join('')}</div>` : '<span class="small mut">Zatím žádné fotky.</span>'}
+  o += `<h3>Fotky${ff.length ? ' · ' + ff.length : ''}</h3><div class="karta">${ff.length ? `<div class="fotky">${ff.map((f, i) => `<button data-foto="${i}" aria-label="Fotka ${i + 1}${f.typ === 'formular' ? ' – papír' : ''}">${f.id ? `<img src="${fotoN(f)}" alt="" loading="lazy">` : `<span class="bez">${esc(f.soubor || 'fotka')}<br>neuložená</span>`}${f.typ === 'formular' ? `<span class="tag">papír${vz.length > 1 ? ' v' + vOf[i] : ''}</span>` : ''}</button>`).join('')}</div>` : '<span class="small mut">Zatím žádné fotky.</span>'}
     ${S.assets ? `<div class="rada" style="margin-top:8px"><label class="btn sm" for="fotoPridat">📷 Přidat fotku</label><input id="fotoPridat" type="file" accept="image/*" capture="environment" multiple hidden>${S.ai.fotoPridat ? '<span class="ai"></span>' : ''}</div>` : ''}</div>`;
   o += '</div><div>';
   // hodiny
@@ -3140,7 +3168,7 @@ function vMisto(key) {
   o += `<h3>Jističe v rozvaděči · ${(m.jistice || []).length}</h3><div class="karta">${(m.jistice || []).length ? '<div class="jis small mut"><span>Označení</span><span>Typ</span><span>Co jistí</span><span></span></div>' : ''}${(m.jistice || []).map((j, i) => `<div class="jis"><input data-jis="${i}" data-f="oz" value="${esc(j.oz || '')}" aria-label="Označení" placeholder="FA1"><input data-jis="${i}" data-f="typ" value="${esc(j.typ || '')}" aria-label="Typ" placeholder="B10"><input data-jis="${i}" data-f="co" value="${esc(j.co || '')}" aria-label="Co jistí" placeholder="světla chodba 1NP"><button class="btn sm ghost" data-jisdel="${i}" aria-label="Smazat řádek">×</button></div>`).join('') || '<p class="small mut" style="margin:0 0 8px">Vyfoť popisky na dvířkách rozvaděče – přepíšou se sem. Nebo přidej řádek ručně.</p>'}
     <div class="rada" style="margin-top:8px"><button class="btn sm" data-a="jis-pridat">+ Řádek</button>${S.sample && S.assets ? `<label class="btn sm p" for="jisIn">📷 Přečíst z dvířek rozvaděče</label><input id="jisIn" type="file" accept="image/*" capture="environment" hidden>${S.ai.jis ? '<span class="ai"></span> Čtu…' : ''}` : ''}</div></div></div><div>`;
   o += `<h3>Historie požadavků · ${poz.length}</h3>${poz.length ? '<div class="seznam">' + poz.map(polozka).join('') + '</div>' : '<p class="small mut">Tady zatím žádný požadavek nebyl.</p>'}`;
-  if (fot.length) o += `<h3>Fotky z požadavků</h3><div class="karta"><div class="mfot">${fot.map(({ f, p }) => `<a href="#p-${esc(p.id)}" title="${esc(p.cislo || '')}"><img src="${fotoUrl(f)}" alt="Fotka k ${esc(p.cislo || '')}" loading="lazy"></a>`).join('')}</div></div>`;
+  if (fot.length) o += `<h3>Fotky z požadavků</h3><div class="karta"><div class="mfot">${fot.map(({ f, p }) => `<a href="#p-${esc(p.id)}" title="${esc(p.cislo || '')}"><img src="${fotoN(f)}" alt="Fotka k ${esc(p.cislo || '')}" loading="lazy"></a>`).join('')}</div></div>`;
   return o + '</div></div>';
 }
 // --- budova → patra → místnosti (z požadavků, karet míst a seznamu učeben)
