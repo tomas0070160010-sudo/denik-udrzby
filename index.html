@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v55"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v56"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -297,6 +297,7 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .seg{flex-wrap:wrap;max-width:100%}
 .dnesh{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px;align-items:start}@media (max-width:780px){.dnesh{grid-template-columns:1fr}}
 .dk-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.dk-h b{font:700 16px var(--f-head)}
+.dpat{margin:8px 0 0;padding:2px 8px;border-radius:6px;background:var(--plocha);color:var(--mut);font-weight:600;display:block;width:fit-content}
 .dkr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2);cursor:pointer}.dkr:last-child{border-bottom:0}.dkr input{width:22px;height:22px;accent-color:var(--ok);margin:0}.dkr.hot>span{text-decoration:line-through;color:var(--mut)}.dkr a{font-size:24px;line-height:1;text-decoration:none;padding:2px 8px}
 .bar{height:8px;border-radius:5px;background:var(--line2);overflow:hidden;margin-top:8px}.bar span{display:block;height:100%;background:var(--ok)}.bar span.pres{background:var(--err)}
 ol.trasa{list-style:none;margin:0;padding:0;counter-reset:z}ol.trasa li{position:relative;padding:4px 0 14px 26px;border-left:2px dashed var(--line);margin-left:13px}ol.trasa li:last-child{border-left-color:transparent}
@@ -971,7 +972,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v55';
+const VERZE = 'v56';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -1181,6 +1182,25 @@ const komplex = (b) => { const m = KOMPLEX.find(([r]) => r.test(String(b || '').
 const fakBarva = (k) => (FAK[k] ? FAK[k][1] : '');
 const fakStitek = (b) => { const k = fakBud(b); return k ? `<span class="fak" style="--fk:${FAK[k][1]}" title="${esc(FAK[k][0])}">${esc(k === 'Koleje' ? 'KOLEJ' : k)}</span>` : ''; };
 const patro = (p) => { const m = ((p.mistnost || '') + ' ' + (p.mistoOdhad || '')).match(/(\d+)\s*\.?\s*(NP|PP)\b/i); return m ? m[1] + '. ' + m[2].toUpperCase() : ''; };
+// poloha v budově: patro (napsané „3. NP“ → z plánku → z čísla místnosti), v patře křídlo a místo podél chodby z plánku
+const VBUD = { pl: undefined, m: new Map() };
+function vBud(p) { if (VBUD.pl !== S.plany) { VBUD.pl = S.plany; VBUD.m.clear(); } const nb = budovaKr(p), m = String(p.mistnost || p.mistoOdhad || '').trim(), t = patro(p); const kl = nb + '|' + m + '|' + t + '|' + (p.mistoOdhad || '');
+  if (VBUD.m.has(kl)) return VBUD.m.get(kl); let k = t ? patroPor(t) : null, x = null, y = null, w = 0, pl = false;
+  const maPl = planPatra(nb).length > 0; if (!maPl) k = null; // bez plánku: patro jako všude jinde v deníku (z čísla místnosti, „2. NP“ = 1. patro)
+  if (m && maPl) { const kp = patroZPlanu(nb, m); if (kp != null && (k == null || k === kp)) { k = kp; pl = true; const f = planRuc(nb, kp); const r = f && (f.m || []).find((q) => q[0] && norm(q[0]) === norm(m)); if (r) { x = r[1] + r[3] / 2; y = r[2] + r[4] / 2; w = kridla(f).get(norm(r[0])) ?? 0; } } }
+  if (k == null) k = mistPatro([m, p.mistoOdhad].filter(Boolean).join(' ')) ?? mistPatro(m); const v = { k: k == null ? 99 : k, x, y, w, m, pl, nb }; VBUD.m.set(kl, v); return v; }
+// křídla patra: místnosti, které se vodorovně překrývají nebo jsou do 8 jednotek od sebe (dvě strany jedné chodby), patří k sobě
+const KRID = new WeakMap();
+function kridla(f) { if (KRID.has(f)) return KRID.get(f); const R = (f.m || []).filter((q) => q[0]).map((q) => [norm(q[0]), q[1], q[1] + q[3]]).sort((a, b) => a[1] - b[1]); const M = new Map(); let w = -1, kon = -Infinity;
+  R.forEach(([n, x0, x1]) => { if (x0 > kon + 8) w++; kon = Math.max(kon, x1); if (!M.has(n)) M.set(n, w); }); KRID.set(f, M); return M; }
+function vBudCmp(a, b) { const A = vBud(a), B = vBud(b); if (A.k !== B.k) return A.k - B.k;
+  if (A.x != null && B.x != null) { if (A.w !== B.w) return A.w - B.w; if (Math.abs(A.y - B.y) > 0.5) return A.y - B.y; return A.x - B.x; }
+  if ((A.x != null) !== (B.x != null)) return A.x != null ? -1 : 1;
+  return A.m.localeCompare(B.m, 'cs', { numeric: true }); }
+const vBudNaz = (v) => v.k === 99 ? 'Patro nepoznám' : (v.pl && planNazev(v.nb, v.k)) || (planPatra(v.nb).length ? v.k + '.NP' : patroNaz(v.k));
+// předěl „3.NP“ v Dnes, jen když má budova úkoly na víc patrech
+function patroPredel(L, i) { const ks = new Set(L.map((q) => vBud(q).k)); if (ks.size < 2) return ''; const v = vBud(L[i]); if (i > 0 && vBud(L[i - 1]).k === v.k) return '';
+  return `<div class="dpat small">${esc(vBudNaz(v))}</div>`; }
 const patroPor = (t) => { const m = /(\d+)\. (NP|PP)/.exec(t || ''); return m ? (m[2] === 'PP' ? -m[1] : +m[1]) : 99; };
 const OBT = { 1: 'Snadné', 2: 'Střední', 3: 'Náročné' }, DUL = { 1: 'Počká', 2: 'Běžná', 3: 'Důležité' };
 function odhadObt(p) { const t = norm([p.nazev, p.popis, p.materialText].join(' '));
@@ -1210,7 +1230,7 @@ const SORT = {
   ceka: ['Nejdéle čeká', (a, b) => (a.datum || '9').localeCompare(b.datum || '9')],
   dul: ['Nejdůležitější', (a, b) => dulezitost(b) - dulezitost(a) || (a.datum || '').localeCompare(b.datum || '')],
   snad: ['Nejsnazší první', (a, b) => obtiznost(a) - obtiznost(b) || dulezitost(b) - dulezitost(a)],
-  trasa: ['Po budovách a patrech', (a, b) => budRank(budovaKr(a)) - budRank(budovaKr(b)) || budovaKr(a).localeCompare(budovaKr(b), 'cs') || patroPor(patro(a)) - patroPor(patro(b)) || (a.mistnost || a.mistoOdhad || '').localeCompare(b.mistnost || b.mistoOdhad || '', 'cs', { numeric: true })],
+  trasa: ['Po budovách a patrech', (a, b) => budRank(budovaKr(a)) - budRank(budovaKr(b)) || budovaKr(a).localeCompare(budovaKr(b), 'cs') || vBudCmp(a, b)],
 };
 const F0 = { fak: '', bud: '', pat: '', obt: '', dul: '', cek: '', cekR: '', druh: '', mes: '', mat: '', grp: '', sort: 'nove' };
 const matKlic = (x) => { const k = katId(x.kat); return k ? 'k:' + k.id : norm(x.nazev); };
@@ -1750,7 +1770,7 @@ function vDnes() {
     o += `<h3>Trasa ${tp.mapa ? '· podle ' + (tp.planek ? 'plánku' : tp.areal ? 'mapy areálu' : 'mapy') + (tp.km != null ? ', ≈ ' + fmtH(r1(tp.km * 1.3)) + ' km' : '') : '· podle pořadí budov (níž v nastavení)'}</h3>${tp.planek ? '<p class="small"><a href="#mapa">Ukázat trasu na plánku →</a></p>' : ''}<ol class="trasa">${tp.start ? `<li class="zak st"><b>📍 Začínáš: ${esc(MAPA_B[tp.start][2])}</b>${tp.pres ? '' : '<div class="small mut">Bez zastávky na základně – to, co potřebuješ, už máš u sebe.</div>'}</li>` : ''}${!tp.start || tp.pres ? `<li class="zak"><b>${tp.start ? '⌂ Nejdřív ' : ''}${esc(T.zakladna)}</b><div class="small mut">${T.vozitko ? 'Nalož všechno na vozítko (seznam „Co si vzít“ níž).' : 'Vezmi, co je v „Co si vzít“ – a jen to.'}</div></li>` : ''}
       ${tp.zast.map((z) => { const vz = vezmiSi(z.ukoly.filter((p) => p.stav !== 'hotovy')); const pot = [...vz.sk.flatMap(([, g]) => [...g.values()].map((e) => fmtH(e.ks) + '× ' + e.nazev)), ...vz.nar, ...vz.mist.flatMap((e) => [...e.veci.values()].map((t) => t + ' (na místě)'))];
         return `<li><b>${esc(z.b)}</b> <span class="small mut">${z.ukoly.length} ${z.ukoly.length === 1 ? 'úkol' : z.ukoly.length < 5 ? 'úkoly' : 'úkolů'}</span>${ulozkyPro(z.ukoly[0]).map((u) => `<div class="small">🏠 ${esc(u.nazev)}${u.klic ? ' · 🔑 ' + esc(u.klic) : ''}</div>`).join('')}
-          ${z.ukoly.map((p) => `<label class="dkr snf${p.stav === 'hotovy' ? ' hot' : ''}"><input type="checkbox" data-spl="${esc(p.id)}"${p.stav === 'hotovy' ? ' checked' : ''} aria-label="Splněno ${esc(p.cislo || '')}">${papirNahled(p)}<span><span class="cislo">${esc(p.cislo || '')}</span> ${esc(p.nazev || '')}${popisKr(p) ? `<span class="small dpop">${esc(popisKr(p))}</span>` : '<br>'}<span class="small mut">${esc(p.mistnost || p.mistoOdhad || '')}${p.mistnost || p.mistoOdhad ? ' · ' : ''}≈ ${fmtH(odhadH(p))} h</span>${nevejde.has(p.id) ? ' <span class="chip warn">nevejde se?</span>' : ''}</span><a href="#p-${esc(p.id)}" aria-label="Otevřít ${esc(p.cislo || '')}">›</a></label>`).join('')}
+          ${z.ukoly.map((p, i) => `${patroPredel(z.ukoly, i)}<label class="dkr snf${p.stav === 'hotovy' ? ' hot' : ''}"><input type="checkbox" data-spl="${esc(p.id)}"${p.stav === 'hotovy' ? ' checked' : ''} aria-label="Splněno ${esc(p.cislo || '')}">${papirNahled(p)}<span><span class="cislo">${esc(p.cislo || '')}</span> ${esc(p.nazev || '')}${popisKr(p) ? `<span class="small dpop">${esc(popisKr(p))}</span>` : '<br>'}<span class="small mut">${esc(p.mistnost || p.mistoOdhad || '')}${p.mistnost || p.mistoOdhad ? ' · ' : ''}≈ ${fmtH(odhadH(p))} h</span>${nevejde.has(p.id) ? ' <span class="chip warn">nevejde se?</span>' : ''}</span><a href="#p-${esc(p.id)}" aria-label="Otevřít ${esc(p.cislo || '')}">›</a></label>`).join('')}
           ${pot.length ? `<div class="small" style="margin-top:2px">Potřebuješ tu: ${pot.map(esc).join(' · ')}</div>` : ''}</li>`; }).join('')}
       <li class="zak"><b>Zpět: ${esc(T.zakladna)}</b></li></ol>`;
     o += vezmiHtml(v, true) + `<div class="rada" style="margin:10px 0"><button class="btn p" data-a="plan-tisk">⤓ Plán k tisku</button><a class="btn" target="_blank" rel="noopener" href="${waOdkaz('Plán na ' + fmtD(dnes()) + ' (' + (T.vozitko ? 's vozítkem' : 'pěšky') + '):\n' + tp.poradi.map((p, i) => (i + 1) + '. ' + (p.cislo || '') + ' ' + budovaKr(p) + ' ' + (p.mistnost || p.mistoOdhad || '') + ': ' + (p.nazev || '')).join('\n') + (v.sk.length ? '\n\nVezmi si:\n' + v.sk.map(([k, g]) => k + ': ' + [...g.values()].map((e) => fmtH(e.ks) + '× ' + e.nazev).join(', ')).join('\n') : ''))}">📤 Poslat plán</a><button class="btn ghost" data-a="plan-navrh">✨ Doplnit, co se vejde</button><button class="btn ghost" data-a="plan-vycistit">Vyčistit plán</button></div>`; }
