@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v48.1"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v49"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -538,10 +538,12 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 // Žádná knihovna zvenku: jen fetch a WebSocket na adresu, kterou zadáš při přihlášení. Adresa a klíč zůstanou v tomhle prohlížeči, heslo se neukládá.
 (() => {
   'use strict';
+  const WEB = "https://tomas0070160010-sudo.github.io/denik-udrzby/"; // adresa webové verze (doplní sestavení), pro odkaz do telefonu
   const LS_CFG = 'denik-srv', LS_SEZ = 'denik-srv-sezeni', DBN = 'denik-udrzby-server', VER = 1, STRANA = 1000, TOPIC = 'realtime:denik';
   const lsG = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
   const lsS = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   const kopie = (x) => JSON.parse(JSON.stringify(x));
+  const enc = encodeURIComponent;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const puvFetch = window.fetch.bind(window);
   class SitChyba extends Error {}
@@ -583,6 +585,13 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   function klicTyp(k) { k = String(k || '').trim(); if (/^sb_secret_/i.test(k)) return 'tajny';
     if (/^eyJ/.test(k)) { try { const p = JSON.parse(atob(k.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); if (p.role === 'service_role') return 'tajny'; } catch (e) { return 'spatny'; } return 'ok'; }
     return /^sb_publishable_[A-Za-z0-9_-]{8,}$/.test(k) ? 'ok' : 'spatny'; }
+  // odkaz z QR kódu: #srv=<projekt nebo adresa>~<klíč> → adresa a klíč se uloží, z adresního řádku hned zmizí
+  (() => { const m = /^#srv=([^~&]+)~([^&]+)/.exec(location.hash || ''); if (!m) return;
+    try { const a = decodeURIComponent(m[1]), k = decodeURIComponent(m[2]); const url = /^[a-z0-9]{20}$/.test(a) ? 'https://' + a + '.supabase.co' : zakladni(a);
+      if (/^https:\/\/[a-z0-9.-]+(:\d+)?$/i.test(url) && klicTyp(k) === 'ok') { if (sez && (!cfg || cfg.url !== url)) { sez = null; lsS(LS_SEZ, null); } cfg = { url, key: k }; lsS(LS_CFG, cfg); S.zQr = true; } } catch (e) {}
+    try { history.replaceState(null, '', location.pathname + location.search + '#domu'); } catch (e) { location.hash = '#domu'; } })();
+  function odkazTelefon() { if (!cfg) return ''; const zak = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : (/^https:\/\//.test(WEB) ? WEB : '');
+    if (!zak) return ''; const r = /^https:\/\/([a-z0-9]{20})\.supabase\.co$/.exec(cfg.url); return zak + '#srv=' + (r ? r[1] : enc(cfg.url)) + '~' + enc(cfg.key); }
   const ulozSez = (j) => { sez = { at: j.access_token, rt: j.refresh_token, exp: j.expires_at ? j.expires_at * 1000 : Date.now() + (j.expires_in || 3600) * 1000, uid: j.user && j.user.id || (sez && sez.uid), email: j.user && j.user.email || (sez && sez.email) }; lsS(LS_SEZ, sez); planujObnovu(); };
   async function volej(cesta, o) { try { return await puvFetch(cfg.url + cesta, o); } catch (e) { throw new SitChyba('bez spojení'); } }
   async function prihlas(email, heslo) {
@@ -612,7 +621,6 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
   async function chybaZ(r) { let t = ''; try { t = await r.text(); } catch (e) {} let m = t; try { const j = JSON.parse(t); m = j.message || j.msg || j.error_description || j.error || t; } catch (e) {} return new SrvChyba(r.status, String(m || ('chyba ' + r.status)).slice(0, 200)); }
 
   // --- tabulka dokumenty a koš fotky
-  const enc = encodeURIComponent;
   async function nactiVse() { const L = []; let od = 0, celkem = Infinity;
     while (od < celkem) { const r = await api('/rest/v1/dokumenty?select=kolekce,id,data,upraveno&order=kolekce.asc,id.asc&limit=' + STRANA + '&offset=' + od, { headers: { Prefer: 'count=exact' } });
       if (!r.ok) throw await chybaZ(r); const rows = await r.json(); L.push(...rows);
@@ -784,6 +792,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 #srvPanel{position:fixed;z-index:55;right:max(10px,env(safe-area-inset-right));top:calc(58px + env(safe-area-inset-top,0px));width:min(360px,calc(100vw - 20px));box-sizing:border-box;background:var(--plocha,#fff);color:var(--ink,#1b2420);border:1px solid var(--line,#d5dcd8);border-radius:12px;padding:14px 16px;box-shadow:0 8px 28px rgba(0,0,0,.18);font-size:14.5px;line-height:1.45}
 #srvPanel h3{margin:0 0 6px;font-size:16px}#srvPanel p{margin:6px 0}#srvPanel .srvmut{color:var(--mut,#5b6b63);font-size:13px}
 #srvPanel .srvbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}#srvPanel .srvch{color:#b3261e}
+#srvPanel{max-height:calc(100vh - 80px);overflow:auto}#srvPanel .srvtel{margin-top:10px;border-top:1px solid var(--line,#d5dcd8);padding-top:8px}#srvPanel .srvqr{display:flex;justify-content:center;margin:6px 0}#srvPanel .srvqr svg{width:min(240px,70vw);height:auto;border-radius:6px}
 `;
   let stavBtn = null, panel = null, prihl = null;
   const host = () => { try { return new URL(cfg.url).host; } catch (e) { return cfg ? cfg.url : ''; } };
@@ -801,14 +810,18 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
       <p><b>${esc(x.t)}</b></p><p class="srvmut">Naposledy načteno ze serveru: ${esc(predChvili(S.sync))}. Živé změny z jiných zařízení: ${S.rt === 'ok' ? 'zapnuté' : 'teď ne (doplní se při dalším načtení)'}.</p>
       ${S.chyby.length ? '<p class="srvch">' + S.chyby.slice(0, 3).map((c) => esc(c.co) + ': ' + esc(c.proc)).join('<br>') + '</p>' : ''}
       <p class="srvmut">Fotky, které si otevřeš, zůstanou i v tomhle zařízení – půjdou zobrazit bez signálu.</p>
-      <div class="srvbtns">${S.prihlasit ? '<button class="btn sm p" data-srv="prihlasit">Přihlásit</button>' : '<button class="btn sm" data-srv="nacist">↻ Načíst znovu</button>'}${S.fronta + S.fotek && !S.prihlasit ? '<button class="btn sm p" data-srv="odeslat">Odeslat teď</button>' : ''}${S.chyby.length ? '<button class="btn sm ghost" data-srv="chyby-pryc">Skrýt chyby</button>' : ''}<button class="btn sm ghost" data-srv="odhlasit">Odhlásit</button><button class="btn sm ghost" data-srv="zavrit">Zavřít</button></div>
+      <div class="srvbtns">${S.prihlasit ? '<button class="btn sm p" data-srv="prihlasit">Přihlásit</button>' : '<button class="btn sm" data-srv="nacist">↻ Načíst znovu</button>'}${S.fronta + S.fotek && !S.prihlasit ? '<button class="btn sm p" data-srv="odeslat">Odeslat teď</button>' : ''}${S.chyby.length ? '<button class="btn sm ghost" data-srv="chyby-pryc">Skrýt chyby</button>' : ''}${S.prihlasit ? '' : '<button class="btn sm" data-srv="telefon">📱 Telefon</button>'}<button class="btn sm ghost" data-srv="odhlasit">Odhlásit</button><button class="btn sm ghost" data-srv="zavrit">Zavřít</button></div>
+      ${panel.dataset.tel ? telHtml() : ''}
       ${panel.dataset.odhl ? `<p class="srvch" role="alert">${S.fronta + S.fotek ? 'Ještě se neodeslalo: ' + esc(stavTxt().t.replace(/^[^:]*: /, '')) + ' Po odhlášení se to ztratí. ' : ''}Odhlášením se z tohoto zařízení smaže kopie dat (na serveru zůstanou).</p><div class="srvbtns"><button class="btn sm p" data-srv="odhlasit-ano">Odhlásit</button><button class="btn sm ghost" data-srv="odhlasit-ne">Ne</button></div>` : ''}`; }
+  function telHtml() { const o = odkazTelefon(); if (!o) return '<p class="srvch">Odkaz pro telefon jde udělat jen z webové verze Deníku.</p>';
+    let q = ''; try { q = window.__denikQR ? window.__denikQR(o, 4) : ''; } catch (e) { q = ''; }
+    return `<div class="srvtel" data-odkaz="${esc(o)}"><p><b>Naskenuj fotoaparátem telefonu.</b> Otevře se Deník s vyplněnou adresou serveru a klíčem – zadáš jen e-mail a heslo.</p>${q ? '<div class="srvqr">' + q + '</div>' : ''}<p class="srvmut">Heslo ani přihlášení v kódu není. Ukaž ho jen svému telefonu.</p></div>`; }
   function otevriPanel() { if (panel) { zavriPanel(); return; } panel = document.createElement('aside'); panel.id = 'srvPanel'; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-labelledby', 'srvPh'); document.body.appendChild(panel); kresliPanel(); const b = panel.querySelector('button'); if (b) b.focus(); }
   function zavriPanel() { if (!panel) return; panel.remove(); panel = null; if (stavBtn) stavBtn.focus(); }
   document.addEventListener('click', async (e) => { const b = e.target.closest && e.target.closest('[data-srv]'); if (b) { e.preventDefault(); e.stopPropagation(); const a = b.dataset.srv;
       if (a === 'zavrit') zavriPanel(); else if (a === 'odeslat') { pokus = 0; odesli(); } else if (a === 'nacist') { synchronizuj().catch(() => {}); rtPripoj(); }
       else if (a === 'chyby-pryc') { S.chyby = []; lsS('denik-srv-chyby', []); kresliStav(); } else if (a === 'prihlasit') { zavriPanel(); ukazPrihlaseni(); }
-      else if (a === 'odhlasit') { panel.dataset.odhl = '1'; kresliPanel(); } else if (a === 'odhlasit-ne') { delete panel.dataset.odhl; kresliPanel(); } else if (a === 'odhlasit-ano') await odhlasit();
+      else if (a === 'odhlasit') { panel.dataset.odhl = '1'; kresliPanel(); } else if (a === 'telefon') { if (panel.dataset.tel) delete panel.dataset.tel; else panel.dataset.tel = '1'; kresliPanel(); } else if (a === 'odhlasit-ne') { delete panel.dataset.odhl; kresliPanel(); } else if (a === 'odhlasit-ano') await odhlasit();
       else if (a === 'panel') otevriPanel();
       return; }
     if (panel && !panel.contains(e.target) && !(stavBtn && stavBtn.contains(e.target))) zavriPanel(); }, true);
@@ -826,7 +839,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
         <div id="srvCfg"${zmenit ? '' : ' hidden'}><label for="srvUrl">Adresa serveru (Project URL)</label><input id="srvUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://….supabase.co" value="${esc(cfg ? cfg.url : '')}">
         <label for="srvKey">Klíč (Publishable key)</label><input id="srvKey" autocomplete="off" spellcheck="false" placeholder="sb_publishable_…" value="${esc(cfg ? cfg.key : '')}">
         <p class="srvmut">Najdeš je v Supabase: Project Settings → API Keys (a Data API). <b>Tajný klíč</b> (secret, service_role) sem nikdy nedávej.</p></div>
-        ${zmenit ? '' : `<div class="srvsrv" id="srvSrv">Server: <b>${esc(host())}</b><button type="button" class="srvlink" data-srvf="zmenit">Změnit</button></div>`}
+        ${zmenit ? '' : `<div class="srvsrv" id="srvSrv">${S.zQr ? '✓ Z QR kódu – server' : 'Server'}: <b>${esc(host())}</b><button type="button" class="srvlink" data-srvf="zmenit">Změnit</button></div>`}
         <label for="srvMail">E-mail</label><input id="srvMail" type="email" autocomplete="username" spellcheck="false" value="${esc(sez && sez.email || lsG('denik-srv-mail') || '')}">
         <label for="srvHeslo">Heslo</label><input id="srvHeslo" type="password" autocomplete="current-password">
         <p class="srvchyba" id="srvChyba" role="alert">${esc(zprava || '')}</p>
@@ -876,8 +889,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
   })();
   const st = document.createElement('style'); st.id = 'srv-css'; st.textContent = CSS; (document.head || document.documentElement).appendChild(st);
-  window.__server = { stav: () => ({ ...stavTxt(), server: cfg ? host() : '', email: sez ? sez.email : '', fronta: S.fronta, fotek: S.fotek, online: S.online, rt: S.rt, sync: S.sync }), panel: otevriPanel, nacist: () => synchronizuj() };
+  window.__server = { odkazTelefon, stav: () => ({ ...stavTxt(), server: cfg ? host() : '', email: sez ? sez.email : '', fronta: S.fronta, fotek: S.fotek, online: S.online, rt: S.rt, sync: S.sync }), panel: otevriPanel, nacist: () => synchronizuj() };
   document.documentElement.setAttribute('data-server', '1');
+  // webová verze: aplikace se otevře i bez signálu (ukládá jen soubory aplikace, ne data)
+  try { if ('serviceWorker' in navigator && window.isSecureContext && document.querySelector('link[rel="manifest"]')) navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {}
   const cl = { use: async (n) => { if (n === 'downloads') return downloads; if (n === 'db' || n === 'assets') { await jePripraven; return n === 'db' ? db : assets; } return null; } };
   window.__denikClaude = cl;
   try { window.claude = cl; } catch (e) {}
@@ -887,7 +902,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v48.1';
+const VERZE = 'v49';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -2246,6 +2261,7 @@ const QR = (() => {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 2 * q} ${n + 2 * q}" width="${(n + 2 * q) * modul}" height="${(n + 2 * q) * modul}" shape-rendering="crispEdges" role="img" aria-label="QR kód"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`; }
   return { matice, svg };
 })();
+try { window.__denikQR = (t, m) => QR.svg(t, m); } catch (e) {}
 // --- QR štítky na místa: tisk a skenování (čtečka v telefonu, jinak přečtení textu pod kódem)
 const QR_PRE = 'DENIK:M:';
 function stitkyTisk(L) { const lab = (M) => { const z = M.zaznam || {}; return `<div class="s">${QR.svg(QR_PRE + encodeURIComponent(M.key), 3).replace('<svg ', '<svg class="q" ')}<div class="t"><b>${esc(budovaKr({ budova: M.budova }))}</b><div class="m">${esc(M.mistnost || '')}</div>${z.rozvadec ? `<div>Rozvaděč ${esc(z.rozvadec)}${z.okruh ? ' · ' + esc(z.okruh) : ''}</div>` : ''}<div class="k">M:${esc(M.key)}</div><div class="p">Deník údržby – vyfoť v aplikaci (📷 Štítek)</div></div></div>`; };
