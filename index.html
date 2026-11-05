@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v67"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v68"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -1073,9 +1073,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v67';
+const VERZE = 'v68';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v68', 'Plánek budovy v jednom měřítku – všechna patra stejně velká a přesně nad sebou, při přepnutí patra zůstane pohled (jen se posune na místnost s požadavkem). Plánek je hned čitelný, kolečko nad mapou vždy přibližuje a mapou jde volně posouvat. Domů: na počítači zase přehled se vším, na telefonu jednoduchý.'],
   ['v67', '3D model se stěnami – ve 3D přepínáš Patra a Stěny. Stěny ukážou místnosti jako krabice bez stropu (podlaha v barvě typu místnosti, místnosti s nesplněnými oranžově i s číslem), chodby, schodiště a výtahy. Tlačítkem Rozložit / Složit patra je dáš od sebe nebo k sobě. Klepnutím na patro otevřeš jeho plánek, na místnost rovnou místnost.'],
   ['v66', 'Budova ve 3D – klepnutí na budovu s plánkem ukáže patra nad sebou jako vrstvy (pohled ze strany). Tažením budovu otočíš, kolečkem nebo dvěma prsty přiblížíš, klepnutím na patro otevřeš jeho plánek, klepnutím na místnost rovnou místnost. Nad oknem přepínáš Plánek a 3D.'],
   ['v65', 'Mapy jako Google Maps – mapou areálu i plánkem budovy posouváš tažením (i s doběhem), přibližuješ kolečkem, dvěma prsty, dvojklepnutím nebo + a −. Tlačítko s terčem ukáže celé, tlačítko s rohy celou obrazovku. Budova s plánkem se otevře přímo v mapě: patra vpravo nad sebou jako na kiosku, vybraná místnost dole i s požadavky, „← Areál“ zpět.'],
@@ -3167,8 +3168,9 @@ function vDen() { if (!S.nacteno) return '<div class="prazdne"><b>Načítám…<
     ${vz.length ? `<section class="den-vz" aria-label="Vezmi si"><span class="den-l">VEZMI SI</span>${vz.map((t, i) => `<label class="den-c"><input type="checkbox" data-a="den-vzato" data-k="${esc(p.id + ':' + i)}"${ma[p.id + ':' + i] ? ' checked' : ''}><span>${esc(t)}</span></label>`).join('')}</section>` : ''}
     <div class="den-a"><button class="den-hot" data-a="den-hotovo">Hotovo</button><div class="dm-2"><button class="den-b" data-a="den-chybi">Nejde – chybí věc</button><button class="den-b" data-a="den-pozdeji"${zb.length < 2 ? ' disabled' : ''}>Později</button></div>
       ${zb.length > 1 ? `<p class="den-dal">Potom: ${zb.slice(1, 4).map((q) => esc(budovaKr(q) + (q.mistnost ? ' ' + q.mistnost : ''))).join(' → ')}${zb.length > 4 ? ' …' : ''}</p>` : ''}</div></div>`; }
-function vDomu() { return ls.get('domuPlny', 0) ? vDomuVse() : vDomuJednoduse(); }
-function vVse() { const plny = !!ls.get('domuPlny', 0);
+const domuPlny0 = () => (window.innerWidth || 1000) >= 900; const domuPlnyJe = () => { const x = ls.get('domuPlny', null); return x == null ? domuPlny0() : !!x; };
+function vDomu() { return domuPlnyJe() ? vDomuVse() : vDomuJednoduse(); }
+function vVse() { const plny = domuPlnyJe();
   return `<div class="rada" style="justify-content:space-between;margin-top:12px"><h2 style="margin:0">Všechno</h2><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-a="domu-plny"${plny ? ' checked' : ''}> Domů jako dřív (všechno na jedné stránce)</label></div>` + vDomuVse(); }
 function vDomuVse() {
   const otev = S.poz.filter((p) => p.stav !== 'hotovy'); const spl = S.poz.length - otev.length;
@@ -3448,9 +3450,9 @@ function budPlanHtml(K) { const jm = budJmena(K); const nb = jm.find((n) => n ==
     const patra = `<div class="seg bpp gm-pat gm-ui" role="group" aria-label="Patro – ${esc(nb)}">${pat.map((k) => `<button data-bpp="${k}" data-bpb="${esc(nb)}" class="${k === pk ? 'on' : ''}" aria-pressed="${k === pk}" aria-label="${esc(planNazev(nb, k) || patroNaz(k === 'x' ? null : k))}${otvP(k) ? ': ' + otvP(k) + ' nesplněných' : ''}">${esc(planNazev(nb, k) || patroKr(k))}${otvP(k) ? `<b>${otvP(k)}</b>` : ''}</button>`).join('')}</div>`; const sheet = bpdH ? `<div class="gm-sheet gm-ui">${bpdH}</div>` : ''; const pn = planNazev(nb, pk) || patroKr(pk);
     const v3d = !!S.bp3d && !sel; if (sel) S.bp3d = false; const b3 = v3d ? b3Html(nb, R, pat, pk, otvP, patra, ruc ? (ruc.vest ? planLeg(ruc) : `<p class="small mut bpleg">✏️ Plánek podle skutečného podkladu${ruc.pozn ? ' – ' + esc(ruc.pozn) : ''}. Číslo = nesplněné · čárkovaně = učebna ČZU.</p>`) : '') : '';
     if (b3) o += b3;
-    else if (ruc) { const bb = planBox(ruc); const mimo = vPat.filter((r) => !(ruc.m || []).some(([m]) => norm(m) === norm(r.m)));
-      const svg = planSvg(ruc, R, nb, sel, pk).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, ' style="width:100%"');
-      o += `<div class="gm gm-plan${S.gmVstup ? ' gm-vstup' : ''}" data-gm="plan|${esc(nb)}|${pk}" data-gmk="plan" data-gmu="${bb[2]}" data-gmr="94" data-gmf="${sel ? '.bpm.on' : '.bpm.ma'}" data-gmsel="${esc(sel)}" tabindex="0" role="region" aria-label="Plánek ${esc(nb)}, ${esc(pn)} – posouváš tažením, přiblížíš kolečkem, dvěma prsty nebo dvojklepnutím" style="--gar:${Math.round((bb[2] / bb[3]) * 1e4) / 1e4}"><div class="gm-l" style="aspect-ratio:${bb[2]} / ${bb[3]}">${svg}</div>${gmCtl('plan')}${patra}${sheet}</div>`
+    else if (ruc) { const fb = planBox(ruc), bb = budBox(nb) || fb; const fbr = [(fb[0] - bb[0]) / bb[2], (fb[1] - bb[1]) / bb[3], (fb[0] + fb[2] - bb[0]) / bb[2], (fb[1] + fb[3] - bb[1]) / bb[3]].map((x) => Math.round(x * 1e4) / 1e4).join(','); const mimo = vPat.filter((r) => !(ruc.m || []).some(([m]) => norm(m) === norm(r.m)));
+      const svg = planSvg(ruc, R, nb, sel, pk).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, ' style="width:100%"').replace(/viewBox="[^"]*"/, 'viewBox="' + bb.join(' ') + '"');
+      o += `<div class="gm gm-plan${S.gmVstup ? ' gm-vstup' : ''}" data-gm="plan|${esc(nb)}" data-gmfl="${pk}" data-gmfb="${fbr}" data-gmk="plan" data-gmu="${bb[2]}" data-gmr="94" data-gmf="${sel ? '.bpm.on' : '.bpm.ma'}" data-gmsel="${esc(sel)}" tabindex="0" role="region" aria-label="Plánek ${esc(nb)}, ${esc(pn)} – posouváš tažením, přiblížíš kolečkem, dvěma prsty nebo dvojklepnutím" style="--gar:${Math.round((bb[2] / bb[3]) * 1e4) / 1e4}"><div class="gm-l" style="aspect-ratio:${bb[2]} / ${bb[3]}">${svg}</div>${gmCtl('plan')}${patra}${sheet}</div>`
         + (mimo.length ? `<p class="small" style="margin:6px 0 0">Ještě nejsou v plánku: ${mimo.map((r) => chip(r, pk)).join(' ')}</p>` : '')
         + (ruc.vest ? planLeg(ruc) : `<p class="small mut bpleg">✏️ Plánek podle skutečného podkladu${ruc.pozn ? ' – ' + esc(ruc.pozn) : ''}. Číslo = nesplněné · čárkovaně = učebna ČZU.</p>`); }
     else o += `<div class="gm gm-plan gm-bez" data-gmr="94"><div class="gm-bezin">${vPat.length ? `<div class="bpr bpx">${vPat.map((r) => chip(r, pk)).join('')}</div>` : '<p class="small mut" style="margin:0">Na tomhle patře zatím nic.</p>'}</div>${patra}${sheet}</div>`
@@ -3494,12 +3496,10 @@ function gmInit(el) {
   const cont = (R) => Math.min(R.SW / R.w, R.SH / R.h);
   const meze = (R) => { const c = cont(R); return [c, Math.max(c * 3, +el.dataset.gmu ? (14 * +el.dataset.gmu) / R.w : 8)]; };
   // obsah menší než volná plocha je uprostřed; větší ji musí pokrýt (mapa areálu smí zajet i pod tlačítka, plánek ne – místnosti by se schovaly pod patra)
-  const omez = (R, q) => { const [a, b] = meze(R); q.s = Math.max(a, Math.min(b, q.s || a)); const cw = R.w * q.s, ch = R.h * q.s, cel = druh === 'areal';
-    const osa = (c, sz, lo, SS, CC) => { const t = lo + SS / 2 - c * sz; if (sz <= SS) return lo + (SS - sz) / 2; const [mn, mx] = cel && sz >= CC ? [CC - sz, 0] : [lo + SS - sz, lo]; return Math.max(mn, Math.min(mx, t)); };
-    const tx = osa(q.cx, cw, R.l, R.SW, R.W), ty = osa(q.cy, ch, R.t, R.SH, R.H); q.cx = (R.l + R.SW / 2 - tx) / cw; q.cy = (R.t + R.SH / 2 - ty) / ch; return q; };
+  const omez = (R, q) => { const [a, b] = meze(R); q.s = Math.max(a, Math.min(b, q.s || a)); q.cx = Math.max(0, Math.min(1, q.cx)); q.cy = Math.max(0, Math.min(1, q.cy)); return q; };
   const kresli = () => { const R = rozm(); v = omez(R, v); const tx = R.l + R.SW / 2 - v.cx * R.w * v.s, ty = R.t + R.SH / 2 - v.cy * R.h * v.s;
     L.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${v.s.toFixed(5)})`; L.style.setProperty('--gs', v.s.toFixed(5));
-    GMV[key] = { s: v.s, cx: v.cx, cy: v.cy, sel: el.dataset.gmsel || '' }; const mw = R.w * v.s; el.querySelectorAll('.alab[data-zw]').forEach((x) => { x.hidden = +x.dataset.zw > mw + 1; });
+    GMV[key] = { s: v.s, cx: v.cx, cy: v.cy, sel: el.dataset.gmsel || '', fl: el.dataset.gmfl || '' }; const mw = R.w * v.s; el.querySelectorAll('.alab[data-zw]').forEach((x) => { x.hidden = +x.dataset.zw > mw + 1; });
     const [a, b] = meze(R); const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.s <= a * 1.002; if (zp) zp.disabled = v.s >= b * 0.998; };
   const let_ = (cil, ms) => { cancelAnimationFrame(anim); const R = rozm(), z = { ...v }, k = omez(R, { ...cil }); if (!ms || gmPomalu()) { v = k; kresli(); return; }
     const t0 = performance.now(); L.style.willChange = 'transform';
@@ -3508,7 +3508,7 @@ function gmInit(el) {
   const zoomBod = (f, px, py, ms) => { const R = rozm(), tx = R.l + R.SW / 2 - v.cx * R.w * v.s, ty = R.t + R.SH / 2 - v.cy * R.h * v.s; const ux = (px - tx) / (R.w * v.s), uy = (py - ty) / (R.h * v.s);
     const [a, b] = meze(R), s2 = Math.max(a, Math.min(b, v.s * f)); let_({ s: s2, cx: ux - (px - R.l - R.SW / 2) / (R.w * s2), cy: uy - (py - R.t - R.SH / 2) / (R.h * s2) }, ms); };
   const posun = (dx, dy) => { const R = rozm(); v.cx -= dx / (R.w * v.s); v.cy -= dy / (R.h * v.s); kresli(); };
-  const citelne = (R) => (+el.dataset.gmu ? (3.2 * +el.dataset.gmu) / R.w : 0);
+  const citelne = (R) => (+el.dataset.gmu ? (4 * +el.dataset.gmu) / R.w : 0);
   const fokus = () => (el.dataset.gmf ? L.querySelector(el.dataset.gmf) : null);
   const naEl = (x, s) => { const r = gmRel(L, x); return { s, cx: r[0], cy: r[1] }; };
   el._gm = { kresli, let_, zoomBod, rozm, fit: (ms) => let_({ s: 0, cx: 0.5, cy: 0.5 }, ms), pohled: () => ({ ...v }) };
@@ -3516,8 +3516,11 @@ function gmInit(el) {
   const R0 = rozm(), c0 = cont(R0); const naB = (k) => L.querySelector(`path[data-mk="${CSS.escape(k)}"]`) || L.querySelector(`[data-mk="${CSS.escape(k)}"]`);
   const zp = S.gmZpet && druh === 'areal' ? naB(S.gmZpet) : null;
   if (zp) { const cil = v || { s: c0, cx: 0.5, cy: 0.5 }; const r = gmRel(L, zp); const sb = Math.min(R0.SW / Math.max(1, r[2] * R0.w), R0.SH / Math.max(1, r[3] * R0.h)) * 0.5; v = { s: Math.max(cil.s * 2, sb), cx: r[0], cy: r[1] }; kresli(); let_(cil, 480); }
-  else if (!v) { const f = fokus(); const s0 = Math.max(c0, +el.dataset.gms0 ? Math.max(+el.dataset.gms0, (R0.H + 2) / R0.h, (R0.W + 2) / R0.w) : 0, citelne(R0)); v = f ? naEl(f, s0) : { s: s0, cx: 0.5, cy: 0.5 }; kresli(); }
-  else { kresli(); const f = fokus(); if (f && el.dataset.gmsel && el.dataset.gmsel !== (ul.sel || '')) let_(naEl(f, Math.max(v.s, citelne(rozm()))), 320); }
+  else if (!v) { const f = fokus(); const s0 = Math.max(c0, +el.dataset.gms0 ? Math.max(+el.dataset.gms0, (R0.H + 2) / R0.h, (R0.W + 2) / R0.w) : 0, citelne(R0)); const fb = (el.dataset.gmfb || '').split(',').map(Number); v = f ? naEl(f, s0) : fb.length === 4 ? { s: s0, cx: (fb[0] + fb[2]) / 2, cy: (fb[1] + fb[3]) / 2 } : { s: s0, cx: 0.5, cy: 0.5 }; kresli(); }
+  else { kresli(); const f = fokus(); if (f && el.dataset.gmsel && el.dataset.gmsel !== (ul.sel || '')) let_(naEl(f, Math.max(v.s, citelne(rozm()))), 320);
+    else if (el.dataset.gmfl && el.dataset.gmfl !== (ul.fl || '')) { const R = rozm(), hx = R.SW / 2 / (R.w * v.s), hy = R.SH / 2 / (R.h * v.s), vid = [v.cx - hx, v.cy - hy, v.cx + hx, v.cy + hy];
+      const vidi = (x) => { const r = gmRel(L, x); return r[0] > vid[0] && r[0] < vid[2] && r[1] > vid[1] && r[1] < vid[3]; }; const ma = [...L.querySelectorAll('.bpm.ma')]; const fb = (el.dataset.gmfb || '').split(',').map(Number);
+      if (ma.length && !ma.some(vidi)) let_(naEl(ma[0], v.s), 320); else if (fb.length === 4 && (fb[2] < vid[0] || fb[0] > vid[2] || fb[3] < vid[1] || fb[1] > vid[3])) let_({ s: v.s, cx: (fb[0] + fb[2]) / 2, cy: (fb[1] + fb[3]) / 2 }, 320); } }
   if (S.gmLet && druh === 'areal') { const x = naB(S.gmLet); if (x) { const g = el.getBoundingClientRect(), b = x.getBoundingClientRect(), R = rozm(); if (b.left < g.left + R.l || b.right > g.right - R.r || b.top < g.top + R.t || b.bottom > g.bottom - R.b) let_(naEl(x, v.s), 380); } }
   if (GM_RO) GM_RO.observe(el);
   // tažení, dva prsty, doběh, dvojklepnutí
@@ -3541,7 +3544,7 @@ function gmInit(el) {
   el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
   el.addEventListener('click', (e) => { if (performance.now() < (el._potlac || 0) && !e.target.closest('.gm-ui')) { e.stopPropagation(); e.preventDefault(); } }, true);
   // kolečko: přiblíží kolem kurzoru (když se zrovna neposouvá stránka), Ctrl + kolečko i dva prsty na touchpadu vždy
-  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-sheet,.gm-pat')) return; if (!e.ctrlKey && !el.classList.contains('gm-full') && performance.now() - GM_SCR < 400) return;
+  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-sheet,.gm-pat')) return; 
     e.preventDefault(); cancelAnimationFrame(anim); const [px, py] = bod(e); const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; zoomBod(Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)), px, py, 0); }, { passive: false });
   el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName) || e.altKey || e.ctrlKey || e.metaKey) return; const R = rozm(), k = e.key; let ok = true;
     if (k.startsWith('Arrow')) cancelAnimationFrame(anim);
@@ -3574,7 +3577,7 @@ function gm3Init(el) {
   const konec = (e) => { if (!P.has(e.pointerId)) return; P.delete(e.pointerId); if (P.size) { pin = null; return; } el.classList.remove('gm-tah'); if (tah) { el._potlac = performance.now() + 350; tah = false; } };
   el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
   el.addEventListener('click', (e) => { if (performance.now() < (el._potlac || 0) && !e.target.closest('.gm-ui')) { e.stopPropagation(); e.preventDefault(); } }, true);
-  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return; if (!e.ctrlKey && !el.classList.contains('gm-full') && performance.now() - GM_SCR < 400) return; e.preventDefault(); cancelAnimationFrame(anim);
+  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return;  e.preventDefault(); cancelAnimationFrame(anim);
     const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; v.zm *= Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)); kresli(); }, { passive: false });
   el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || e.altKey || e.ctrlKey || e.metaKey) return; const k = e.key; let ok = true;
     if ((k === 'Enter' || k === ' ') && e.target.matches('[data-b3p]')) e.target.click(); else if (k === 'ArrowLeft') anim3({ rz: v.rz - 20 }, 160); else if (k === 'ArrowRight') anim3({ rz: v.rz + 20 }, 160); else if (k === 'ArrowUp') anim3({ rx: v.rx - 8 }, 160); else if (k === 'ArrowDown') anim3({ rx: v.rx + 8 }, 160);
@@ -3582,6 +3585,8 @@ function gm3Init(el) {
     if (ok) { e.preventDefault(); e.stopPropagation(); } });
 }
 // 3D budovy: jedna deska na patro (stejný výřez pro všechna patra, ať sedí nad sebou), dole nejnižší
+function budBox(nb) { const bx = planPatra(nb).map((k) => planRuc(nb, k)).filter(Boolean).map(planBox); if (!bx.length) return null; const x0 = Math.min(...bx.map((b) => b[0])), y0 = Math.min(...bx.map((b) => b[1]));
+  return [x0, y0, Math.max(...bx.map((b) => b[0] + b[2])) - x0, Math.max(...bx.map((b) => b[1] + b[3])) - y0].map((x) => Math.round(x * 10) / 10); }
 function b3Html(nb, R, pat, pk, otvP, patra, leg) { if (S.b3m === 'steny') return b3sHtml(nb, R, pat, pk, otvP, patra, leg);
   const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl = fl.map((k) => [k, planRuc(nb, k)]); const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x));
   if (!bx.length) return ''; const u = [Math.min(...bx.map((b) => b[0])), Math.min(...bx.map((b) => b[1]))]; u.push(Math.max(...bx.map((b) => b[0] + b[2])) - u[0], Math.max(...bx.map((b) => b[1] + b[3])) - u[1]); const vb = u.map((x) => Math.round(x * 10) / 10).join(' ');
@@ -3663,7 +3668,7 @@ function gm3sInit(el) {
   const konec = (e) => { if (!P.has(e.pointerId)) return; P.delete(e.pointerId); if (P.size) { pin = null; return; } el.classList.remove('gm-tah');
     if (tah) { tah = false; return; } if (e.type !== 'pointerup' || e.target.closest('.gm-ui')) return; const [x, y] = kl(e.clientX, e.clientY); const h = vyber(x, y); if (h) otevri(h); };
   el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
-  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return; if (!e.ctrlKey && !el.classList.contains('gm-full') && performance.now() - GM_SCR < 400) return; e.preventDefault(); cancelAnimationFrame(anim);
+  el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return;  e.preventDefault(); cancelAnimationFrame(anim);
     const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; v.zm *= Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)); kresli(); }, { passive: false });
   el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || e.altKey || e.ctrlKey || e.metaKey) return; const k = e.key; let ok = true;
     if (k === 'ArrowLeft') anim3({ rz: v.rz - 20 }, 160); else if (k === 'ArrowRight') anim3({ rz: v.rz + 20 }, 160); else if (k === 'ArrowUp') anim3({ rx: v.rx - 8 }, 160); else if (k === 'ArrowDown') anim3({ rx: v.rx + 8 }, 160);
