@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v59"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v60"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -243,7 +243,7 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpven{fill:var(--ok,#2e7d32);font:600 3px var(--f-ui)}
 .bpd{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--plocha)}
 .novk{border-color:var(--acc)}.novk ul,.novL{margin:6px 0 8px;padding-left:18px}.novk li,.novL li{margin:3px 0;max-width:72ch}
-.kosL{display:flex;flex-direction:column;gap:6px}.zsrvSt summary{cursor:pointer;color:var(--mut);padding:4px 0}.zsrvSt .kosL{margin-top:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.kosL{display:flex;flex-direction:column;gap:6px}.kontR{border-top:1px solid var(--line);padding:8px 0}.kontR:first-of-type{border-top:0}.zsrvSt summary{cursor:pointer;color:var(--mut);padding:4px 0}.zsrvSt .kosL{margin-top:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .t-poslucharna{--tm:#9ccccd}.t-ucebna{--tm:#ccccff}.t-kancelar{--tm:#ffcc00}.t-sekretariat{--tm:#ffe26a}.t-vedouci{--tm:#fdeeb5}.t-zasedaci{--tm:#ffff3a}.t-wc{--tm:#66cbff}.t-studio{--tm:#aa72b1}.t-odpocinkova{--tm:#e28100}.t-klub{--tm:#3b6ab2}.t-tech{--tm:#8c8c8c}.t-kavarna{--tm:#6e3d12}
 .bpvest .bpm[class*=" t-"] rect,.bpn0{fill:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha))}
 .bpn0{stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:.3}
@@ -1001,9 +1001,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v59';
+const VERZE = 'v60';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v60', '🩺 Kontrola dat (Záloha a export) – najde chyby v datech (stejné číslo dvakrát, materiál bez katalogu, chybějící fotky…) a bezpečné opravy udělá jedním klikem.'],
   ['v59', 'Co je nového – po aktualizaci se na Domů ukáže, co přibylo. Celý seznam je na dlaždici Co je nového. Číslo verze je vidět v hlavičce.'],
   ['v58', 'Plánky pater v telefonu – plánek se ořízne na kresbu patra a sám ukáže místnost s nesplněnými; ⤢ Celé patro / 🔍 Přiblížit, posouvání prstem.'],
   ['v57', 'Náhledy fotek – v seznamech a pásu fotek se stahují jen malé náhledy (šetří data v telefonu), celá fotka až ve velkém.', 1],
@@ -1541,7 +1542,7 @@ const csv = (rows) => '﻿' + rows.map((r) => r.map((x) => '"' + String(x ?? '')
 function csvSoubory() {
   const P = S.poz.map(uplny).sort((a, b) => String(a.cislo).localeCompare(String(b.cislo)));
   const poz = [['cislo', 'stav', 'datum', 'ceka_dni', 'dulezitost', 'obtiznost', 'fakulta', 'budova', 'patro', 'mistnost', 'misto_odhad', 'misto_nejiste', 'objednatel', 'kontakt', 'zdroj_financovani', 'resitel', 'kategorie', 'zavada', 'popis', 'material_na_papire', 'material', 'overit', 'postup', 'hodin', 'fotek', 'verzi_papiru', 'splneno_dne', 'naradi', 'rady', 'poznamka', 'id']]
-    .concat(P.map((p) => [p.cislo, STAV[p.stav || 'novy'][0], p.datum, p.stav === 'hotovy' ? '' : dniOd(p.datum), DUL[dulezitost(p)], OBT[obtiznost(p)], fakulta(p), budovaKr(p), patro(p), p.mistnost, p.mistoOdhad, nejiste(p) ? 'ano' : '', p.objednatel, p.kontakt, p.zdrojFinancovani, p.resitel, p.kategorie, p.nazev, p.popisOpraveny || p.popis, p.materialText,
+    .concat(P.map((p) => [p.cislo, (STAV[p.stav] || STAV.novy)[0], p.datum, p.stav === 'hotovy' ? '' : dniOd(p.datum), DUL[dulezitost(p)], OBT[obtiznost(p)], fakulta(p), budovaKr(p), patro(p), p.mistnost, p.mistoOdhad, nejiste(p) ? 'ano' : '', p.objednatel, p.kontakt, p.zdrojFinancovani, p.resitel, p.kategorie, p.nazev, p.popisOpraveny || p.popis, p.materialText,
       p.material.filter(maNazev).map((x) => x.nazev + ' ' + (x.ks ?? '') + ' (' + (potr(x) === '?' ? 'nevím' : potr(x) === 'ne' ? 'nepotřebuji' : OBJ[x.obj || '']) + ')').join(' | '), p.zjistit.join(' | '), p.ukoly.map((u) => (u.hotovo ? '[x] ' : '[ ] ') + u.text).join(' | '),
       String(hodinyCelkem(p)).replace('.', ','), p.fotky.length, verzePapiru(p).length, p.splnenoDne, p.naradiPotreba.join(' | '), p.rady.map((r) => r.text + (r.kdo ? ' (' + r.kdo + ')' : '')).join(' | '), String(p.poznamka || '').replace(/\n/g, ' | '), p.id]));
   const mat = [['cislo', 'polozka', 'ks', 'potreba', 'objednavka', 'kde_vzit', 'katalog', 'poznamka', 'odepsano_ze_skladu']].concat(P.flatMap((p) => p.material.filter(maNazev).map((x) => [p.cislo, x.nazev, x.ks, POTREBA[potr(x)], OBJ[x.obj || ''], x.kde || '', (katId(x.kat) || {}).nazev || '', x.pozn || '', x.odepsano ? 'ano' : ''])));
@@ -1565,7 +1566,7 @@ function prehledVse() {
     <div id="nefoto" role="alert"><b>Fotky se nenačetly.</b> Nejspíš je přehled otevřený přímo v ZIPu. ZIP nejdřív rozbal (na počítači pravým tlačítkem → <b>Extrahovat vše</b>) a pak otevři <b>prehled.html</b> v rozbalené složce – fotky jsou vedle ve složce <b>fotky</b>. Fotky uvnitř jednoho souboru má „Aplikace s daty (HTML)“ v Deníku (Záloha a export).</div>
     <script>function nefoto(i){i.className='chybi';i.removeAttribute('onerror');var b=document.getElementById('nefoto');if(b)b.style.display='block';}<\/script>
     <h1>Deník údržby – všechny požadavky</h1><p>Export ${fmtD(dnes())} · ${P.length} požadavků · ${P.filter((p) => p.stav === 'hotovy').length} splněno</p>
-    ${P.map((p) => `<div class="p"><h2>${esc(p.cislo || 'bez čísla')} – ${esc(p.nazev)}</h2><table>${r('Stav', STAV[p.stav || 'novy'][0] + (p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : ''))}${r('Datum', fmtD(p.datum) + (p.stav !== 'hotovy' && p.datum ? ' (čeká ' + dniOd(p.datum) + ' dní)' : ''))}${r('Důležitost / obtížnost', DUL[dulezitost(p)] + ' / ' + OBT[obtiznost(p)])}
+    ${P.map((p) => `<div class="p"><h2>${esc(p.cislo || 'bez čísla')} – ${esc(p.nazev)}</h2><table>${r('Stav', (STAV[p.stav] || STAV.novy)[0] + (p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : ''))}${r('Datum', fmtD(p.datum) + (p.stav !== 'hotovy' && p.datum ? ' (čeká ' + dniOd(p.datum) + ' dní)' : ''))}${r('Důležitost / obtížnost', DUL[dulezitost(p)] + ' / ' + OBT[obtiznost(p)])}
       ${r('Budova', p.budova)}${r('Místnost', (p.mistnost || p.mistoOdhad) + (nejiste(p) ? ' (nejisté)' : ''))}${r('Objednatel', [p.objednatel, p.kontakt].filter(Boolean).join(', '))}${r('Zdroj financování', p.zdrojFinancovani)}${r('Řešitel', p.resitel)}${r('Popis', p.popisOpraveny || p.popis)}${r('Materiál na papíře', p.materialText)}
       ${r('Materiál', p.material.filter(maNazev).map((x) => x.nazev + ' ' + (x.ks ?? '') + ' – ' + (potr(x) === '?' ? 'nevím' : potr(x) === 'ne' ? 'nepotřebuji' : OBJ[x.obj || ''])).join('; '))}${r('Ověřit', p.zjistit.join('; '))}${r('Postup', p.ukoly.map((u) => (u.hotovo ? '✓ ' : '☐ ') + u.text).join('; '))}
       ${r('Hodiny', p.hodiny.map((h) => fmtD(h.datum) + ' ' + h.kdo + ' ' + fmtH(h.h) + ' h').join('; '))}${r('Verze papíru', verzePapiru(p).map((v) => 'v' + v.n + ' ' + fmtKdy(v.kdy) + (v.zmeny.length ? ': ' + v.zmeny.join(', ') : '')).join('; '))}${r('Poznámka', p.poznamka)}</table>
@@ -1717,7 +1718,7 @@ ${zalZprava(ls.get('zalApp', null), 'Aplikace s daty')}
   if (S.zal && S.zal.Z) { const Z = S.zal.Z; const sum = Object.values(Z.sh).reduce((a, x) => a + x.nove + x.novejsi, 0);
     o += `<div class="upoz ${sum ? 'warn' : ''}" id="zalNahled" style="margin-top:10px"><span class="ik">⇪</span><div><b>${esc(Z.soubor)}</b> – záloha z ${fmtD(String(Z.data.exportovano || '').slice(0, 10))}<br>${Object.entries(Z.sh).filter(([, x]) => x.nove || x.novejsi).map(([k, x]) => KOL[k] + ': ' + (x.nove ? x.nove + ' nových' : '') + (x.nove && x.novejsi ? ', ' : '') + (x.novejsi ? x.novejsi + ' novějších' : '')).join(' · ') || 'Všechno už v deníku je – není co načítat.'}${Z.fotky.size ? '<br>Fotek v záloze: ' + Z.fotky.size : ''}
       <div class="rada" style="margin-top:8px">${sum ? `<button class="btn p" data-a="zal-obnov">Načíst ${sum} záznamů</button>` : ''}<button class="btn sm ghost" data-a="zal-zrus">Zavřít</button></div></div></div>`; }
-  return o + zsrvKarta() + kosHtml() + '</div>';
+  return o + zsrvKarta() + kontrolaHtml() + kosHtml() + '</div>';
 }
 // --- co si vzít a odkud: materiál (kde vzít), nářadí, rady od kolegů; plán na dnes; arch k doplnění
 const ZDROJE0 = ['sklad', 'dílna', 'objednat'];
@@ -2191,7 +2192,7 @@ function hledejVseHtml(q) { const w = norm(q).split(' ').filter(Boolean); const 
   const add = (nad, L) => { if (L.length) out.push(`<div class="pg">${nad} · ${L.length > 8 ? '8+' : L.length}</div>` + L.slice(0, 8).join('')); };
   { const H = ucHledej(q); const L = [...H.presne, ...H.L].slice(0, 6); add('Učebny', L.map((u) => `<a class="pv" href="#ucebny" data-ucq="${esc(u.k)}"><b>🏫 ${esc(ucKod(u.k))}</b><small>${esc(u.nazev)} · ${esc(u.typ)}${u.patro != null ? ' · ' + esc(ucPatroTx(u.patro)) : ''}</small></a>`)); }
   add('Nápověda', TEMATA.filter((t) => m(t.nazev + ' ' + t.body.join(' ') + ' ' + (t.klic || ''))).map((t) => `<a class="pv" href="#" data-pa="tema" data-id="${t.id}"><b>❔ ${esc(t.nazev)}</b><small>${esc(t.body[0])}</small></a>`));
-  add('Požadavky', S.poz.filter((p) => m([p.cislo, p.nazev, p.popis, budovaKr(p), p.mistnost, p.mistoOdhad, p.objednatel, p.poznamka].join(' '))).sort((SORT.nove || SORT.dul)[1]).map((p) => `<a class="pv" href="#p-${esc(p.id)}"><b>${esc(p.cislo || '')} ${esc(p.nazev || '')}</b><small>${esc(budovaKr(p))}${p.mistnost ? ' · ' + esc(p.mistnost) : ''} · ${STAV[p.stav || 'novy'][0]}</small></a>`));
+  add('Požadavky', S.poz.filter((p) => m([p.cislo, p.nazev, p.popis, budovaKr(p), p.mistnost, p.mistoOdhad, p.objednatel, p.poznamka].join(' '))).sort((SORT.nove || SORT.dul)[1]).map((p) => `<a class="pv" href="#p-${esc(p.id)}"><b>${esc(p.cislo || '')} ${esc(p.nazev || '')}</b><small>${esc(budovaKr(p))}${p.mistnost ? ' · ' + esc(p.mistnost) : ''} · ${(STAV[p.stav] || STAV.novy)[0]}</small></a>`));
   add('Katalog', S.katalog.filter((k) => m([k.nazev, k.druh, k.typ, k.vyrobce, katPopis(k), k.kde].join(' '))).map((k) => `<a class="pv" href="#kat=${encodeURIComponent(k.id)}"><b>${esc(k.nazev)}</b><small>${esc(katPopis(k))}</small></a>`));
   add('Sklady a klíče', S.ulozky.filter((u) => m([u.nazev, u.budovy, u.kde, u.co, u.klic].join(' '))).map((u) => `<a class="pv" href="#ulozky"><b>${esc(u.nazev)}</b><small>${esc([u.budovy, u.co, u.klic ? '🔑 ' + u.klic : ''].filter(Boolean).join(' · '))}</small></a>`));
   add('Místa', [...mistaVse().values()].filter((M) => m(nazevMista(M) + ' ' + ((M.zaznam || {}).rozvadec || '') + ' ' + ((M.zaznam || {}).jistice || []).map((j) => [j.oz, j.typ, j.co].join(' ')).join(' '))).map((M) => `<a class="pv" href="#misto=${encodeURIComponent(M.key)}"><b>${esc(nazevMista(M))}</b><small>${M.poz.length} ${M.poz.length === 1 ? 'požadavek' : M.poz.length > 1 && M.poz.length < 5 ? 'požadavky' : 'požadavků'}</small></a>`));
@@ -2437,7 +2438,7 @@ function textPoslat(p, kontakt) {
   const r = [('Požadavek ' + (p.cislo || '') + ' – ' + (p.nazev || '')).trim()];
   r.push('Místo: ' + [budovaKr(p), p.mistnost || p.mistoOdhad].filter(Boolean).join(', ') + (nejiste(p) ? ' (ověřit)' : ''));
   if (p.popisOpraveny || p.popis) r.push('Závada: ' + (p.popisOpraveny || p.popis));
-  r.push('Stav: ' + STAV[p.stav || 'novy'][0] + (p.stav !== 'hotovy' && p.datum ? ', čeká ' + dniOd(p.datum) + ' dní' : '') + ' · důležitost: ' + DUL[dulezitost(p)].toLowerCase());
+  r.push('Stav: ' + (STAV[p.stav] || STAV.novy)[0] + (p.stav !== 'hotovy' && p.datum ? ', čeká ' + dniOd(p.datum) + ' dní' : '') + ' · důležitost: ' + DUL[dulezitost(p)].toLowerCase());
   const m = (p.material || []).filter((x) => maNazev(x) && potr(x) !== 'ne');
   if (m.length) r.push('Materiál:\n' + m.map((x) => '– ' + x.nazev + (x.ks ? ' ' + x.ks + ' ks' : '') + ' (' + (potr(x) === '?' ? 'nevím, jestli potřeba' : OBJ[x.obj || ''].toLowerCase()) + ')').join('\n'));
   if ((p.zjistit || []).length) r.push('Ověřit:\n' + p.zjistit.map((t) => '– ' + t).join('\n'));
@@ -2465,6 +2466,27 @@ async function kosUklid() { const hr = new Date(Date.now() - KOS_DNI * 864e5).to
 const kosPopis = (z) => { const d = z.data || {}; return z.kol === 'pozadavky' ? ((d.cislo ? d.cislo + ' ' : '') + (d.nazev || 'Požadavek') + (d.budova ? ' · ' + budovaKr(d) : '') + (d.mistnost ? ' ' + d.mistnost : '')) : (d.nazev || d.jmeno || d.mistnost || d.text || z.puvId); };
 const KOS_N = { pozadavky: 'Požadavek', mista: 'Místo', napady: 'Nápad', lide: 'Člověk', katalog: 'Katalog' };
 const kosZbyva = (z) => Math.max(0, KOS_DNI - Math.floor((Date.now() - new Date(z.smazano).getTime()) / 864e5));
+// 🩺 kontrola dat: jen čte; opravy jen bezpečné a na klik
+async function kontrolaDat() { const P = S.poz.filter((p) => !p.slouceno); const R = []; const add = (k, t, L, oprava, info) => { if (L.length) R.push({ k, t, L, oprava, info }); };
+  add('bezc', 'Požadavky bez čísla', P.filter((p) => !String(p.cislo || '').trim()), null, 'Doplň číslo z papíru, ať jde požadavek najít.');
+  const C = new Map(); P.forEach((p) => { const c = String(p.cislo || '').trim(); if (c) C.set(c, [...(C.get(c) || []), p]); });
+  add('dup', 'Stejné číslo u víc požadavků', [...C.values()].filter((g) => g.length > 1).flat(), null, 'Nejspíš duplikát – spojíš ho v Přehledy → Možné duplikáty → Sloučit (fotky, materiál i hodiny se spojí).');
+  const K = new Set(S.katalog.map((k) => k.id)); add('kat', 'Materiál napojený na smazanou položku katalogu', P.filter((p) => (p.material || []).some((x) => x.kat && !K.has(x.kat))), 'kat', 'Materiál zůstane, jen se odpojí od katalogu.');
+  const SK = new Set(S.sklad.map((x) => x.id)); const poh = S.pohyby.filter((m) => !SK.has(m.pol)); if (poh.length) R.push({ k: 'poh', t: 'Pohyby skladu bez položky', L: [], n: poh.length, oprava: 'poh', info: 'Položka skladu byla smazaná, pohyby už k ničemu nepatří.' });
+  const hod = P.filter((p) => (p.hodiny || []).some((h) => !(+h.h > 0) || +h.h > 16 || !/^\d{4}-\d\d-\d\d$/.test(String(h.datum || '')))); add('hod', 'Divné hodiny (0, víc než 16 h nebo bez data)', hod, null, 'Otevři požadavek a hodiny oprav.');
+  add('stav', 'Neznámý stav požadavku', P.filter((p) => p.stav && !STAV[p.stav]), 'stav', 'Ukazuje se jako Nový. Oprava nastaví stav Nový – pak ho uprav v detailu.');
+  const zitra = new Date(Date.now() + 864e5).toISOString().slice(0, 10); add('dat', 'Datum v budoucnu nebo nečitelné', P.filter((p) => p.datum && (!/^\d{4}-\d\d-\d\d$/.test(p.datum) || p.datum > zitra)), null, 'Asi překlep při přepisu z papíru.');
+  if (S.assets && S.assets.list) { try { const A = new Set(((await S.assets.list()) || {}).assets.map((a) => a.id)); if (A.size) add('fot', 'Fotky, které nejsou v zařízení ani na serveru', P.filter((p) => (p.fotky || []).some((f) => f.id && !A.has(f.id))), null, 'Fotka se nenahrála (třeba bez signálu na jiném zařízení). Otevři Deník na tom zařízení, ať se dopošle.'); } catch {} }
+  S.kontrola = { kdy: new Date().toISOString(), R }; }
+function kontrolaHtml() { const K = S.kontrola; const pol = (p) => `<a class="chip" href="#p-${esc(p.id)}">${esc(p.cislo || 'bez čísla')} ${esc((p.nazev || '').slice(0, 28))}</a>`;
+  return `<h3 id="kontrola">🩺 Kontrola dat</h3><div class="karta"><p class="small mut" style="margin:0 0 8px;max-width:66ch">Projde data a najde, co nesedí. Nic sama nemění – opravy jen ty bezpečné a až na tvůj klik.</p>
+    ${K ? (K.R.length ? K.R.map((r) => `<div class="kosR kontR"><span class="kosT"><b>${esc(r.t)}</b> · ${r.L.length || r.n}<br><span class="small mut">${esc(r.info)}</span>${r.L.length ? `<span class="rada" style="gap:4px;margin-top:4px">${r.L.slice(0, 8).map(pol).join('')}${r.L.length > 8 ? `<span class="small mut">…a ${r.L.length - 8} dalších</span>` : ''}</span>` : ''}</span>${r.oprava ? `<button class="btn sm" data-a="kontr-oprav" data-k="${r.oprava}">${{ kat: 'Odpojit od katalogu', poh: 'Smazat tyhle pohyby', stav: 'Nastavit stav Nový' }[r.oprava]}</button>` : ''}</div>`).join('') : '<p style="margin:0">✓ Všechno sedí – nic jsem nenašel.</p>') + `<p class="small mut" style="margin:8px 0 0">Zkontrolováno ${fmtKdy(K.kdy)}.</p>` : ''}
+    <div class="rada" style="margin-top:8px"><button class="btn sm${K ? '' : ' p'}" data-a="kontr">${K ? 'Zkontrolovat znovu' : '🩺 Zkontrolovat data'}</button></div></div>`; }
+async function kontrolaOprav(k) { let n = 0;
+  if (k === 'kat') { const K = new Set(S.katalog.map((x) => x.id)); for (const p of S.poz.filter((q) => (q.material || []).some((x) => x.kat && !K.has(x.kat)))) { const q = JSON.parse(JSON.stringify(p)); q.material.forEach((x) => { if (x.kat && !K.has(x.kat)) { delete x.kat; n++; } }); await ulozPoz(q); } toast('Odpojeno ' + n + ' kusů materiálu od smazaného katalogu.'); }
+  if (k === 'stav') { for (const p of S.poz.filter((q) => q.stav && !STAV[q.stav])) { await ulozPoz({ ...JSON.parse(JSON.stringify(p)), stav: 'novy' }); n++; } toast('Stav Nový nastaven u ' + n + ' požadavků.'); }
+  if (k === 'poh') { const SK = new Set(S.sklad.map((x) => x.id)); for (const m of S.pohyby.filter((x) => !SK.has(x.pol))) { await smazDoc('pohyby', m.id); n++; } toast('Smazáno ' + n + ' osiřelých pohybů.'); }
+  await kontrolaDat(); vykresli(); }
 function kosHtml() { const L = (S.kos || []).filter((z) => !kosZije(z) && kosZbyva(z) > 0).sort((a, b) => String(b.smazano).localeCompare(String(a.smazano)));
   return `<h3 id="kos">🗑 Koš</h3><div class="karta"><p class="small mut" style="margin:0 0 8px;max-width:66ch">Smazané požadavky, nářadí, katalog, sklad a další tu zůstanou ${KOS_DNI} dní – pak se smažou samy. Obnovit je můžeš i na jiném zařízení.</p>
     ${L.length ? `<div class="kosL">${L.slice(0, 60).map((z) => `<div class="kosR"><span class="kosT"><b>${esc(KOS_N[z.kol] || KOL[z.kol] || z.kol)}</b> · ${esc(kosPopis(z))}<br><span class="small mut">smazáno ${fmtD(String(z.smazano).slice(0, 10))} · v koši ještě ${kosZbyva(z)} ${kosZbyva(z) === 1 ? 'den' : kosZbyva(z) < 5 ? 'dny' : 'dní'}${z.pril && (z.pril.pohyby || []).length ? ' · i s historií pohybů' : ''}</span></span><button class="btn sm" data-a="kos-obnov" data-id="${esc(z.id)}">↩ Obnovit</button>${S.mazat === 'kos:' + z.id ? `<span class="potvrd">Natrvalo? <button class="btn sm" data-a="kos-smaz" data-id="${esc(z.id)}">Smazat</button><button class="btn sm ghost" data-a="kos-smaz-ne">Ne</button></span>` : `<button class="btn sm ghost" data-a="kos-smaz-?" data-id="${esc(z.id)}">Smazat natrvalo</button>`}</div>`).join('')}${L.length > 60 ? `<p class="small mut" style="margin:0">… a dalších ${L.length - 60}</p>` : ''}</div>` : '<p class="small mut" style="margin:0">Koš je prázdný.</p>'}</div>`; }
@@ -2740,7 +2762,7 @@ function stavGraf() { const L = S.poz.filter((p) => !p.slouceno); if (!L.length)
 const cekROk = (p, r) => { if (!r) return true; const [a, b] = r.split('-'); const d = dniOd(p.datum); return d >= +a && (b === '' || d <= +b); };
 const pocetTxt = (n) => n + ' ' + (n === 1 ? 'požadavek' : n > 1 && n < 5 ? 'požadavky' : 'požadavků');
 function polozka(p) {
-  const d = duplikaty(p); const st = STAV[p.stav || 'novy']; const ob = obtiznost(p), du = dulezitost(p), dn = p.stav === 'hotovy' ? 0 : dniOd(p.datum);
+  const d = duplikaty(p); const st = (STAV[p.stav] || STAV.novy); const ob = obtiznost(p), du = dulezitost(p), dn = p.stav === 'hotovy' ? 0 : dniOd(p.datum);
   const fs = (p.fotky || []).filter((x) => x.id); const hf = hlFoto(p); const nf = hf && hf.f;
   return `<button class="pol${nf ? ' sf' : ''}" data-otevri="${esc(p.id)}">${nf ? `<span class="nf" data-lbp="${esc(p.id)}" data-lbi="${hf.i}" title="Klik = ${nf.typ === 'formular' ? 'papír' : 'fotka'} ve velkém · dvojklik = otevřít požadavek"><img src="${fotoN(nf)}" alt="" loading="lazy">${fs.length > 1 ? `<b>${fs.length}</b>` : ''}</span>` : ''}<span class="t"><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || p.popis || 'Bez popisu')}</span><span class="h">${fmtH(hodinyCelkem(p))} h</span>
     <span class="m">${p.slouceno ? '<span class="chip mu">sloučeno – duplikát</span>' : `<span class="chip ${st[1]}">${st[0]}</span>`}${du === 3 ? '<span class="chip err">! Důležité</span>' : du === 1 ? '<span class="chip mu">Počká</span>' : ''}<span class="chip mu" title="Obtížnost: ${OBT[ob]}"><span class="tecky">${tecky(ob)}</span> ${OBT[ob]}</span>
@@ -2779,7 +2801,7 @@ function upozorneni(p) {
   if (nejiste(p)) o += `<div class="upoz warn"><span class="ik">!</span><div><b>Místo je nejisté.</b> ${p.mistnost ? 'Místnost je napsaná nejasně.' : 'Kolonka Místnost je na papíře prázdná.'} ${p.mistoOdhad ? 'Z popisu to vypadá na <b>' + esc(p.mistoOdhad) + '</b>.' : ''} Ověř u objednatele${p.objednatel ? ' (' + esc(p.objednatel) + ')' : ''}.
     ${p.mistoOdhad && !p.mistnost ? `<div class="rada" style="margin-top:6px"><button class="btn sm" data-a="pouzit-odhad">Použít „${esc(p.mistoOdhad)}“ jako místnost</button></div>` : ''}</div></div>`;
   const d = duplikaty(p);
-  d.forEach((x) => { o += `<div class="upoz err"><span class="ik">≈</span><div><b>Možný duplikát:</b> <span class="cislo">${esc(x.q.cislo || 'bez čísla')}</span> ${esc(x.q.nazev || x.q.popis || '')} · ${fmtD(x.q.datum)} · ${STAV[x.q.stav || 'novy'][0]}<br><span class="small mut">${esc(x.proc)}</span>
+  d.forEach((x) => { o += `<div class="upoz err"><span class="ik">≈</span><div><b>Možný duplikát:</b> <span class="cislo">${esc(x.q.cislo || 'bez čísla')}</span> ${esc(x.q.nazev || x.q.popis || '')} · ${fmtD(x.q.datum)} · ${(STAV[x.q.stav] || STAV.novy)[0]}<br><span class="small mut">${esc(x.proc)}</span>
     <div class="rada" style="margin-top:6px"><button class="btn sm" data-otevri="${esc(x.q.id)}">Otevřít</button>${S.mazat === 'slouc:' + x.q.id ? `<span class="potvrd">Sloučit ${esc(x.q.cislo || 'ho')} sem? Fotky, materiál, hodiny a poznámky se přenesou, ${esc(x.q.cislo || 'on')} se označí jako duplikát. <button class="btn sm" data-a="slouc-ano" data-id="${esc(x.q.id)}">Sloučit</button><button class="btn sm ghost" data-a="smazat-ne">Ne</button></span>` : `<button class="btn sm" data-a="slouc" data-id="${esc(x.q.id)}">Sloučit do tohoto</button>`}</div></div></div>`; });
   const dupIds = new Set(d.map((x) => x.q.id)); const mk = mistoKlic(p);
   const sm = mk && /\|[a-z]?\d{2,4}[a-z]?$/.test(mk) ? S.poz.filter((q) => q.id !== p.id && !dupIds.has(q.id) && q.stav !== 'hotovy' && mistoKlic(q) === mk) : [];
@@ -2803,7 +2825,7 @@ function vNovy() {
     <p class="small mut" style="margin:8px 0 0">Máš fotky ve WhatsAppu? <a href="#import">Načti celý export chatu</a> – papíry i fotky z místa se roztřídí samy.</p>`;
   const p = d || { stav: 'novy', datum: dnes() };
   const ex = d && d.cislo && S.poz.find((q) => q.cislo && norm(q.cislo) === norm(d.cislo));
-  if (ex) o += `<div class="upoz warn" style="margin-top:12px"><span class="ik">↻</span><div><b>Tenhle papír už v deníku je</b> – <span class="cislo">${esc(ex.cislo)}</span> ${esc(ex.nazev || '')} (${STAV[ex.stav || 'novy'][0]}, verzí papíru: ${verzePapiru(ex).length || 1}).
+  if (ex) o += `<div class="upoz warn" style="margin-top:12px"><span class="ik">↻</span><div><b>Tenhle papír už v deníku je</b> – <span class="cislo">${esc(ex.cislo)}</span> ${esc(ex.nazev || '')} (${(STAV[ex.stav] || STAV.novy)[0]}, verzí papíru: ${verzePapiru(ex).length || 1}).
     Ulož ho jako <b>další verzi</b>: fotka se přidá, prázdné údaje se doplní a nové ručně psané poznámky se zapíšou. Nic starého se nepřepíše.${d.rucne ? `<br><span class="small">Ručně na nové fotce: <i>${esc(d.rucne)}</i></span>` : ''}
     <div class="rada" style="margin-top:8px"><button class="btn p" data-a="ulozit-verzi">Uložit jako verzi ${(verzePapiru(ex).length || 1) + 1}</button><a class="btn sm ghost" href="#p-${esc(ex.id)}">Otevřít ${esc(ex.cislo)}</a></div></div></div>`;
   o += '<h3>Údaje</h3><div class="karta" id="draftForm">' + formular(p, 'n') + (d && d.rucne && !ex ? `<p class="small mut" style="margin:8px 0 0">Ručně na papíře: <i>${esc(d.rucne)}</i> – uloží se do poznámky.</p>` : '') + '</div>' + (d && !ex ? upozorneni(p) : '');
@@ -2812,7 +2834,7 @@ function vNovy() {
 }
 function vDetail(id) {
   const p = S.poz.find((q) => q.id === id); if (!p) return '<div class="prazdne"><b>Požadavek nenalezen</b><a href="#seznam">Zpět na seznam</a></div>';
-  const st = STAV[p.stav || 'novy']; const m = mistoK(p);
+  const st = (STAV[p.stav] || STAV.novy); const m = mistoK(p);
   let o = `<div class="rada" style="margin-top:14px"><a class="btn ghost sm" href="#seznam">← Seznam</a></div>
     <h2><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || 'Požadavek')}</h2>
     <div class="rada"><select id="stavSel" aria-label="Stav" style="width:auto">${Object.entries(STAV).map(([k, v]) => `<option value="${k}"${(p.stav || 'novy') === k ? ' selected' : ''}>${v[0]}</option>`).join('')}</select>
@@ -3066,7 +3088,7 @@ function vPrehled() {
       const hf = hlFoto(p); const f = hf && hf.f; const s = p.stav === 'hotovy'; const dni = dniOd(p.datum);
       return `<div class="pt ${s ? 'spl' : 'nespl'}"><a class="img" href="#p-${esc(p.id)}" aria-label="${f ? 'Papír ' + esc(p.cislo || '') + ' ve velkém (dvojklik = otevřít)' : 'Otevřít ' + esc(p.cislo || '')}"${f ? ` data-lbp="${esc(p.id)}" data-lbi="${hf.i}"` : ''}>${f ? `<img src="${fotoUrl(f)}" alt="" loading="lazy">` : `<span class="ph">${svg(ICO.foto, 34)}</span>`}<span class="cislo">${esc(p.cislo || 'bez čísla')}</span></a>
         <div class="pas">${s ? '✓ Splněno' : '✗ Nesplněno'}<small>${s ? (p.splnenoDne ? fmtD(p.splnenoDne) : '') : dni > 0 ? dni + ' d' : ''}</small></div>
-        <div class="tx"><b>${esc(p.nazev || p.popis || 'Bez popisu')}</b><span class="mut">${esc(p.mistnost || p.mistoOdhad || 'místo?')}${s ? '' : ' · ' + STAV[p.stav || 'novy'][0]}</span> ${matChip(p)}</div>
+        <div class="tx"><b>${esc(p.nazev || p.popis || 'Bez popisu')}</b><span class="mut">${esc(p.mistnost || p.mistoOdhad || 'místo?')}${s ? '' : ' · ' + (STAV[p.stav] || STAV.novy)[0]}</span> ${matChip(p)}</div>
         <div class="akce">${s ? `<button class="btn sm" data-spl="${esc(p.id)}" title="Vrátit mezi nesplněné">↶ Vrátit</button>` : `<button class="btn sm ok" data-spl="${esc(p.id)}">✓ Splněno</button>`}</div></div>`;
     }).join('') + '</div>';
   });
@@ -3079,7 +3101,7 @@ function prehledTisk() {
   [...sk.keys()].sort((a, b) => a.localeCompare(b, 'cs')).forEach((b) => {
     const ps = sk.get(b).sort((x, y) => (x.mistnost || x.mistoOdhad || '').localeCompare(y.mistnost || y.mistoOdhad || '', 'cs', { numeric: true }));
     t += `<h2>${esc(b)}</h2><table><tr><th style="width:13%">Číslo</th><th style="width:17%">Místnost</th><th>Závada</th><th style="width:22%">Stav</th></tr>${ps.map((p) => `<tr><td>${esc(p.cislo || '')}</td><td>${esc(p.mistnost || p.mistoOdhad || '')}</td><td>${esc(p.nazev || p.popis || '')}${(p.zjistit || [])[0] ? `<div class="mala">Ověřit: ${esc(p.zjistit[0])}</div>` : ''}</td>
-      <td>${p.stav === 'hotovy' ? '☑ <b>Splněno</b>' + (p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : '') : '☐ Nesplněno – ' + STAV[p.stav || 'novy'][0].toLowerCase()}</td></tr>`).join('')}</table>`;
+      <td>${p.stav === 'hotovy' ? '☑ <b>Splněno</b>' + (p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : '') : '☐ Nesplněno – ' + (STAV[p.stav] || STAV.novy)[0].toLowerCase()}</td></tr>`).join('')}</table>`;
   });
   return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Přehled požadavků ${fmtD(dnes())}</title><style>@page{size:A4;margin:14mm}body{font:10.5pt/1.35 Arial,Helvetica,sans-serif;color:#000;margin:0}
     h1{font-size:15pt;margin:0 0 4px}h2{font-size:12pt;margin:14px 0 4px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #000;padding:4px 6px;vertical-align:top;text-align:left}th{background:#eee;font-size:9pt}.mala{font-size:8.5pt;color:#333}</style></head><body>
@@ -3619,6 +3641,8 @@ document.addEventListener('click', async (e) => {
     catch (err) { S.zal = null; toast('Export se nepovedl: ' + (err.message || err.code || err)); } vykresli(); return; }
   if (a === 'zal-json') { await stahni('denik-udrzby-' + dnes() + '.json', JSON.stringify(dataVse(), null, 1)); ls.set('zaloha', dnes()); vykresli(); return; }
   if (a === 'zal-zrus') { S.zal = null; vykresli(); return; }
+  if (a === 'kontr') { b.disabled = true; await kontrolaDat(); vykresli(); return; }
+  if (a === 'kontr-oprav') { b.disabled = true; await kontrolaOprav(b.dataset.k); return; }
   if (a === 'nov-ok') { ls.set('videno', VERZE); vykresli(); return; }
   if (a === 'zsrv-ted') { await zsrvUdelat(true); return; }
   if (a === 'zsrv-obnov' || a === 'zsrv-stahni') { const n = b.dataset.n; const kdy = zsrvKdy(n); b.disabled = true;
