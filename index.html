@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v52"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v53"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -238,6 +238,7 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpm text.bpbd{fill:#fff;font-size:3.2px}
 .bpven{fill:var(--ok,#2e7d32);font:600 3px var(--f-ui)}
 .bpd{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--plocha)}
+.kosL{display:flex;flex-direction:column;gap:6px}.kosR{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px}.kosR:first-child{border-top:0;padding-top:0}.kosT{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .t-poslucharna{--tm:#9ccccd}.t-ucebna{--tm:#ccccff}.t-kancelar{--tm:#ffcc00}.t-sekretariat{--tm:#ffe26a}.t-vedouci{--tm:#fdeeb5}.t-zasedaci{--tm:#ffff3a}.t-wc{--tm:#66cbff}.t-studio{--tm:#aa72b1}.t-odpocinkova{--tm:#e28100}.t-klub{--tm:#3b6ab2}.t-tech{--tm:#8c8c8c}.t-kavarna{--tm:#6e3d12}
 .bpvest .bpm[class*=" t-"] rect,.bpn0{fill:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha))}
 .bpn0{stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:.3}
@@ -958,7 +959,7 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v52';
+const VERZE = 'v53';
 const ZDROJ = (() => { try { const sc = document.currentScript, css = document.getElementById('denik-css'), sh = document.getElementById('denik-shim'); if (!sc || !css || !sh) return null;
   const m = []; for (const n of document.body.childNodes) { if (n === sc) break; if (n.nodeType === 1 && /^(HEADER|MAIN|NAV|DIV)$/.test(n.tagName)) m.push(n.outerHTML); }
   return { css: css.textContent, html: m.join('\n'), shim: sh.textContent, js: sc.textContent }; } catch (e) { return null; } })();
@@ -1615,7 +1616,7 @@ ${zalZprava(ls.get('zalApp', null), 'Aplikace s daty')}
   if (S.zal && S.zal.Z) { const Z = S.zal.Z; const sum = Object.values(Z.sh).reduce((a, x) => a + x.nove + x.novejsi, 0);
     o += `<div class="upoz ${sum ? 'warn' : ''}" style="margin-top:10px"><span class="ik">⇪</span><div><b>${esc(Z.soubor)}</b> – záloha z ${fmtD(String(Z.data.exportovano || '').slice(0, 10))}<br>${Object.entries(Z.sh).filter(([, x]) => x.nove || x.novejsi).map(([k, x]) => KOL[k] + ': ' + (x.nove ? x.nove + ' nových' : '') + (x.nove && x.novejsi ? ', ' : '') + (x.novejsi ? x.novejsi + ' novějších' : '')).join(' · ') || 'Všechno už v deníku je – není co načítat.'}${Z.fotky.size ? '<br>Fotek v záloze: ' + Z.fotky.size : ''}
       <div class="rada" style="margin-top:8px">${sum ? `<button class="btn p" data-a="zal-obnov">Načíst ${sum} záznamů</button>` : ''}<button class="btn sm ghost" data-a="zal-zrus">Zavřít</button></div></div></div>`; }
-  return o + '</div>';
+  return o + kosHtml() + '</div>';
 }
 // --- co si vzít a odkud: materiál (kde vzít), nářadí, rady od kolegů; plán na dnes; arch k doplnění
 const ZDROJE0 = ['sklad', 'dílna', 'objednat'];
@@ -2346,7 +2347,27 @@ async function kopiruj(t) { try { await navigator.clipboard.writeText(t); toast(
 // --- úložiště
 async function ulozPoz(p) { (p.material || []).forEach((x) => { if (x.obj === 'obj' && !x.objKdy) x.objKdy = new Date().toISOString(); }); p.upraveno = new Date().toISOString(); const i = S.poz.findIndex((q) => q.id === p.id); if (i < 0) S.poz.unshift(p); else S.poz[i] = p;
   if (S.db) { try { await S.db.doc('pozadavky/' + p.id).set(JSON.parse(JSON.stringify(p))); } catch (e) { toast('Uložit nešlo: ' + (e.message || e.code)); } } else ls.set('poz', S.poz); }
-async function smazPoz(id) { S.poz = S.poz.filter((q) => q.id !== id); if (S.db) { try { await S.db.doc('pozadavky/' + id).delete(); } catch (e) { toast('Smazat nešlo'); } } else ls.set('poz', S.poz); }
+// koš: kopie smazaného záznamu na 30 dní (obnovit jde i po zavření aplikace a na jiném zařízení)
+const KOS_DNI = 30;
+async function doKose(kol, id, data, pril) { if (!data) return; const k = kol + '~' + id; const z = { kol, puvId: id, data: JSON.parse(JSON.stringify(data)), smazano: new Date().toISOString() }; if (pril) z.pril = JSON.parse(JSON.stringify(pril));
+  S.kos = [...(S.kos || []).filter((x) => x.id !== k), { ...z, id: k }]; if (S.db) { try { await S.db.doc('kos/' + k).set(z); } catch {} } else ls.set('kos', S.kos); }
+async function zKose(k) { const z = (S.kos || []).find((x) => x.id === k); if (!z) return null; S.kos = S.kos.filter((x) => x.id !== k); if (S.db) { try { await S.db.doc('kos/' + k).delete(); } catch {} } else ls.set('kos', S.kos); return z; }
+async function obnovZKose(k) { const z = await zKose(k); if (!z) return; const d = { ...z.data }; delete d.id;
+  const id = z.puvId;
+  if (z.kol === 'pozadavky') { const q = uplny({ id, ...d }); S.poz = [...S.poz.filter((x) => x.id !== id), q]; if (S.db) await S.db.doc('pozadavky/' + id).set(d); else ls.set('poz', S.poz); }
+  else if (Array.isArray(S[z.kol])) { await ulozDoc(z.kol, { ...d, id }); const P = z.pril || {}; for (const m of P.pohyby || []) await ulozDoc('pohyby', m);
+    for (const v of P.kat || []) { const c = S.poz.find((x) => x.id === v.pid); if (!c) continue; const c2 = JSON.parse(JSON.stringify(c)); let zm = false; (c2.material || []).forEach((x) => { if (!x.kat && (v.mat || []).some((n) => norm(n) === norm(x.nazev))) { x.kat = id; zm = true; } }); if (zm) await ulozPoz(c2); } }
+  else if (z.kol === 'napady') { S.napady = { ...(S.napady || {}), [id]: d }; if (S.db) await S.db.doc('napady/' + id).set(d); else ls.set('napady', S.napady); }
+  toast('Obnoveno z koše.'); vykresli(); }
+const kosZije = (z) => z.kol === 'pozadavky' ? S.poz.some((x) => x.id === z.puvId) : Array.isArray(S[z.kol]) ? S[z.kol].some((x) => x.id === z.puvId) : z.kol === 'napady' ? !!(S.napady || {})[z.puvId] : false;
+async function kosUklid() { const hr = new Date(Date.now() - KOS_DNI * 864e5).toISOString(); for (const z of (S.kos || []).filter((x) => String(x.smazano || '') < hr || kosZije(x))) await zKose(z.id); }
+const kosPopis = (z) => { const d = z.data || {}; return z.kol === 'pozadavky' ? ((d.cislo ? d.cislo + ' ' : '') + (d.nazev || 'Požadavek') + (d.budova ? ' · ' + budovaKr(d) : '') + (d.mistnost ? ' ' + d.mistnost : '')) : (d.nazev || d.jmeno || d.mistnost || d.text || z.puvId); };
+const KOS_N = { pozadavky: 'Požadavek', mista: 'Místo', napady: 'Nápad', lide: 'Člověk', katalog: 'Katalog' };
+const kosZbyva = (z) => Math.max(0, KOS_DNI - Math.floor((Date.now() - new Date(z.smazano).getTime()) / 864e5));
+function kosHtml() { const L = (S.kos || []).filter((z) => !kosZije(z) && kosZbyva(z) > 0).sort((a, b) => String(b.smazano).localeCompare(String(a.smazano)));
+  return `<h3 id="kos">🗑 Koš</h3><div class="karta"><p class="small mut" style="margin:0 0 8px;max-width:66ch">Smazané požadavky, nářadí, katalog, sklad a další tu zůstanou ${KOS_DNI} dní – pak se smažou samy. Obnovit je můžeš i na jiném zařízení.</p>
+    ${L.length ? `<div class="kosL">${L.slice(0, 60).map((z) => `<div class="kosR"><span class="kosT"><b>${esc(KOS_N[z.kol] || KOL[z.kol] || z.kol)}</b> · ${esc(kosPopis(z))}<br><span class="small mut">smazáno ${fmtD(String(z.smazano).slice(0, 10))} · v koši ještě ${kosZbyva(z)} ${kosZbyva(z) === 1 ? 'den' : kosZbyva(z) < 5 ? 'dny' : 'dní'}${z.pril && (z.pril.pohyby || []).length ? ' · i s historií pohybů' : ''}</span></span><button class="btn sm" data-a="kos-obnov" data-id="${esc(z.id)}">↩ Obnovit</button>${S.mazat === 'kos:' + z.id ? `<span class="potvrd">Natrvalo? <button class="btn sm" data-a="kos-smaz" data-id="${esc(z.id)}">Smazat</button><button class="btn sm ghost" data-a="kos-smaz-ne">Ne</button></span>` : `<button class="btn sm ghost" data-a="kos-smaz-?" data-id="${esc(z.id)}">Smazat natrvalo</button>`}</div>`).join('')}${L.length > 60 ? `<p class="small mut" style="margin:0">… a dalších ${L.length - 60}</p>` : ''}</div>` : '<p class="small mut" style="margin:0">Koš je prázdný.</p>'}</div>`; }
+async function smazPoz(id) { await doKose('pozadavky', id, S.poz.find((q) => q.id === id)); S.poz = S.poz.filter((q) => q.id !== id); if (S.db) { try { await S.db.doc('pozadavky/' + id).delete(); } catch (e) { toast('Smazat nešlo'); } } else ls.set('poz', S.poz); }
 async function ulozMisto(m) { m.upraveno = new Date().toISOString(); const i = S.mista.findIndex((q) => q.id === m.id); if (i < 0) S.mista.push(m); else S.mista[i] = m;
   if (S.db) { try { await S.db.doc('mista/' + m.id).set(JSON.parse(JSON.stringify(m))); } catch (e) { toast('Uložit nešlo'); } } else ls.set('mista', S.mista); }
 // nářadí a lidé – stejné ukládání pro obě kolekce
@@ -2356,14 +2377,14 @@ const ODEB_N = { katalog: 'z katalogu', naradi: 'z nářadí', lide: 'z lidí', 
 async function odebrat(kol, id, pak) { const o0 = (S[kol] || []).find((q) => q.id === id); if (!o0) return; const o = JSON.parse(JSON.stringify(o0)); let poz = [], poh = [], pozn = '';
   if (kol === 'katalog') { const u = katPouzito(id); poz = u.map((q) => JSON.parse(JSON.stringify(q))); for (const q of u) { const q2 = JSON.parse(JSON.stringify(q)); q2.material.forEach((x) => { if (x.kat === id) delete x.kat; }); await ulozPoz(q2); } if (u.length) pozn = ' · odpojeno od ' + u.length + ' ' + (u.length === 1 ? 'požadavku' : 'požadavků'); }
   if (kol === 'sklad') { poh = S.pohyby.filter((x) => x.pol === id).map((x) => JSON.parse(JSON.stringify(x))); for (const m of poh) await smazDoc('pohyby', m.id); }
-  await smazDoc(kol, id); if (pak) location.hash = pak; else vykresli();
+  await smazDoc(kol, id, poh.length || poz.length ? { pohyby: poh, kat: poz.map((q) => ({ pid: q.id, mat: (q.material || []).filter((x) => x.kat === id).map((x) => x.nazev) })) } : null); if (pak) location.hash = pak; else vykresli();
   const naz = o.nazev || o.jmeno || [o.budova, o.mistnost].filter(Boolean).join(' · ') || 'položka';
-  toastZpet('Odebráno ' + ODEB_N[kol] + ': ' + naz + pozn, async () => { await ulozDoc(kol, o); for (const m of poh) await ulozDoc('pohyby', m);
+  toastZpet('Odebráno ' + ODEB_N[kol] + ': ' + naz + pozn, async () => { await zKose(kol + '~' + id); await ulozDoc(kol, o); for (const m of poh) await ulozDoc('pohyby', m);
     for (const q of poz) { const c = S.poz.find((x) => x.id === q.id); if (!c) continue; const c2 = JSON.parse(JSON.stringify(c)); (c2.material || []).forEach((x, i) => { const z = (q.material || [])[i]; if (z && z.kat === id && !x.kat && norm(z.nazev) === norm(x.nazev)) x.kat = id; }); await ulozPoz(c2); }
     vykresli(); toast('Vráceno: ' + naz); }); }
 async function odebratMat(pid, i) { const q = S.poz.find((x) => x.id === pid); if (!q || !(q.material || [])[i]) return; const x = JSON.parse(JSON.stringify(q.material[i])); const q2 = JSON.parse(JSON.stringify(q)); q2.material.splice(i, 1); await ulozPoz(q2); vykresli();
   toastZpet('Odebráno: ' + (x.nazev || 'položka') + ' z ' + (q.cislo || 'požadavku'), async () => { const c = S.poz.find((y) => y.id === pid); if (!c) return; const c2 = JSON.parse(JSON.stringify(c)); (c2.material = c2.material || []).splice(Math.min(i, c2.material.length), 0, x); await ulozPoz(c2); vykresli(); toast('Vráceno: ' + (x.nazev || 'položka')); }); }
-async function smazDoc(kol, id) { S[kol] = S[kol].filter((q) => q.id !== id); if (S.db) { try { await S.db.doc(kol + '/' + id).delete(); } catch (e) { toast('Smazat nešlo'); } } else ls.set(kol, S[kol]); }
+async function smazDoc(kol, id, pril) { if (kol !== 'pohyby') await doKose(kol, id, (S[kol] || []).find((q) => q.id === id), pril); S[kol] = S[kol].filter((q) => q.id !== id); if (S.db) { try { await S.db.doc(kol + '/' + id).delete(); } catch (e) { toast('Smazat nešlo'); } } else ls.set(kol, S[kol]); }
 const novyId = (cislo) => (cislo ? norm(cislo).replace(/ /g, '-') : 'p-' + Date.now().toString(36)) || 'p-' + Date.now().toString(36);
 // --- Claude (sample)
 async function zmensi(file, max = 1800) {
@@ -3417,6 +3438,10 @@ document.addEventListener('click', async (e) => {
     const q = S.poz.find((x) => x.id === S.lb.pid); const f = q && q.fotky[S.lb.i]; zavriLb(); if (!f) return;
     q.fotky.splice(S.lb.i, 1); await ulozPoz(q); if (S.assets && f.id) { try { await S.assets.delete(f.id); } catch {} } toast('Fotka odebrána.'); vykresli(); return;
   }
+  if (a === 'kos-obnov') { await obnovZKose(b.dataset.id); return; }
+  if (a === 'kos-smaz-?') { S.mazat = 'kos:' + b.dataset.id; vykresli(); return; }
+  if (a === 'kos-smaz-ne') { S.mazat = null; vykresli(); return; }
+  if (a === 'kos-smaz') { S.mazat = null; await zKose(b.dataset.id); toast('Smazáno natrvalo.'); vykresli(); return; }
   if (a === 'imp-zrusit') { S.imp = null; vykresli(); return; }
   if (b.dataset.skp) { const it = S.sklad.find((x) => x.id === b.dataset.skp); if (!it) return; if (b.dataset.t === 'edit') { S.skEdit = it.id; S.skAkce = null; } else { S.skAkce = { id: it.id, t: b.dataset.t }; S.skEdit = null; } vykresli(); const f = $('#skMn'); if (f) { f.focus(); f.select(); } return; }
   if (b.dataset.hzpet) { const m = S.pohyby.find((x) => x.id === b.dataset.hzpet); if (!m) return; await vratPohyb(m);
@@ -3467,7 +3492,7 @@ document.addEventListener('click', async (e) => {
   if (b.dataset.otz) { const id = b.dataset.otz; const x0 = (S.napady || {})[id] || {}; const t = $('#ot-' + id); await ulozNapad(id, { ...x0, volba: x0.volba === b.dataset.ov ? '' : b.dataset.ov, odpoved: t ? t.value.trim() : (x0.odpoved || ''), kdy: new Date().toISOString() }); vykresli(); return; }
   if (a === 'otz-ulozit') { const id = b.dataset.otzid; const x0 = (S.napady || {})[id] || {}; const t = $('#ot-' + id); await ulozNapad(id, { ...x0, odpoved: t ? t.value.trim() : '', kdy: new Date().toISOString() }); toast('Odpověď uložena, díky.'); vykresli(); return; }
   if (a === 'nap-pridat') { const t = $('#mujNap'); const v = t ? t.value.trim() : ''; if (!v) { toast('Napiš nápad do pole.'); return; } await ulozNapad('m-' + Date.now().toString(36), { text: v, kdy: new Date().toISOString(), moje: true }); toast('Nápad přidán.'); vykresli(); return; }
-  if (b.dataset.mnapdel) { const id = b.dataset.mnapdel; const n = { ...(S.napady || {}) }; delete n[id]; S.napady = n; if (S.db) { try { await S.db.doc('napady/' + id).delete(); } catch { toast('Smazat nešlo'); } } else ls.set('napady', S.napady); vykresli(); return; }
+  if (b.dataset.mnapdel) { const id = b.dataset.mnapdel; await doKose('napady', id, (S.napady || {})[id]); const n = { ...(S.napady || {}) }; delete n[id]; S.napady = n; if (S.db) { try { await S.db.doc('napady/' + id).delete(); } catch { toast('Smazat nešlo'); } } else ls.set('napady', S.napady); vykresli(); return; }
   if (b.dataset.nap) { const id = b.dataset.nap; const x = { ...(S.napady[id] || {}), volba: S.napady[id] && S.napady[id].volba === b.dataset.volba ? '' : b.dataset.volba, kdy: new Date().toISOString() }; S.napady[id] = x;
     if (S.db) { try { await S.db.doc('napady/' + id).set(x); } catch { toast('Uložit nešlo'); } } else ls.set('napady', S.napady); vykresli(); return; }
   if (a === 'dch-prev' || a === 'dch-next') { let [y, m] = S.vMes; m += a === 'dch-next' ? 1 : -1; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } S.vMes = [y, m]; vykresli(); return; }
@@ -3733,7 +3758,7 @@ document.addEventListener('click', async (e) => {
   if (a === 'nove-misto') { const m = { id: 'm-' + Date.now().toString(36), budova: p.budova || '', mistnost: p.mistnost || p.mistoOdhad || '' }; await ulozMisto(m); toast('Místo přidáno – doplň rozvaděč a svítidla.'); location.hash = 'misto=' + encodeURIComponent(mistoKlic(m)); return; }
   if (a === 'smazat') { S.mazat = p.id; vykresli(); return; }
   if (a === 'smazat-ne') { S.mazat = null; vykresli(); return; }
-  if (a === 'smazat-ano') { await smazPoz(p.id); S.mazat = null; toast('Smazáno.'); location.hash = 'seznam'; return; }
+  if (a === 'smazat-ano') { await smazPoz(p.id); S.mazat = null; toast('Smazáno. Ještě 30 dní je v koši (Záloha → Koš).'); location.hash = 'seznam'; return; }
   if (a === 'pracovni-list') { await stahni('pracovni-list-' + (p.cislo || p.id).replace(/[^\w-]+/g, '-') + '.html', pracovniList(p)); return; }
 });
 // nová data z úložiště nepřekreslí formulář, do kterého zrovna píšeš – počká, až z něj odejdeš
@@ -3841,7 +3866,7 @@ vykresli();
   const cl = window.__denikClaude || window.claude;
   const [db, sample, dl, assets] = await Promise.all([cl?.use?.('db') ?? null, cl?.use?.('sample') ?? null, cl?.use?.('downloads') ?? null, cl?.use?.('assets') ?? null].map((p) => Promise.resolve(p).catch(() => null)));
   S.sample = sample; S.dl = dl; S.db = db; S.assets = assets;
-  if (!db) { S.poz = ls.get('poz', []); S.mista = ls.get('mista', []); S.naradi = ls.get('naradi', []); S.lide = ls.get('lide', []); S.doch = ls.get('doch', {}); S.nastV = ls.get('nastV', null); S.zdroje = ls.get('zdroje', null); S.plan = ls.get('plan', null); S.trasa = ls.get('trasa', null); S.tyden = ls.get('tyden', null); S.mapa = ls.get('mapa', null); S.plany = ls.get('plany', null); S.napady = ls.get('napady', {}); S.sklad = ls.get('sklad', []); S.pohyby = ls.get('pohyby', []); S.katalog = ls.get('katalog', []); S.ulozky = ls.get('ulozky', []); S.poz = S.poz.map(uplny); S.nacteno = true; vykresli(); return; }
+  if (!db) { S.poz = ls.get('poz', []); S.mista = ls.get('mista', []); S.naradi = ls.get('naradi', []); S.lide = ls.get('lide', []); S.doch = ls.get('doch', {}); S.nastV = ls.get('nastV', null); S.zdroje = ls.get('zdroje', null); S.plan = ls.get('plan', null); S.trasa = ls.get('trasa', null); S.tyden = ls.get('tyden', null); S.mapa = ls.get('mapa', null); S.plany = ls.get('plany', null); S.napady = ls.get('napady', {}); S.sklad = ls.get('sklad', []); S.pohyby = ls.get('pohyby', []); S.katalog = ls.get('katalog', []); S.ulozky = ls.get('ulozky', []); S.kos = ls.get('kos', []); S.poz = S.poz.map(uplny); S.nacteno = true; vykresli(); return; }
   const timer = setTimeout(() => { if (!S.nacteno) { S.nacteno = true; vykresli(); toast('Úložiště odpovídá pomalu.'); } }, 10000);
   db.collection('pozadavky').onSnapshot((snap) => { clearTimeout(timer); if (window.__offlinePamet && !document.getElementById('denik-vlozena') && !document.getElementById('pametPruh')) document.body.insertAdjacentHTML('afterbegin', '<div id="pametPruh" class="pametpruh" role="status">⚠ <b>Neukládá se:</b> tenhle prohlížeč nedovolí ukládat (náhled souboru nebo soukromé okno). Otevři soubor v Chrome.</div>'); S.poz = snap.docs.map((d) => uplny({ id: d.id, ...d.data() })); S.nacteno = true; prekresli(); if (!S.vlozK) { S.vlozK = 1; setTimeout(vlozenaKontrola, 500); } }, (e) => { clearTimeout(timer); S.nacteno = true; vykresli(); toast('Načíst nešlo: ' + (e.message || e.code)); });
   db.collection('mista').onSnapshot((snap) => { S.mista = snap.docs.map((d) => ({ id: d.id, ...d.data() })); if (S.nacteno) prekresli(); }, () => {});
@@ -3849,6 +3874,7 @@ vykresli();
   db.collection('nastaveni').onSnapshot((snap) => { const g = (id) => { const d = snap.docs.find((x) => x.id === id); return d ? d.data() : null; }; S.nastV = g('vykaz'); S.zdroje = g('zdroje'); S.plan = g('plan'); S.trasa = g('trasa'); S.tyden = g('tyden'); S.mapa = g('mapa'); S.plany = g('plany'); if (S.nacteno) prekresli(); }, () => {});
   db.collection('napady').onSnapshot((snap) => { const m = {}; snap.docs.forEach((d) => { m[d.id] = d.data(); }); S.napady = m; if (S.nacteno) prekresli(); }, () => {});
   ['naradi', 'lide', 'sklad', 'pohyby', 'katalog', 'ulozky'].forEach((k) => db.collection(k).onSnapshot((snap) => { S[k] = snap.docs.map((d) => ({ id: d.id, ...d.data() })); if (S.nacteno) prekresli(); }, () => {}));
+  let kosPrvni = true; try { db.collection('kos').onSnapshot((snap) => { S.kos = snap.docs.map((d) => ({ ...d.data(), id: d.id })); if (kosPrvni) { kosPrvni = false; setTimeout(() => { kosUklid().catch(() => {}); }, 3000); } if (S.nacteno && cesta() === 'zaloha') prekresli(); }, () => {}); } catch {}
 })();
 })();
 </script>
