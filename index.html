@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v72"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v73"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -375,11 +375,12 @@ html.gm-zamek,html.gm-zamek body{overflow:hidden}
 .b3seg{margin-left:auto}.b3seg+.seg{margin-left:6px}.b3seg button{min-height:44px;padding:0 16px;font-weight:600}
 .gm-3d{perspective:1500px;perspective-origin:50% 30%;background:radial-gradient(ellipse at 50% 35%,var(--plocha),color-mix(in srgb,var(--ink) 9%,var(--plocha)))}
 .b3-sc{position:absolute;left:calc(var(--cx,50%) + var(--px,0px));top:calc(56% + var(--py,0px));width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);transform-style:preserve-3d;transform:rotateX(var(--rx)) rotateZ(var(--rz)) translateZ(calc((var(--n) - 1) * var(--gap) * -0.5))}
-.b3-p{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * var(--gap)));border-radius:6px;background:color-mix(in srgb,var(--plocha) 74%,transparent);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--ink) 35%,transparent),0 6px 18px rgba(0,0,0,.12);cursor:pointer;outline:none}
+.b3-p{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * var(--gap)));border-radius:6px;background:none;box-shadow:none;cursor:pointer;outline:none}
+.b3-obr{fill:color-mix(in srgb,var(--plocha) 82%,transparent);stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:1.5px;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 .b3-p svg{position:absolute;inset:0;width:100%;height:100%;display:block;margin:0;overflow:visible}
-.b3-p.on{box-shadow:0 0 0 3px var(--ok),0 6px 18px rgba(0,0,0,.18)}
-.b3-p:focus-visible{box-shadow:0 0 0 3px var(--warn),0 6px 18px rgba(0,0,0,.18)}
-@media (hover:hover){.b3-p:hover{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 70%,transparent),0 6px 18px rgba(0,0,0,.18)}}
+.b3-p.on .b3-obr{stroke:var(--ok);stroke-width:3px}.b3-p.on .b3-nic rect{stroke:var(--ok);stroke-width:2px;stroke-dasharray:none}
+.b3-p:focus-visible .b3-obr,.b3-p:focus-visible .b3-nic rect{stroke:var(--warn);stroke-width:3px}
+@media (hover:hover){.b3-p:hover .b3-obr{stroke:color-mix(in srgb,var(--ok) 70%,transparent);stroke-width:3px}}
 .b3-nic rect{fill:color-mix(in srgb,var(--ink) 7%,var(--plocha));stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-dasharray:3 2}
 .b3-stit{position:absolute;right:100%;top:50%;margin-right:12px;transform-origin:100% 50%;transform:translateY(-50%) rotateZ(calc(-1 * var(--rz))) rotateX(calc(-1 * var(--rx)));white-space:nowrap;font:700 14px/1.2 var(--f-ui);color:var(--ink);background:var(--plocha);border:1px solid var(--line);border-radius:8px;padding:5px 9px;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer}
 .b3-stit b{margin-left:6px;background:var(--warn);color:#fff;border-radius:999px;padding:0 6px;font-size:12px}
@@ -391,6 +392,8 @@ html.gm-zamek,html.gm-zamek body{overflow:hidden}
 .b3-cv{position:absolute;inset:0;display:block}.gm .b3-vz{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 .b3-mod{position:absolute;left:8px;top:8px;z-index:6;margin:0;box-shadow:0 1px 4px rgba(0,0,0,.15);border-radius:12px}.b3-mod button{min-height:44px;padding:0 14px;font-weight:600}
 .b3-x{position:absolute;left:8px;bottom:28px;z-index:6;box-shadow:0 1px 4px rgba(0,0,0,.15)}.btn.sm.b3-x{height:auto;min-height:44px;padding:0 14px}
+.b3-dole{position:absolute;left:8px;bottom:28px;z-index:6;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;max-width:calc(100% - 16px)}.b3-dole .b3-x{position:static}.b3-jen{box-shadow:0 1px 4px rgba(0,0,0,.15);border-radius:12px;margin:0}.b3-jen button{min-height:44px;padding:0 12px;font-weight:600}
+@media (max-width:700px){.gm .b3-dole{bottom:8px}.gm .b3-tip{display:none}.gm .b3-mod{bottom:60px}}
 .bplg i.bplgn{background:color-mix(in srgb,var(--warn) 30%,var(--plocha));border:2px solid var(--warn)}
 .b3-zem{position:absolute;inset:-28%;border-radius:50%;transform:translateZ(calc(var(--i) * var(--gap) - 3px));background:radial-gradient(closest-side,color-mix(in srgb,#5fae4f 34%,transparent),color-mix(in srgb,#5fae4f 18%,transparent) 70%,transparent);pointer-events:none}
 @media (hover:none){.b3-tm{display:none}}@media (hover:hover){.b3-tt{display:none}}
@@ -1076,9 +1079,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v72';
+const VERZE = 'v73';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v73', '3D budovy: patro už není čtvercová deska – je vidět jen obrys toho, co v patře je (místnosti, chodby, schodiště), v Patrech i ve Stěnách. Vybrané patro má zelený obrys. Dole vlevo je přepínač Všechna / Jen vybrané patro – patro změníš vpravo ve sloupci pater nebo klepnutím na štítek.'],
   ['v72', 'Opravený kalendář: dny v kalendáři hodin jsou zase přes celou šířku sloupce (od v63 se smrskly na úzký proužek). Pracovní den na Dnes už nemá navíc rámeček okolo.'],
   ['v71', 'Čitelné 3D: v Patrech je plánek po přiblížení ostrý a štítky pater zůstanou malé. Ve Stěnách je číslo místnosti namalované na podlaze (i s druhem místnosti) a na vnější stěně, která míří ven – leží v ploše jako barva, neotáčí se. Silně je vidět jen to, na co se díváš: shora nápis na podlaze, ze strany nápis na stěně; ten druhý je světlý a průhledný.'],
   ['v70', 'PEF: učebny C (C11–C28) jsou v plánku, ve 3D i v seznamu učeben jako počítačové – mají vlastní barvu a legendu. V Nápadech je nový nápad Průchod školou s kamerou a Fotky místností.'],
@@ -3594,31 +3598,48 @@ function gm3Init(el) {
     else if (k === '+' || k === '=') anim3({ zm: v.zm * 1.4 }, 180); else if (k === '-' || k === '_') anim3({ zm: v.zm / 1.4 }, 180); else if (k === '0') el._gm.fit(300); else ok = false;
     if (ok) { e.preventDefault(); e.stopPropagation(); } });
 }
+// v73: obrys patra – sjednocení místností, chodeb a schodišť (přesah 0,6 přes zdi a mezery), jako smyčky bodů; velké díry (dvory) zůstanou
+const OBR = new WeakMap();
+function obrysPatra(x) { if (!x) return []; if (OBR.has(x)) return OBR.get(x); const e = 0.6, r2 = (v) => Math.round(v * 100) / 100;
+  const R = [...(x.m || []).map((r) => r.slice(1, 5)), ...(x.ch || []), ...(x.sch || []).map((r) => r.slice(0, 4))].filter((r) => r && r[2] > 0 && r[3] > 0).map(([X, Y, W, H]) => [r2(X - e), r2(Y - e), r2(X + W + e), r2(Y + H + e)]);
+  if (!R.length) { OBR.set(x, []); return []; }
+  const xs = [...new Set(R.flatMap((r) => [r[0], r[2]]))].sort((a, b) => a - b), ys = [...new Set(R.flatMap((r) => [r[1], r[3]]))].sort((a, b) => a - b), ix = new Map(xs.map((v, i) => [v, i])), iy = new Map(ys.map((v, i) => [v, i]));
+  const nx = xs.length - 1, ny = ys.length - 1, N = nx + 1, g = new Uint8Array(nx * ny); R.forEach(([a, b, c, d]) => { for (let j = iy.get(b); j < iy.get(d); j++) for (let i = ix.get(a); i < ix.get(c); i++) g[j * nx + i] = 1; });
+  const pl = (i, j) => i >= 0 && j >= 0 && i < nx && j < ny && g[j * nx + i] === 1, out = new Map(), hr = (a, b) => { if (!out.has(a)) out.set(a, []); out.get(a).push(b); }, v = (i, j) => j * N + i;
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { if (!pl(i, j)) continue; if (!pl(i, j - 1)) hr(v(i, j), v(i + 1, j)); if (!pl(i + 1, j)) hr(v(i + 1, j), v(i + 1, j + 1)); if (!pl(i, j + 1)) hr(v(i + 1, j + 1), v(i, j + 1)); if (!pl(i - 1, j)) hr(v(i, j + 1), v(i, j)); }
+  const L = []; out.forEach((ts, s0) => { while (ts.length) { const lp = [s0]; let c = ts.pop(); while (c !== s0) { lp.push(c); const n = out.get(c); if (!n || !n.length) break; c = n.pop(); } L.push(lp); } });
+  const plo = (q) => q.reduce((a, b, k) => { const c = q[(k + 1) % q.length]; return a + b[0] * c[1] - c[0] * b[1]; }, 0) / 2;
+  const res = L.map((lp) => lp.map((w) => [xs[w % N], ys[Math.floor(w / N)]])).map((q) => q.filter((b, k) => { const a = q[(k - 1 + q.length) % q.length], c = q[(k + 1) % q.length]; return !((a[0] === b[0] && b[0] === c[0]) || (a[1] === b[1] && b[1] === c[1])); })).filter((q) => q.length >= 3 && Math.abs(plo(q)) >= 6);
+  OBR.set(x, res); return res; }
+const obrPath = (x) => { const L = obrysPatra(x); return L.length ? `<path class="b3-obr" fill-rule="evenodd" d="${L.map((q) => 'M' + q.map((b) => b[0] + ' ' + b[1]).join('L') + 'Z').join('')}"/>` : ''; };
+// jen vybrané patro (když má plánek), jinak všechna
+const b3Vyber = (pl, pk) => (S.b3jen && pl.some(([k, x]) => k === pk && x) ? pl.filter(([k]) => k === pk) : pl);
+const b3JenSeg = (nb, pk, pl) => { const lze = pl.some(([k, x]) => k === pk && x), jen = !!S.b3jen && lze; return `<div class="seg b3-jen" role="group" aria-label="Která patra ukázat"><button type="button" data-b3jen="0" class="${jen ? '' : 'on'}" aria-pressed="${!jen}">Všechna</button><button type="button" data-b3jen="1" class="${jen ? 'on' : ''}" aria-pressed="${jen}"${lze ? '' : ' disabled'} title="${lze ? '' : 'Vybrané patro nemá plánek'}">Jen ${esc(planNazev(nb, pk) || patroKr(pk))}</button>${jen ? (() => { const kk = pl.filter(([, x]) => x).map(([k]) => k), i = kk.indexOf(pk), vys = kk[i + 1], niz = kk[i - 1]; return `<button type="button" data-b3krok="${vys ?? ''}" data-bpb="${esc(nb)}" aria-label="Patro výš"${vys == null ? ' disabled' : ''}>▲</button><button type="button" data-b3krok="${niz ?? ''}" data-bpb="${esc(nb)}" aria-label="Patro níž"${niz == null ? ' disabled' : ''}>▼</button>`; })() : ''}</div>`; };
 // 3D budovy: jedna deska na patro (stejný výřez pro všechna patra, ať sedí nad sebou), dole nejnižší
 function budBox(nb) { const bx = planPatra(nb).map((k) => planRuc(nb, k)).filter(Boolean).map(planBox); if (!bx.length) return null; const x0 = Math.min(...bx.map((b) => b[0])), y0 = Math.min(...bx.map((b) => b[1]));
   return [x0, y0, Math.max(...bx.map((b) => b[0] + b[2])) - x0, Math.max(...bx.map((b) => b[1] + b[3])) - y0].map((x) => Math.round(x * 10) / 10); }
 function b3Html(nb, R, pat, pk, otvP, patra, leg) { if (S.b3m === 'steny') return b3sHtml(nb, R, pat, pk, otvP, patra, leg);
-  const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl = fl.map((k) => [k, planRuc(nb, k)]); const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x));
+  const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl0 = fl.map((k) => [k, planRuc(nb, k)]), pl = b3Vyber(pl0, pk), zk0 = (pl0.find(([k]) => k >= 0) || pl0[0] || [])[0]; const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x));
   if (!bx.length) return ''; const u = [Math.min(...bx.map((b) => b[0])), Math.min(...bx.map((b) => b[1]))]; u.push(Math.max(...bx.map((b) => b[0] + b[2])) - u[0], Math.max(...bx.map((b) => b[1] + b[3])) - u[1]); const vb = u.map((x) => Math.round(x * 10) / 10).join(' ');
-  const zi = Math.max(0, pl.findIndex(([k]) => k >= 0));
+  const zi = pl.findIndex(([k]) => k === zk0);
   const desky = pl.map(([k, x], i) => { const nm = planNazev(nb, k) || patroKr(k), c = otvP(k);
-    const sv = x ? planSvg(x, R, nb, '', k).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, '').replace(/viewBox="[^"]*"/, `viewBox="${vb}"`).replace('aria-label="Plánek patra"', 'aria-hidden="true"') : `<svg class="b3-nic" viewBox="${vb}" aria-hidden="true"><rect x="${u[0]}" y="${u[1]}" width="${u[2]}" height="${u[3]}" rx="2"/></svg>`;
+    const sv = x ? planSvg(x, R, nb, '', k).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, '').replace(/viewBox="[^"]*"/, `viewBox="${vb}"`).replace('aria-label="Plánek patra"', 'aria-hidden="true"').replace(/(<svg[^>]*>)/, (m) => m + obrPath(x)) : `<svg class="b3-nic" viewBox="${vb}" aria-hidden="true"><rect x="${u[0]}" y="${u[1]}" width="${u[2]}" height="${u[3]}" rx="2"/></svg>`;
     return `<div class="b3-p${k === pk ? ' on' : ''}${c ? ' ma' : ''}${x ? '' : ' nic'}" style="--i:${i}" data-b3p="${k}" data-bpb="${esc(nb)}" role="button" tabindex="0" aria-label="${esc(nm)}${c ? ': ' + c + ' nesplněných' : ''}${x ? '' : ', plánek zatím nemám'} – otevřít patro">${sv}<span class="b3-stit">${esc(nm)}${c ? `<b>${c}</b>` : ''}</span></div>`; }).join('');
-  return `<div class="gm gm-3d${S.gmVstup ? ' gm-vstup' : ''}" data-gm3="3d|${esc(nb)}" data-gmk="plan" data-n="${pl.length}" data-ar="${Math.round((u[2] / u[3]) * 1e4) / 1e4}" data-gmr="94" tabindex="0" role="region" aria-label="3D pohled na ${esc(nb)} – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro ho otevřeš"><div class="b3-sc"><div class="b3-zem" style="--i:${zi}" aria-hidden="true"></div>${desky}</div>${gmCtl('plan')}${b3Mod()}${patra}<p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
+  return `<div class="gm gm-3d${S.gmVstup ? ' gm-vstup' : ''}" data-gm3="3d|${esc(nb)}" data-gmk="plan" data-n="${pl.length}" data-ar="${Math.round((u[2] / u[3]) * 1e4) / 1e4}" data-gmr="94" tabindex="0" role="region" aria-label="3D pohled na ${esc(nb)} – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro ho otevřeš"><div class="b3-sc">${zi >= 0 ? `<div class="b3-zem" style="--i:${zi}" aria-hidden="true"></div>` : ''}${desky}</div>${gmCtl('plan')}${b3Mod()}${patra}<div class="b3-dole gm-ui">${b3JenSeg(nb, pk, pl0)}</div><p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
 document.addEventListener('click', (e) => { if (!e.target.closest) return; const t3 = e.target.closest('[data-bp3d]'); if (t3) { S.bp3d = t3.dataset.bp3d === '1'; if (S.bp3d) S.bpSel = null; vykresli(); return; }
   const t = e.target.closest('[data-b3p]'); if (!t || e.target.closest('[data-bpm]')) return; S.bp3d = false; S.bpB = t.dataset.bpb; S.bpP = { b: t.dataset.bpb, k: +t.dataset.b3p }; vykresli(); });
 // v67: 3D model se stěnami – kreslení na plátno: místnosti jako krabice bez stropu, chodby, schodiště, patra nad sebou (rozložená / složená)
 const B3D = {};
 const b3Mod = () => `<div class="seg b3-mod gm-ui" role="group" aria-label="Model budovy"><button type="button" data-b3m="vrstvy" class="${S.b3m === 'steny' ? '' : 'on'}" aria-pressed="${S.b3m !== 'steny'}">Patra</button><button type="button" data-b3m="steny" class="${S.b3m === 'steny' ? 'on' : ''}" aria-pressed="${S.b3m === 'steny'}">Stěny</button></div>`;
 function b3sHtml(nb, R, pat, pk, otvP, patra, leg) {
-  const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl = fl.map((k) => [k, planRuc(nb, k)]); const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x)); if (!bx.length) return '';
+  const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl0 = fl.map((k) => [k, planRuc(nb, k)]), pl = b3Vyber(pl0, pk), zk0 = (pl0.find(([k]) => k >= 0) || pl0[0] || [])[0]; const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x)); if (!bx.length) return '';
   const u = [Math.min(...bx.map((b) => b[0])), Math.min(...bx.map((b) => b[1]))]; u.push(Math.max(...bx.map((b) => b[0] + b[2])) - u[0], Math.max(...bx.map((b) => b[1] + b[3])) - u[1]);
   const Rm = new Map(R.map((r) => [norm(r.m), r])); const key = '3s|' + nb;
-  B3D[key] = { u, nb, f: pl.map(([k, x]) => ({ k, nm: planNazev(nb, k) || patroKr(k), c: otvP(k), on: k === pk, box: x ? planBox(x) : u,
+  B3D[key] = { u, nb, zk: zk0, f: pl.map(([k, x]) => ({ k, nm: planNazev(nb, k) || patroKr(k), c: otvP(k), on: k === pk, box: x ? planBox(x) : u, o: x ? obrysPatra(x) : [],
     m: x ? (x.m || []).map(([m, X, Y, W, H, t]) => ({ m, X, Y, W, H, t: t || '', ma: m ? (Rm.get(norm(m)) || {}).otv || 0 : 0 })) : [], ch: x ? x.ch || [] : [], sch: x ? x.sch || [] : [] })) };
   const vz = `<svg class="b3-vz bpsvg bpvest" aria-hidden="true" focusable="false"><g class="bpm v-m"><rect/></g><g class="bpm ma v-ma"><rect/></g><rect class="bpch v-ch"/><g class="bpsch v-sch"><rect/></g><g class="bpvyt v-vyt"><rect/></g><rect class="bptech v-tech"/>${Object.keys(TYP_MIST).map((t) => `<g class="bpm t-${t} v-t-${t}"><rect/></g>`).join('')}</svg>`;
   const rz = S.b3x !== false;
-  return `<div class="gm gm-3d gm-3s" data-gm3s="${esc(key)}" data-gmk="plan" data-gmr="94" tabindex="0" role="region" aria-label="3D model ${esc(nb)} se stěnami – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro nebo místnost ji otevřeš"><canvas class="b3-cv"></canvas>${vz}${gmCtl('plan')}${b3Mod()}${patra}<button type="button" class="btn sm b3-x gm-ui" data-b3x aria-pressed="${rz}">${rz ? 'Složit patra' : 'Rozložit patra'}</button><p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro nebo místnost · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro nebo místnost · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
+  return `<div class="gm gm-3d gm-3s" data-gm3s="${esc(key)}" data-gmk="plan" data-gmr="94" tabindex="0" role="region" aria-label="3D model ${esc(nb)} se stěnami – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro nebo místnost ji otevřeš"><canvas class="b3-cv"></canvas>${vz}${gmCtl('plan')}${b3Mod()}${patra}<div class="b3-dole gm-ui">${b3JenSeg(nb, pk, pl0)}${pl.length > 1 ? `<button type="button" class="btn sm b3-x gm-ui" data-b3x aria-pressed="${rz}">${rz ? 'Složit patra' : 'Rozložit patra'}</button>` : ''}</div><p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro nebo místnost · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro nebo místnost · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
 function gm3sInit(el) {
   if (el._gm) return; const cv = el.querySelector('canvas'), key = el.dataset.gm3s, D = B3D[key]; if (!cv || !D) return; const ctx = cv.getContext('2d'); if (!ctx) return;
   if (S.gmFull === 'plan') { el.classList.add('gm-full'); document.documentElement.classList.add('gm-zamek'); }
@@ -3638,11 +3659,11 @@ function gm3sInit(el) {
     const sc = Math.min(av[0] / Math.max(1, a[2] - a[0]), av[1] / Math.max(1, a[3] - a[1])) * 0.95 * v.zm, ox = L0 + av[0] / 2 - (sc * (a[0] + a[2])) / 2, oy = T0 + av[1] / 2 - (sc * (a[1] + a[3])) / 2;
     const P = (X, Y, Z) => { const q = pr0(X, Y, Z); return [ox + (v.px || 0) + sc * q[0], oy + (v.py || 0) + sc * q[1], q[2]]; };
     const F = []; const quad = (pts, fill, st, i, m, w, al, hr) => { const q = pts.map((b) => P(b[0], b[1], b[2])); F.push({ q, d: q.reduce((x, b) => x + b[2], 0) / q.length, lay: w === -10 ? -1 : w === -9 ? 0 : w === -8 ? 1 : w === -5 ? 2 : 3, fill, st, i, m, a: al == null ? 1 : al, hr }); };
-    const zi = Math.max(0, D.f.findIndex((f) => f.k >= 0)), zx = u[2] * 0.35, zy = u[3] * 0.35;
+    const zi = D.zk == null ? Math.max(0, D.f.findIndex((f) => f.k >= 0)) : D.f.findIndex((f) => f.k === D.zk), zx = u[2] * 0.35, zy = u[3] * 0.35;
     const stena = tma ? 'rgba(78,90,85,.86)' : 'rgba(228,233,230,.8)', stenaMa = 'rgba(255,165,60,.6)', obrys = tma ? 'rgba(255,255,255,.28)' : 'rgba(0,0,0,.32)';
     D.f.forEach((f, i) => { const z0 = i * G, b = f.box;
       if (i === zi) quad([[u[0] - zx, u[1] - zy, z0 - 0.15], [u[0] + u[2] + zx, u[1] - zy, z0 - 0.15], [u[0] + u[2] + zx, u[1] + u[3] + zy, z0 - 0.15], [u[0] - zx, u[1] + u[3] + zy, z0 - 0.15]], tma ? 'rgba(70,140,70,.34)' : 'rgba(110,185,95,.32)', tma ? 'rgba(110,190,110,.45)' : 'rgba(60,130,60,.45)', i, null, -10);
-      quad([[b[0], b[1], z0 - 0.05], [b[0] + b[2], b[1], z0 - 0.05], [b[0] + b[2], b[1] + b[3], z0 - 0.05], [b[0], b[1] + b[3], z0 - 0.05]], tma ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.04)', f.on ? okb : obrys, i, null, -9);
+      (f.o && f.o.length ? f.o : [[[b[0], b[1]], [b[0] + b[2], b[1]], [b[0] + b[2], b[1] + b[3]], [b[0], b[1] + b[3]]]]).forEach((q) => quad(q.map(([X, Y]) => [X, Y, z0 - 0.05]), tma ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.05)', f.on ? okb : obrys, i, null, -9));
       f.ch.forEach(([x, y, w, h]) => quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], C.ch, null, i, null, -8));
       const krab = (x, y, w, h, pod, st, m, ma, al) => { quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], pod, null, i, m, -5);
         [[[x, y], [x + w, y]], [[x + w, y], [x + w, y + h]], [[x + w, y + h], [x, y + h]], [[x, y + h], [x, y]]].forEach(([A, B], ei) => quad([[A[0], A[1], z0], [B[0], B[1], z0], [B[0], B[1], z0 + VH], [A[0], A[1], z0 + VH]], st, ma ? warn : obrys, i, m, 3, al, ei)); };
@@ -3676,7 +3697,7 @@ function gm3sInit(el) {
       ctx.globalAlpha = al; ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '700 40px system-ui,sans-serif'; ctx.fillText(o.t1, 0, o.t2 ? -13 : 0);
       if (o.t2) { ctx.font = '600 25px system-ui,sans-serif'; ctx.fillText(o.t2, 0, 22); } ctx.restore(); };
     F.forEach((f) => { const h = hov && f.m && f.m === hov.m && D.f[f.i].k === hov.k; ctx.beginPath(); f.q.forEach((b, j) => (j ? ctx.lineTo(b[0], b[1]) : ctx.moveTo(b[0], b[1]))); ctx.closePath(); ctx.globalAlpha = h ? Math.max(f.a, 0.88) : f.a; ctx.fillStyle = f.fill; ctx.fill(); ctx.globalAlpha = 1;
-      if (h) { ctx.strokeStyle = okb; ctx.lineWidth = 1.8; ctx.stroke(); } else if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = 0.7; ctx.stroke(); }
+      if (h) { ctx.strokeStyle = okb; ctx.lineWidth = 1.8; ctx.stroke(); } else if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = f.lay === 0 ? (D.f[f.i].on ? 2.4 : 1.2) : 0.7; ctx.stroke(); }
       const L = f.m && LAB.get(f.i + '|' + f.m); if (L) { if (f.lay === 2 && L.pa) maluj(L.pod, h ? Math.max(L.pa, 0.94) : L.pa); else if (f.hr != null && L.st && f.hr === L.st.ei && L.sa) maluj(L.st, h && L.sa > 0.5 ? 1 : L.sa); } });
     popN = pocty;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -3701,7 +3722,7 @@ function gm3sInit(el) {
     const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm', 'px', 'py'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
   const kl = (x, y) => { const r = el.getBoundingClientRect(); return [x - r.left, y - r.top]; }, ven = (x, y) => { const r = el.getBoundingClientRect(); return [r.left + x, r.top + y]; };
   el._gm = { kresli, rozm: () => ({ l: 0, t: 0, SW: 0, SH: 0 }), zoomBod: (f, x, y, ms) => anim3({ zm: v.zm * f }, ms), fit: (ms) => anim3({ ...Z0, rz: Z0.rz + Math.round((v.rz - Z0.rz) / 360) * 360 }, ms), pohled: () => ({ ...v }),
-    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), hover: () => (hov ? hov.m : null), popisky: () => ({ ...popN }), dvojite: () => popN.obe, nastav: (o) => anim3(o, 0), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
+    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), hover: () => (hov ? hov.m : null), desky: () => plochy.filter((q) => q.lay === 0).map((q) => q.q.length), patra: () => D.f.map((f) => f.k), popisky: () => ({ ...popN }), dvojite: () => popN.obe, nastav: (o) => anim3(o, 0), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
     najdi: (m) => { const f = plochy.filter((q) => q.m === m); for (const q of f) { const cx = q.q.reduce((a, b) => a + b[0], 0) / q.q.length, cy = q.q.reduce((a, b) => a + b[1], 0) / q.q.length; const h = vyber(cx, cy); if (h && h.m === m) return ven(cx, cy); } return null; } };
   kresli(); if (GM_RO) GM_RO.observe(el);
   const P = new Map(); let tah = false, st = null, pin = null;
@@ -3723,6 +3744,8 @@ function gm3sInit(el) {
     if (ok) { e.preventDefault(); e.stopPropagation(); } });
 }
 document.addEventListener('click', (e) => { if (!e.target.closest) return; const m = e.target.closest('[data-b3m]'); if (m) { S.b3m = m.dataset.b3m; vykresli(); return; }
+  const jn = e.target.closest('[data-b3jen]'); if (jn) { S.b3jen = jn.dataset.b3jen === '1'; vykresli(); return; }
+  const kr = e.target.closest('[data-b3krok]'); if (kr) { if (!kr.disabled && kr.dataset.b3krok !== '') { S.bpB = kr.dataset.bpb; S.bpP = { b: kr.dataset.bpb, k: +kr.dataset.b3krok }; vykresli(); const t = document.querySelector('[data-b3krok]:not([disabled])'); if (t) t.focus({ preventScroll: true }); } return; }
   if (e.target.closest('[data-b3x]')) { S.b3x = S.b3x === false; vykresli(); } });
 function gmFull(el) { const druh = el.dataset.gmk || 'areal', na = S.gmFull !== druh; S.gmFull = na ? druh : ''; el.classList.toggle('gm-full', na); document.documentElement.classList.toggle('gm-zamek', na);
   const b = el.querySelector('[data-gmfull]'); if (b) { b.setAttribute('aria-pressed', String(na)); b.setAttribute('aria-label', na ? 'Zavřít celou obrazovku' : 'Celá obrazovka'); b.title = na ? 'Zavřít celou obrazovku (Esc)' : 'Celá obrazovka'; b.innerHTML = na ? GM_IK.zpet : GM_IK.full; }
@@ -4179,7 +4202,7 @@ document.addEventListener('click', async (e) => {
     else S.draft = { stav: 'novy', datum: dnes() }; vykresli(); return; }
   if (b.dataset.mapv != null) { S.mapPohled = b.dataset.mapv; if (budMaPlan(S.mapSel)) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (b.dataset.bptab != null) { S.bpB = b.dataset.bptab; S.bpSel = null; S.bpP = null; vykresli(); return; }
-  if (b.dataset.bpp != null) { const v = b.dataset.bpp; S.bp3d = false; S.bpB = b.dataset.bpb; S.bpP = { b: b.dataset.bpb, k: v === 'x' ? 'x' : +v }; vykresli(); const t = document.querySelector('[data-bpp].on'); if (t) t.focus({ preventScroll: true }); return; }
+  if (b.dataset.bpp != null) { const v = b.dataset.bpp; if (!S.b3jen || v === 'x') S.bp3d = false; S.bpB = b.dataset.bpb; S.bpP = { b: b.dataset.bpb, k: v === 'x' ? 'x' : +v }; vykresli(); const t = document.querySelector('[data-bpp].on'); if (t) t.focus({ preventScroll: true }); return; }
   if (a === 'bp-zoom') { S.bpZoom = S.bpZoom === 'fit' ? '' : 'fit'; vykresli(); return; }
   if (b.dataset.bpm != null && b.dataset.a !== 'bp-novy') { const x = { b: b.dataset.bpb, m: b.dataset.bpm }; S.bpB = x.b; if (b.dataset.bpk != null) S.bpP = { b: x.b, k: b.dataset.bpk === 'x' ? 'x' : +b.dataset.bpk }; S.bpSel = S.bpSel && S.bpSel.b === x.b && norm(S.bpSel.m) === norm(x.m) ? null : x; vykresli(); const d = $('.bpd'); if (d && S.bpSel) d.scrollIntoView({ block: 'nearest' }); return; }
   if (b.dataset.mk != null) { const pred = S.mapSel; S.mapSel = pred === b.dataset.mk ? '' : b.dataset.mk; S.mapHl = ''; S.bpSel = null; S.bpB = ''; S.bpP = null; const bm = budMaPlan(S.mapSel); if (S.mapSel && bm) { S.gmVstup = 1; S.bp3d = true; } else if (!S.mapSel && budMaPlan(pred)) S.gmZpet = pred;
