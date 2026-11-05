@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v63"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v64"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -339,6 +339,15 @@ kbd{font:600 12px var(--f-mono);border:1px solid var(--line);border-bottom-width
 .den-vz{display:flex;flex-direction:column;gap:8px}.den-c{display:flex;align-items:center;gap:14px;min-height:56px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--plocha);font-size:18px;cursor:pointer}.den-c input{width:26px;height:26px;accent-color:var(--ok);flex:none}
 .den-a{display:flex;flex-direction:column;gap:10px}.den-hot{min-height:68px;border-radius:16px;border:0;background:var(--ok);color:#fff;font:inherit;font-weight:700;font-size:22px;cursor:pointer}.den-dal{margin:0;text-align:center;color:var(--mut);font-size:15px}
 .den-start{margin:12px 0 4px;max-width:420px}
+.ds{display:flex;flex-direction:column;gap:12px;max-width:640px;margin:6px 0 4px}
+.ds-stav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:4px;border-radius:14px;border:1px solid var(--line);background:var(--plocha)}.ds-stav button{min-height:48px;border-radius:10px;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:600;font-size:16px;cursor:pointer}.ds-stav button.on{background:var(--warn);color:#fff}.ds-stav button.on[data-v="novy"]{background:var(--acc,#2a6fdb)}
+.ds-hot{padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--ok) 15%,var(--plocha));border:1px solid color-mix(in srgb,var(--ok) 45%,var(--line));font-weight:700;font-size:18px}
+.ds-kde{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-height:56px}.ds-kde>span:nth-child(2){flex:1}.ds-kde b{display:block;font-size:18px}.ds-kde small{display:block;color:var(--mut);font-size:14px}.ds-m{color:var(--ok);font-weight:700}
+.ds-pin{width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid var(--ok);box-sizing:border-box;flex:none}
+.ds-mat{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}.ds-l{flex-basis:100%;color:var(--mut);font-size:13px;font-weight:600;letter-spacing:.04em}.ds-mi{font-size:17px}.ds-mi small{color:var(--mut)}
+.ds-hod{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;border:1px solid var(--line);background:var(--plocha)}.ds-hod span{flex:1;font-size:17px}.ds-hod b{min-width:64px;text-align:center;font-size:20px}.ds-hod button{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:26px;cursor:pointer}.ds-hod button:disabled{opacity:.4}
+.ds-spl{min-height:62px;border-radius:16px;border:0;background:var(--ok);color:#fff;font:inherit;font-weight:700;font-size:21px;cursor:pointer}.ds-spl.zpet{background:transparent;color:var(--ink);border:1px solid var(--line);font-size:17px;min-height:52px}
+.ds-podr{margin:18px 0 6px;color:var(--mut)}
 .dm{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:14px auto 0}.dm-hlav{display:flex;flex-direction:column;gap:2px}.dm-dat{color:var(--mut);font-size:15px}.dm-poz{font-weight:700;font-size:28px;line-height:1.15}
 .dm-doch{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;font-size:17px;text-align:left;text-decoration:none;cursor:pointer}.dm-doch>span:nth-child(2){flex:1}.dm-m{color:var(--mut);font-size:14px}
 .dm-ik{width:22px;height:22px;border-radius:50%;border:3px solid var(--mut);box-sizing:border-box;flex:none}.dm-ik.ok{border-color:var(--ok);background:var(--ok)}
@@ -1020,9 +1029,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v63';
+const VERZE = 'v64';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v64', 'Přehlednější požadavek – nahoře stav třemi tlačítky, kde to je, co je potřeba, dnešní hodiny tlačítky − a + a velké Splněno. Všechny údaje jsou níž pod „Podrobnosti a úpravy“.'],
   ['v63', 'Pracovní den – úkol po úkolu: Domů → Začít den ukáže jeden úkol, co si vzít a velké Hotovo. „Později“ ho dá na konec, „Nejde – chybí věc“ ho přesune do Čeká na materiál.'],
   ['v62', 'Jednodušší Domů – jen dnešní práce, Nový požadavek, Najít, Mapa a jedno upozornění. Všechno ostatní je pod „Všechno ostatní“ (tam jde zapnout i Domů jako dřív).'],
   ['v61', 'Přístupnost a pohodlí v telefonu – větší tlačítka filtrů, řazení a značek na mapě, popisky všech polí pro čtečku obrazovky.'],
@@ -2854,13 +2864,24 @@ function vNovy() {
   o += `<div class="rada" style="margin-top:12px"><button class="btn p" data-a="ulozit-novy">Uložit požadavek</button><button class="btn ghost" data-a="zahodit">Zahodit</button></div>`;
   return o;
 }
+// souhrn nahoře v detailu (v64): co, kde, co je potřeba, hodiny, hotovo
+const hodDnes = (p) => (p.hodiny || []).filter((h) => h.datum === dnes()).reduce((a, h) => a + (+h.h || 0), 0);
+function souhrnDetail(p) { const hot = p.stav === 'hotovy'; const vb = vBud(p); const mist = p.mistnost || p.mistoOdhad || ''; const pat = vb.k === 99 ? '' : vBudNaz(vb);
+  const mat = (p.material || []).filter((x) => maNazev(x) && potr(x) !== 'ne'); const hd = hodDnes(p);
+  const SB = [['novy', 'Nový'], ['rozpr', 'Dělám'], ['material', 'Čeká na věc']];
+  return `<div class="ds">${hot ? `<div class="ds-hot">✓ Splněno${p.splnenoDne ? ' ' + fmtD(p.splnenoDne) : ''}</div>` : `<div class="ds-stav" role="group" aria-label="Stav">${SB.map(([k, t]) => `<button data-a="ds-stav" data-v="${k}" aria-pressed="${(p.stav || 'novy') === k}" class="${(p.stav || 'novy') === k ? 'on' : ''}">${t}</button>`).join('')}</div>`}
+    <button class="ds-kde" data-a="ds-mapa"><span class="ds-pin" aria-hidden="true"></span><span><b>${esc(budovaKr(p))}${pat ? ' · ' + esc(pat) : ''}${mist ? ' · ' + esc(mist) : ''}</b>${popisKr(p) ? `<small>${esc(popisKr(p))}</small>` : ''}</span><span class="ds-m">Mapa</span></button>
+    <div class="ds-mat"><span class="ds-l">CO JE POTŘEBA</span>${mat.length ? mat.map((x) => `<span class="ds-mi">${x.ks != null && x.ks !== '' ? esc(fmtH(+x.ks || 0)) + '× ' : ''}${esc(x.nazev)}${x.obj ? ` <small>· ${esc(OBJ[x.obj] || '')}</small>` : ''}</span>`).join('') : '<span class="ds-mi mut">nic zvláštního</span>'}</div>
+    <div class="ds-hod"><span>Odpracováno dnes</span><button data-a="ds-hod" data-d="-0.5" aria-label="Ubrat půl hodiny"${hd > 0 ? '' : ' disabled'}>−</button><b aria-live="polite">${fmtH(r1(hd))} h</b><button data-a="ds-hod" data-d="0.5" aria-label="Přidat půl hodiny">+</button></div>
+    <button class="ds-spl${hot ? ' zpet' : ''}" data-a="splneno">${hot ? 'Vrátit mezi nesplněné' : '✓ Splněno'}</button></div>
+    <h3 class="ds-podr">Podrobnosti a úpravy</h3>`; }
 function vDetail(id) {
   const p = S.poz.find((q) => q.id === id); if (!p) return '<div class="prazdne"><b>Požadavek nenalezen</b><a href="#seznam">Zpět na seznam</a></div>';
   const st = (STAV[p.stav] || STAV.novy); const m = mistoK(p);
   let o = `<div class="rada" style="margin-top:14px"><a class="btn ghost sm" href="#seznam">← Seznam</a></div>
-    <h2><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || 'Požadavek')}</h2>
+    <h2><span class="cislo">${esc(p.cislo || 'bez čísla')}</span> ${esc(p.nazev || 'Požadavek')}</h2>${souhrnDetail(p)}
     <div class="rada"><select id="stavSel" aria-label="Stav" style="width:auto">${Object.entries(STAV).map(([k, v]) => `<option value="${k}"${(p.stav || 'novy') === k ? ' selected' : ''}>${v[0]}</option>`).join('')}</select>
-      <button class="btn ${p.stav === 'hotovy' ? '' : 'ok'}" data-a="splneno">${p.stav === 'hotovy' ? 'Vrátit mezi nesplněné' : '✓ Splněno'}</button>${S.assets ? '<label class="btn" for="fotoPridat">📷 Fotka</label>' : ''}<button class="btn" data-a="pracovni-list">⤓ Pracovní list k tisku</button>${S.mazat === p.id ? `<span class="potvrd">Opravdu smazat? <button class="btn sm" data-a="smazat-ano">Smazat</button><button class="btn sm ghost" data-a="smazat-ne">Ne</button></span>` : '<button class="btn ghost" data-a="smazat">Smazat</button>'}</div>`;
+      ${S.assets ? '<label class="btn" for="fotoPridat">📷 Fotka</label>' : ''}<button class="btn" data-a="pracovni-list">⤓ Pracovní list k tisku</button>${S.mazat === p.id ? `<span class="potvrd">Opravdu smazat? <button class="btn sm" data-a="smazat-ano">Smazat</button><button class="btn sm ghost" data-a="smazat-ne">Ne</button></span>` : '<button class="btn ghost" data-a="smazat">Smazat</button>'}</div>`;
   const ob = obtiznost(p), du = dulezitost(p);
   const selP = (id, nazev, val, uziv, MAP) => `<select id="${id}" aria-label="${nazev}">${[3, 2, 1].map((n) => `<option value="${n}"${n === val ? ' selected' : ''}>${MAP[n]}${n === val && !uziv ? ' (odhad)' : ''}</option>`).join('')}</select>`;
   o += `<div class="prior"><label>Důležitost ${selP('dulSel', 'Důležitost', du, +p.dulezitost, DUL)}</label><label>Obtížnost ${selP('obtSel', 'Obtížnost', ob, +p.obtiznost, OBT).replace(/<option value="3"([^>]*)>([^<]*)<\/option>(.*)(<option value="1"[^>]*>[^<]*<\/option>)/, '$4$3<option value="3"$1>$2</option>')}</label><label>Lidí <select id="lidiSel" aria-label="Kolik lidí je potřeba" style="width:auto">${[1, 2, 3].map((n) => `<option value="${n}"${lidiP(p) === n ? ' selected' : ''}>${n === 1 ? '1' : '👥 ' + n}</option>`).join('')}</select></label><label>Odhad <input id="odhadIn" inputmode="decimal" value="${p.odhadHodin ? fmtH(p.odhadHodin) : ''}" placeholder="${fmtH(odhadTab()[obtiznost(p)] || 1)}" aria-label="Odhad hodin" style="width:58px;border:1px solid var(--line);border-radius:6px;padding:5px 8px;background:var(--plocha)"> h</label>
@@ -3962,7 +3983,14 @@ document.addEventListener('click', async (e) => {
     await stahni('hodiny-' + key + '.csv', '﻿' + rows.map((r) => r.map((x) => '"' + String(x ?? '').replace(/"/g, '""') + '"').join(';')).join('\r\n')); return;
   }
   if (!p) return;
-  if (a === 'splneno') { prepniSplneno(p); await ulozPoz(p); poSplneni(p); vykresli(); return; }
+  if (a === 'splneno' || a === 'ds-splneno') { prepniSplneno(p); await ulozPoz(p); poSplneni(p); vykresli(); return; }
+  if (a === 'ds-stav') { p.stav = b.dataset.v; delete p.splnenoDne; await ulozPoz(p); toast('Stav: ' + (STAV[p.stav] || STAV.novy)[0]); vykresli(); return; }
+  if (a === 'ds-hod') { const d = +b.dataset.d; const L = p.hodiny = p.hodiny || []; const i = L.findIndex((h) => h.datum === dnes());
+    if (i < 0) { if (d > 0) L.push({ datum: dnes(), kdo: ls.get('kdo', ''), h: d }); } else { L[i].h = Math.max(0, r1((+L[i].h || 0) + d)); if (!L[i].h) L.splice(i, 1); }
+    if (d > 0 && (p.stav || 'novy') === 'novy') p.stav = 'rozpr'; await ulozPoz(p); vykresli(); return; }
+  if (a === 'ds-mapa') { const x = kdeToJe(p); const K = mapKlic(budovaKr(p)); if (x && MAPA_B[x.K]) { const nb = budJmena(x.K).find((n) => norm(n) === norm(x.nb)) || x.nb; S.mapSel = x.K; S.mapHl = x.K; S.bpB = nb; S.bpP = { b: nb, k: x.k }; S.bpSel = { b: nb, m: x.m }; }
+    else if (K && MAPA_B[K]) { S.mapSel = K; S.mapHl = K; S.bpSel = null; S.bpP = null; S.bpB = ''; } else { toast('Tuhle budovu na mapě nemám.'); return; }
+    location.hash = 'mapa'; setTimeout(() => { const d = $('.mdet'); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); return; }
   if (a === 'kpick' && p) { S.kPick = S.kPick && S.kPick.p === p.id ? null : { p: p.id, d: '', q: '', s: null }; vykresli(); if (S.kPick) { const el = $('#kpick'); if (el) el.scrollIntoView({ block: 'nearest' }); } return; }
   if (b.dataset.kpd != null && S.kPick) { S.kPick.d = b.dataset.kpd; S.kPick.s = null; S.kPick.q = ''; vykresli(); return; }
   if (b.dataset.kps != null && S.kPick) { S.kPick.s = b.dataset.kps === '' || b.dataset.kps === S.kPick.s ? null : b.dataset.kps; vykresli(); return; }
