@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v61"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v62"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -330,6 +330,15 @@ kbd{font:600 12px var(--f-mono);border:1px solid var(--line);border-bottom-width
 .tour-spot{position:fixed;z-index:40;border-radius:10px;box-shadow:0 0 0 4px var(--stamp),0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;transition:all .2s}
 .tour-b{position:fixed;z-index:41;width:min(330px,calc(100vw - 24px));box-sizing:border-box;background:var(--plocha);color:var(--ink);border-radius:12px;padding:12px 14px;box-shadow:0 8px 30px rgba(0,0,0,.3)}.tour-b p{margin:4px 0 10px}.tour-b .n{font:600 12px var(--f-mono);color:var(--mut)}.tour-b b{font:700 16px var(--f-head)}
 @media (prefers-reduced-motion:reduce){.tour-spot{transition:none}}
+.dm{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:14px auto 0}.dm-hlav{display:flex;flex-direction:column;gap:2px}.dm-dat{color:var(--mut);font-size:15px}.dm-poz{font-weight:700;font-size:28px;line-height:1.15}
+.dm-doch{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;font-size:17px;text-align:left;text-decoration:none;cursor:pointer}.dm-doch>span:nth-child(2){flex:1}.dm-m{color:var(--mut);font-size:14px}
+.dm-ik{width:22px;height:22px;border-radius:50%;border:3px solid var(--mut);box-sizing:border-box;flex:none}.dm-ik.ok{border-color:var(--ok);background:var(--ok)}
+.dm-dnes{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:18px;background:color-mix(in srgb,var(--ok) 14%,var(--plocha));border:1px solid color-mix(in srgb,var(--ok) 40%,var(--line))}.dm-l{color:var(--mut);font-size:15px}.dm-n{font-size:30px;line-height:1.1}.dm-s{font-size:16px}
+.dm-hl{display:flex;align-items:center;justify-content:center;min-height:58px;border-radius:14px;border:0;background:var(--ok);color:#fff;font:inherit;font-weight:700;font-size:20px;text-decoration:none;cursor:pointer;flex:1}.dm-hl2{background:transparent;color:var(--ink);border:1px solid var(--line)}.dm-2{display:flex;gap:10px;flex-wrap:wrap}
+.dm-akce{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.dm-a{display:flex;align-items:center;gap:14px;min-height:84px;padding:12px 16px;border-radius:16px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;text-align:left;text-decoration:none;cursor:pointer}.dm-a b{display:block;font-size:19px}.dm-a small{display:block;color:var(--mut);font-size:14px}.dm-a .ik{flex:none;display:flex}.dm-novy{grid-column:1/3}
+.dm-up{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--plocha)}.dm-up>span{flex:1;font-size:16px}.dm-up .btn{min-height:44px}.dm-up.warn{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.dm-vse{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;min-height:54px;border-radius:14px;border:1px dashed var(--line);color:var(--ink);font-size:17px;text-decoration:none;text-align:center;padding:6px 10px}.dm-vse small{color:var(--mut)}
+@media (max-width:380px){.dm-akce{grid-template-columns:minmax(0,1fr)}.dm-novy{grid-column:auto}}
 .uvitani{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-color:var(--stamp);margin-top:14px}.uvitani>span{flex:1 1 220px}
 .dbar{display:flex;align-items:center;gap:8px;min-width:110px}.dbar i{display:block;height:10px;border-radius:0 4px 4px 0;background:var(--acc);min-width:2px}.dbar span{font-variant-numeric:tabular-nums;min-width:30px;text-align:right;font-size:13.5px}
 table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td,table.mx th{padding:6px 6px;text-align:center;font-variant-numeric:tabular-nums;border-radius:6px}table.mx th{font-size:11.5px;line-height:1.2}table.mx td:first-child,table.mx th:first-child{text-align:left;white-space:nowrap}
@@ -1002,9 +1011,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v61';
+const VERZE = 'v62';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v62', 'Jednodušší Domů – jen dnešní práce, Nový požadavek, Najít, Mapa a jedno upozornění. Všechno ostatní je pod „Všechno ostatní“ (tam jde zapnout i Domů jako dřív).'],
   ['v61', 'Přístupnost a pohodlí v telefonu – větší tlačítka filtrů, řazení a značek na mapě, popisky všech polí pro čtečku obrazovky.'],
   ['v60', '🩺 Kontrola dat (Záloha a export) – najde chyby v datech (stejné číslo dvakrát, materiál bez katalogu, chybějící fotky…) a bezpečné opravy udělá jedním klikem.'],
   ['v59', 'Co je nového – po aktualizaci se na Domů ukáže, co přibylo. Celý seznam je na dlaždici Co je nového. Číslo verze je vidět v hlavičce.'],
@@ -3034,7 +3044,37 @@ function novinkyKarta() { if (!S.nacteno || !ls.get('pruvodce', 0)) return ''; c
 function vNovinky() { ls.set('videno', VERZE); const srv = !!window.__server;
   return `<h2>Co je nového</h2><p class="small mut" style="max-width:64ch">Tahle verze: <b>${esc(VERZE)}</b> · ${srv ? 'verze se serverem' : window.__offline ? 'offline verze' : 'na claude.ai'}. Starší novinky (v15–v47) jsou v souboru CTI-MNE.txt u každé verze.</p>
     <div class="karta"><ul class="novL">${NOVINKY.filter(([ver]) => verC(ver) <= verC(VERZE)).map(([ver, t, jenSrv]) => `<li${jenSrv && !srv ? ' class="mut"' : ''}><b>${esc(ver)}</b> ${esc(t)}${jenSrv && !srv ? ' <span class="small">(jen verze se serverem)</span>' : ''}</li>`).join('')}</ul></div>`; }
-function vDomu() {
+// --- jednoduchý Domů (v62)
+const POZDRAV = () => { const h = new Date().getHours(); return h < 10 ? 'Dobré ráno' : h < 18 ? 'Dobrý den' : 'Dobrý večer'; };
+const MES2 = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
+const DNY_CELE = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+const ukolu = (n) => n + ' ' + (n === 1 ? 'úkol' : n >= 2 && n <= 4 ? 'úkoly' : 'úkolů');
+function domuUpoz(kObj) { const H = hlidatVse(); if (H.length) return [H.length + ' ' + (H.length === 1 ? 'věc' : H.length <= 4 ? 'věci' : 'věcí') + ' k pohlídání (termín, dlouho čeká)', 'dm-hlidat', 'Ukázat', 'warn'];
+  if (kObj) return [kObj + ' ' + (kObj === 1 ? 'věc čeká' : kObj <= 4 ? 'věci čekají' : 'věcí čeká') + ' na objednání', 'dm-objednat', 'Ukázat', 'warn'];
+  const z = ls.get('zaloha', ''); if (S.poz.length && (!z || dniOd(z) > 14)) return [z ? 'Záloha je stará ' + dniOd(z) + ' dní' : 'Zatím nemáš zálohu', 'dm-zaloha', 'Zálohovat', 'mod'];
+  return null; }
+function vDomuJednoduse() { if (!S.nacteno) return '<div class="prazdne"><b>Načítám…</b></div>';
+  const otev = S.poz.filter((p) => p.stav !== 'hotovy'); let kObj = 0; otev.forEach((p) => (p.material || []).forEach((x) => { if (kObjednani(x)) kObj++; }));
+  const k = dnes(), d = new Date(k + 'T12:00'); const z = S.doch[k] || {}; const u = (z.useky || []).filter((x) => x.od || x.do); const ot = u.find((x) => x.od && !x.do);
+  const tp = trasaPlanu(); const zbyva = tp.vyb.filter((p) => p.stav !== 'hotovy'); const bud = [...new Set(zbyva.map((p) => budovaKr(p)))];
+  const doch = ot ? `<button class="dm-doch" data-a="dch-ted"><span class="dm-ik ok" aria-hidden="true"></span><span>V práci od <b>${hm(ot.od)}</b></span><span class="dm-m">Odcházím</span></button>`
+    : u.length >= 2 ? `<a class="dm-doch" href="#dochazka"><span class="dm-ik" aria-hidden="true"></span><span>Dnes odpracováno</span><span class="dm-m">Docházka</span></a>`
+    : `<button class="dm-doch" data-a="dch-ted"><span class="dm-ik" aria-hidden="true"></span><span>${u.length ? 'Jsem zpátky v práci' : 'Přišel jsem do práce'}</span><span class="dm-m">zapsat ${hm(new Date().toTimeString().slice(0, 5))}</span></button>`;
+  const dnesK = zbyva.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><span class="dm-l">Dnes máš</span><b class="dm-n">${ukolu(zbyva.length)}</b><span class="dm-s">${esc(bud.slice(0, 3).join(', '))}${bud.length > 3 ? ' a další' : ''} · asi ${fmtH(r1(zbyva.reduce((a, p) => a + odhadH(p), 0) + tp.cestaH))} h${tp.vyb.length - zbyva.length ? ' · ' + (tp.vyb.length - zbyva.length) + ' hotovo' : ''}</span><a class="dm-hl" href="#dnes">Začít den</a></section>`
+    : tp.vyb.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Dnešní plán je hotový</b><span class="dm-s">${ukolu(tp.vyb.length)} splněno – dobrá práce.</span><a class="dm-hl dm-hl2" href="#dnes">Přidat další</a></section>`
+    : `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Na dnes nic naplánováno</b><span class="dm-s">${otev.length ? 'Nesplněných je ' + otev.length + '. Nech si den navrhnout, nebo vyber sám.' : 'Nic nečeká – všechno je hotové.'}</span>${otev.length ? '<div class="dm-2"><button class="dm-hl" data-a="plan-navrh" data-pak="dnes">Navrhnout den</button><a class="dm-hl dm-hl2" href="#dnes">Vybrat sám</a></div>' : ''}</section>`;
+  const up = domuUpoz(kObj);
+  return (!ls.get('pruvodce', 0) ? '<div class="karta uvitani"><span>👋 <b>Jsi tu poprvé?</b> Krátká prohlídka ti ukáže, kde co je a kam klepnout (asi 1 minuta).</span><button class="btn sm p" data-a="tour-zacni">▶ Spustit prohlídku</button><button class="btn sm ghost" data-a="tour-ne">Teď ne</button></div>' : '') + novinkyKarta() + prazdnyOffline() + vlozenaHtml()
+    + `<div class="dm"><div class="dm-hlav"><span class="dm-dat">${DNY_CELE[d.getDay()]} ${d.getDate()}. ${MES2[d.getMonth()]}</span><span class="dm-poz">${POZDRAV()}</span></div>${doch}${dnesK}
+    <nav class="dm-akce" aria-label="Hlavní akce"><a class="dm-a dm-novy" href="#novy"><span class="ik">${svg(ICO.foto, 32)}</span><span><b>Nový požadavek</b><small>vyfoť papír, zbytek se vyplní</small></span></a>
+      <button class="dm-a" data-a="dm-najit"><span class="ik">${svg(ICO.seznam, 28)}</span><span><b>Najít</b><small>číslo, místnost, budova</small></span></button>
+      <a class="dm-a" href="#mapa"><span class="ik">${svg(ICO.mapa, 28)}</span><span><b>Mapa</b><small>budovy a patra</small></span></a></nav>
+    ${up ? `<div class="dm-up ${up[3]}"><span>${esc(up[0])}</span><button class="btn${up[3] === 'warn' ? ' p' : ''}" data-a="${up[1]}">${up[2]}</button></div>` : ''}
+    <a class="dm-vse" href="#vse">Všechno ostatní <small>(${otev.length} nesplněných, sklad, docházka, přehledy…)</small></a></div>`; }
+function vDomu() { return ls.get('domuPlny', 0) ? vDomuVse() : vDomuJednoduse(); }
+function vVse() { const plny = !!ls.get('domuPlny', 0);
+  return `<div class="rada" style="justify-content:space-between;margin-top:12px"><h2 style="margin:0">Všechno</h2><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-a="domu-plny"${plny ? ' checked' : ''}> Domů jako dřív (všechno na jedné stránce)</label></div>` + vDomuVse(); }
+function vDomuVse() {
   const otev = S.poz.filter((p) => p.stav !== 'hotovy'); const spl = S.poz.length - otev.length;
   let kObj = 0; otev.forEach((p) => (p.material || []).forEach((x) => { if (kObjednani(x)) kObj++; }));
   const T = [
@@ -3398,11 +3438,11 @@ function cesta() { const h = (location.hash || '#domu').slice(1); return h || 'd
 const kid = () => { const c = cesta(); if (!c.startsWith('kat=')) return ''; try { return decodeURIComponent(c.slice(4)); } catch { return ''; } };
 const klicMista = () => { try { return decodeURIComponent(cesta().slice(6)); } catch { return ''; } };
 function vykresli() {
-  const c = cesta(); const v = c.startsWith('p-') ? 'seznam' : c === 'import' || c === 'novy' || c === 'foto' || c === 'napady' || c === 'zaloha' || c === 'novinky' ? 'domu' : c === 'lide' || c === 'ulozky' ? 'naradi' : c.startsWith('misto=') ? 'mista' : c.startsWith('kat=') ? 'katalog' : c === 'ucebny' ? 'mista' : c === 'najit' ? 'seznam' : c;
+  const c = cesta(); const v = c.startsWith('p-') ? 'seznam' : c === 'import' || c === 'novy' || c === 'foto' || c === 'napady' || c === 'zaloha' || c === 'novinky' || c === 'vse' ? 'domu' : c === 'lide' || c === 'ulozky' ? 'naradi' : c.startsWith('misto=') ? 'mista' : c.startsWith('kat=') ? 'katalog' : c === 'ucebny' ? 'mista' : c === 'najit' ? 'seznam' : c;
   if (c.startsWith('p-')) { const id = c.slice(2); const l = ls.get('posl', []).filter((x) => x !== id); l.unshift(id); ls.set('posl', l.slice(0, 8)); }
   document.querySelectorAll('#karty a, #spodni a').forEach((a) => a.classList.toggle('on', a.dataset.v === v));
   const el = $('#hlavni');
-  el.innerHTML = c.startsWith('p-') ? vDetail(c.slice(2)) : c.startsWith('misto=') ? vMisto(klicMista()) : c.startsWith('kat=') ? vKat(kid()) : c === 'katalog' ? vKatalog() : c === 'prehledy' ? vPrehledy() : c === 'domu' ? vDomu() : c === 'foto' ? vFoto() : c === 'dochazka' ? vDochazka() : c === 'napady' ? vNapady() : c === 'dnes' ? vDnes() : c === 'sklad' ? vSklad() : c === 'zaloha' ? vZaloha() : c === 'novinky' ? vNovinky() : c === 'prehled' ? vPrehled() : c === 'naradi' || c === 'lide' || c === 'ulozky' ? vNaradi(c) : c === 'novy' ? vNovy() : c === 'import' ? vImport() : c === 'material' ? vMaterial() : c === 'kalendar' ? vKalendar() : c === 'mista' ? vMista() : c === 'mapa' ? vMapa() : c === 'najit' ? vNajit() : c === 'ucebny' ? vUcebny() : c === 'seznam' ? vSeznam() : vDomu();
+  el.innerHTML = c.startsWith('p-') ? vDetail(c.slice(2)) : c.startsWith('misto=') ? vMisto(klicMista()) : c.startsWith('kat=') ? vKat(kid()) : c === 'katalog' ? vKatalog() : c === 'prehledy' ? vPrehledy() : c === 'domu' ? vDomu() : c === 'foto' ? vFoto() : c === 'dochazka' ? vDochazka() : c === 'napady' ? vNapady() : c === 'dnes' ? vDnes() : c === 'sklad' ? vSklad() : c === 'zaloha' ? vZaloha() : c === 'novinky' ? vNovinky() : c === 'vse' ? vVse() : c === 'prehled' ? vPrehled() : c === 'naradi' || c === 'lide' || c === 'ulozky' ? vNaradi(c) : c === 'novy' ? vNovy() : c === 'import' ? vImport() : c === 'material' ? vMaterial() : c === 'kalendar' ? vKalendar() : c === 'mista' ? vMista() : c === 'mapa' ? vMapa() : c === 'najit' ? vNajit() : c === 'ucebny' ? vUcebny() : c === 'seznam' ? vSeznam() : vDomu();
   if (c.startsWith('p-')) { const hs = [...el.querySelectorAll('h3')]; if (hs.length > 3) { const kr = (t) => { t = t.split('·')[0].trim(); return /hodin/i.test(t) ? 'Hodiny' : /^verze/i.test(t) ? 'Verze papíru' : /^údaje/i.test(t) ? 'Údaje' : t.split(' ')[0]; };
       const nav = document.createElement('nav'); nav.className = 'skok'; nav.setAttribute('aria-label', 'Přejít na část'); hs.forEach((h, i) => { h.id = h.id || 'sek-' + i; const b = document.createElement('button'); b.type = 'button'; b.dataset.skok = h.id; b.textContent = kr(h.textContent); nav.appendChild(b); });
       const pr = el.querySelector('.prior'); if (pr) pr.after(nav); else el.prepend(nav); } }
@@ -3645,6 +3685,11 @@ document.addEventListener('click', async (e) => {
   if (a === 'zal-zrus') { S.zal = null; vykresli(); return; }
   if (a === 'kontr') { b.disabled = true; await kontrolaDat(); vykresli(); return; }
   if (a === 'kontr-oprav') { b.disabled = true; await kontrolaOprav(b.dataset.k); return; }
+  if (a === 'domu-plny') { ls.set('domuPlny', b.checked ? 1 : 0); toast(b.checked ? 'Domů bude jako dřív – se vším.' : 'Domů bude jednoduchý.'); return; }
+  if (a === 'dm-najit') { location.hash = 'seznam'; setTimeout(() => { const f = $('#filtr'); if (f) f.focus(); }, 60); return; }
+  if (a === 'dm-hlidat') { S.stavF = 'hlidat'; location.hash = 'seznam'; vykresli(); return; }
+  if (a === 'dm-objednat') { location.hash = 'material'; return; }
+  if (a === 'dm-zaloha') { location.hash = 'zaloha'; return; }
   if (a === 'nov-ok') { ls.set('videno', VERZE); vykresli(); return; }
   if (a === 'zsrv-ted') { await zsrvUdelat(true); return; }
   if (a === 'zsrv-obnov' || a === 'zsrv-stahni') { const n = b.dataset.n; const kdy = zsrvKdy(n); b.disabled = true;
