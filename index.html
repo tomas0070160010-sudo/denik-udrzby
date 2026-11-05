@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v68"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v69"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -257,9 +257,9 @@ table.mx td>a.sfa{margin:-3px -6px;padding:3px 6px}.cg-st a.sfa{display:block;he
 .bpvyt rect{fill:color-mix(in srgb,var(--ink) 80%,var(--plocha))}.bpvyt text{fill:var(--plocha);font-size:4px;text-anchor:middle}
 .bpik{font-size:5px;text-anchor:middle}
 .bpvest .bpsch rect{fill:color-mix(in srgb,var(--ink) 75%,var(--plocha));stroke:none}.bpvest .bpsch line{stroke:var(--plocha)}
-.bplg{display:flex;flex-wrap:wrap;gap:4px 12px;margin:8px 0 0;font-size:13px;color:var(--mut)}
+.bplg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 0;padding:8px 12px;font-size:14px;color:var(--ink);background:var(--plocha);border:1px solid var(--line);border-radius:12px}
 .bplg span{display:inline-flex;align-items:center;gap:5px}
-.bplg i{width:14px;height:14px;border-radius:3px;display:inline-block;background:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha));border:1px solid var(--line);font-style:normal;font-size:10px;line-height:13px;text-align:center}
+.bplg i{width:18px;height:18px;border-radius:3px;display:inline-block;background:color-mix(in srgb,var(--tm,#ccc) 72%,var(--plocha));border:1px solid var(--line);font-style:normal;font-size:10px;line-height:13px;text-align:center}
 .bplg i.bplgs{background:color-mix(in srgb,var(--ink) 75%,var(--plocha))}.bplg i.bplgv{background:color-mix(in srgb,var(--ink) 80%,var(--plocha));color:var(--plocha)}
 @media (max-width:640px){.bp{grid-template-columns:62px minmax(0,1fr)}.bpn{font-size:11.5px;padding:6px}}
 .mzak{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:8px;background:#1b2420;color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font:700 16px/1 var(--f-ui);box-shadow:0 2px 6px rgba(0,0,0,.35);z-index:3;pointer-events:none}
@@ -374,7 +374,7 @@ html.gm-zamek,html.gm-zamek body{overflow:hidden}
 .mbud .kh{flex-wrap:wrap}
 .b3seg{margin-left:auto}.b3seg+.seg{margin-left:6px}.b3seg button{min-height:44px;padding:0 16px;font-weight:600}
 .gm-3d{perspective:1500px;perspective-origin:50% 30%;background:radial-gradient(ellipse at 50% 35%,var(--plocha),color-mix(in srgb,var(--ink) 9%,var(--plocha)))}
-.b3-sc{position:absolute;left:var(--cx,50%);top:56%;width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);transform-style:preserve-3d;transform:scale(var(--zm)) rotateX(var(--rx)) rotateZ(var(--rz)) translateZ(calc((var(--n) - 1) * var(--gap) * -0.5))}
+.b3-sc{position:absolute;left:calc(var(--cx,50%) + var(--px,0px));top:calc(56% + var(--py,0px));width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);transform-style:preserve-3d;transform:scale(var(--zm)) rotateX(var(--rx)) rotateZ(var(--rz)) translateZ(calc((var(--n) - 1) * var(--gap) * -0.5))}
 .b3-p{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--i) * var(--gap)));border-radius:6px;background:color-mix(in srgb,var(--plocha) 74%,transparent);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--ink) 35%,transparent),0 6px 18px rgba(0,0,0,.12);cursor:pointer;outline:none}
 .b3-p svg{position:absolute;inset:0;width:100%;height:100%;display:block;margin:0;overflow:visible}
 .b3-p.on{box-shadow:0 0 0 3px var(--ok),0 6px 18px rgba(0,0,0,.18)}
@@ -391,6 +391,9 @@ html.gm-zamek,html.gm-zamek body{overflow:hidden}
 .b3-cv{position:absolute;inset:0;display:block}.gm .b3-vz{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 .b3-mod{position:absolute;left:8px;top:8px;z-index:6;margin:0;box-shadow:0 1px 4px rgba(0,0,0,.15);border-radius:12px}.b3-mod button{min-height:44px;padding:0 14px;font-weight:600}
 .b3-x{position:absolute;left:8px;bottom:28px;z-index:6;box-shadow:0 1px 4px rgba(0,0,0,.15)}.btn.sm.b3-x{height:auto;min-height:44px;padding:0 14px}
+.bplg i.bplgn{background:color-mix(in srgb,var(--warn) 30%,var(--plocha));border:2px solid var(--warn)}
+.b3-zem{position:absolute;inset:-28%;border-radius:50%;transform:translateZ(calc(var(--i) * var(--gap) - 3px));background:radial-gradient(closest-side,color-mix(in srgb,#5fae4f 34%,transparent),color-mix(in srgb,#5fae4f 18%,transparent) 70%,transparent);pointer-events:none}
+@media (hover:none){.b3-tm{display:none}}@media (hover:hover){.b3-tt{display:none}}
 @media (max-width:700px){.b3-mod{top:auto;bottom:80px}}
 .dm{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:14px auto 0}.dm-hlav{display:flex;flex-direction:column;gap:2px}.dm-dat{color:var(--mut);font-size:15px}.dm-poz{font-weight:700;font-size:28px;line-height:1.15}
 .dm-doch{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:var(--plocha);color:var(--ink);font:inherit;font-size:17px;text-align:left;text-decoration:none;cursor:pointer}.dm-doch>span:nth-child(2){flex:1}.dm-m{color:var(--mut);font-size:14px}
@@ -1073,9 +1076,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v68';
+const VERZE = 'v69';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v69', '3D budovy: kolečkem posouváš nahoru a dolů (Shift + kolečko do strany), Ctrl + kolečko nebo dva prsty přibližují, posun i pravým tlačítkem nebo Shift + tažením. Zelená plocha ukazuje zemi u přízemí, stěny mají barvu místnosti a jsou průhlednější, místnost pod myší se zvýrazní i s názvem. Legenda je výraznější.'],
   ['v68', 'Plánek budovy v jednom měřítku – všechna patra stejně velká a přesně nad sebou, při přepnutí patra zůstane pohled (jen se posune na místnost s požadavkem). Plánek je hned čitelný, kolečko nad mapou vždy přibližuje a mapou jde volně posouvat. Domů: na počítači zase přehled se vším, na telefonu jednoduchý.'],
   ['v67', '3D model se stěnami – ve 3D přepínáš Patra a Stěny. Stěny ukážou místnosti jako krabice bez stropu (podlaha v barvě typu místnosti, místnosti s nesplněnými oranžově i s číslem), chodby, schodiště a výtahy. Tlačítkem Rozložit / Složit patra je dáš od sebe nebo k sobě. Klepnutím na patro otevřeš jeho plánek, na místnost rovnou místnost.'],
   ['v66', 'Budova ve 3D – klepnutí na budovu s plánkem ukáže patra nad sebou jako vrstvy (pohled ze strany). Tažením budovu otočíš, kolečkem nebo dvěma prsty přiblížíš, klepnutím na patro otevřeš jeho plánek, klepnutím na místnost rovnou místnost. Nad oknem přepínáš Plánek a 3D.'],
@@ -3413,7 +3417,7 @@ function planSvg(pl, R, nb, sel, pk) { const Rm = new Map(R.map((r) => [norm(r.m
   const bb = planBox(pl), fit = S.bpZoom === 'fit';
   return `<div class="bpsw${fit ? ' fit' : ''}"><svg class="bpsvg${V ? ' bpvest' : ''}" viewBox="${bb.join(' ')}" style="width:${fit ? '100%' : Math.round(bb[2] * ((V && V.mer) || 4.4)) + 'px'}" role="group" aria-label="Plánek patra">${obr}${pr}${(pl.ch || []).map(([x, y, w, h]) => `<rect class="bpch" x="${x}" y="${y}" width="${w}" height="${h}"/>`).join('')}${sch}${vyt}${mi}${ven}</svg></div>`; }
 function planLeg(pl) { const T = [...new Set((pl.m || []).map((x) => x[5]).filter((t) => t && TYP_MIST[t]))]; const vyt = (pl.sch || []).some((s) => s[4] === 'vytah');
-  return `<div class="bplg" aria-label="Legenda plánku">${T.map((t) => `<span><i class="t-${t}"></i>${esc(TYP_MIST[t])}</span>`).join('')}<span><i class="bplgs"></i>Schodiště</span>${vyt ? '<span><i class="bplgv">⇅</i>Výtah</span>' : ''}</div>
+  return `<div class="bplg" aria-label="Legenda plánku">${T.map((t) => `<span><i class="t-${t}"></i>${esc(TYP_MIST[t])}</span>`).join('')}<span><i class="bplgn"></i>Nesplněné</span><span><i class="bplgs"></i>Schodiště</span>${vyt ? '<span><i class="bplgv">⇅</i>Výtah</span>' : ''}</div>
     <p class="small mut bpleg">✏️ ${esc(pl.vest.zdroj)}. Číslo = nesplněné požadavky · klepni na místnost.</p>`; }
 // 📍 Kde to je (detail požadavku): patro z vlastního plánku, místnost zvýrazněná, ostatní nesplněné na patře s číslem
 function kdeToJe(p) { const nb = budovaKr(p); const m = String(p.mistnost || p.mistoOdhad || '').trim(); if (!m || !nb || nb === 'Bez budovy' || !planPatra(nb).length) return null;
@@ -3553,7 +3557,7 @@ function gmInit(el) {
     if (ok) { e.preventDefault(); e.stopPropagation(); } });
 }
 // v66: budova ve 3D – patra jako vrstvy nad sebou (CSS 3D, bez knihoven); tažením otáčíš, kolečkem / dvěma prsty přibližuješ, klepnutím na patro ho otevřeš
-const B3_Z = { rx: 58, rz: -32, zm: 1 };
+const B3_Z = { rx: 58, rz: -32, zm: 1, px: 0, py: 0 };
 const bp3dSeg = (on) => `<div class="seg b3seg" role="group" aria-label="Pohled na budovu"><button type="button" data-bp3d="0" class="${on ? '' : 'on'}" aria-pressed="${!on}">Plánek</button><button type="button" data-bp3d="1" class="${on ? 'on' : ''}" aria-pressed="${on}">3D</button></div>`;
 function gm3Init(el) {
   if (el._gm) return; const sc = el.querySelector('.b3-sc'); if (!sc) return; const key = el.dataset.gm3, n = +el.dataset.n || 1, ar = +el.dataset.ar || 1;
@@ -3561,24 +3565,25 @@ function gm3Init(el) {
   let v = { ...B3_Z, ...(GMV[key] || {}) }, anim = 0;
   const kresli = () => { const W = el.clientWidth || 600, H = el.clientHeight || 400, sl = (window.innerWidth || 1000) < 700 ? 8 : 94, av = Math.max(120, W - sl - 70); let sw = Math.min(av * 0.7, 620), sh = sw / ar; const mh = H * 0.42; if (sh > mh) { sh = mh; sw = sh * ar; }
     const gap = Math.max(16, Math.min(80, (H * 0.52) / Math.max(1, n))); v.rx = Math.max(8, Math.min(88, v.rx)); v.zm = Math.max(0.5, Math.min(3, v.zm));
-    sc.style.cssText = `--cx:${(70 + av / 2).toFixed(1)}px;--sw:${sw.toFixed(1)}px;--sh:${sh.toFixed(1)}px;--gap:${gap.toFixed(1)}px;--n:${n};--rx:${v.rx.toFixed(2)}deg;--rz:${v.rz.toFixed(2)}deg;--zm:${v.zm.toFixed(3)}`; GMV[key] = { ...v };
+    sc.style.cssText = `--cx:${(70 + av / 2).toFixed(1)}px;--sw:${sw.toFixed(1)}px;--sh:${sh.toFixed(1)}px;--gap:${gap.toFixed(1)}px;--n:${n};--rx:${v.rx.toFixed(2)}deg;--rz:${v.rz.toFixed(2)}deg;--zm:${v.zm.toFixed(3)};--px:${(v.px || 0).toFixed(1)}px;--py:${(v.py || 0).toFixed(1)}px`; GMV[key] = { ...v };
     const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.zm <= 0.501; if (zp) zp.disabled = v.zm >= 2.999; };
   const anim3 = (cil, ms) => { cancelAnimationFrame(anim); const z = { ...v }; if (!ms || gmPomalu()) { v = { ...v, ...cil }; kresli(); return; } const t0 = performance.now();
-    const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
+    const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm', 'px', 'py'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
   el._gm = { kresli, rozm: () => ({ l: 0, t: 0, SW: 0, SH: 0 }), zoomBod: (f, x, y, ms) => anim3({ zm: v.zm * f }, ms), fit: (ms) => anim3({ ...B3_Z, rz: B3_Z.rz + Math.round((v.rz - B3_Z.rz) / 360) * 360 }, ms), pohled: () => ({ ...v }) };
   kresli(); if (GM_RO) GM_RO.observe(el);
   const P = new Map(); let tah = false, st = null, pin = null;
   const zacni = (e) => { if (tah) return; tah = true; el.classList.add('gm-tah'); try { el.setPointerCapture(e.pointerId); } catch {} };
-  el.addEventListener('pointerdown', (e) => { if (e.target.closest('.gm-ui') || (e.pointerType === 'mouse' && e.button !== 0)) return; cancelAnimationFrame(anim);
-    P.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (P.size === 1) { st = { x: e.clientX, y: e.clientY }; tah = false; } if (P.size === 2) { const [a, b] = [...P.values()]; pin = Math.hypot(a.x - b.x, a.y - b.y) || 1; zacni(e); } });
+  let pos = false; el.addEventListener('contextmenu', (e) => { if (!e.target.closest('.gm-ui')) e.preventDefault(); });
+  el.addEventListener('pointerdown', (e) => { if (e.target.closest('.gm-ui') || (e.pointerType === 'mouse' && e.button > 2)) return; cancelAnimationFrame(anim);
+    P.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (P.size === 1) { st = { x: e.clientX, y: e.clientY }; tah = false; pos = e.shiftKey || (e.pointerType === 'mouse' && e.button > 0); } if (P.size === 2) { const [a, b] = [...P.values()]; pin = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; zacni(e); } });
   el.addEventListener('pointermove', (e) => { const q = P.get(e.pointerId); if (!q) return;
-    if (P.size >= 2 && pin) { q.x = e.clientX; q.y = e.clientY; const [a, b] = [...P.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y) || 1; v.zm *= d / pin; pin = d; kresli(); return; }
-    if (!tah) { if (Math.hypot(e.clientX - st.x, e.clientY - st.y) < 6) return; zacni(e); } const dx = e.clientX - q.x, dy = e.clientY - q.y; q.x = e.clientX; q.y = e.clientY; v.rz += dx * 0.35; v.rx -= dy * 0.3; kresli(); });
+    if (P.size >= 2 && pin) { q.x = e.clientX; q.y = e.clientY; const [a, b] = [...P.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y) || 1, mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2; v.zm *= d / pin.d; v.px = (v.px || 0) + mx - pin.x; v.py = (v.py || 0) + my - pin.y; pin = { d, x: mx, y: my }; kresli(); return; }
+    if (!tah) { if (Math.hypot(e.clientX - st.x, e.clientY - st.y) < 6) return; zacni(e); } const dx = e.clientX - q.x, dy = e.clientY - q.y; q.x = e.clientX; q.y = e.clientY; if (pos) { v.px = (v.px || 0) + dx; v.py = (v.py || 0) + dy; } else { v.rz += dx * 0.35; v.rx -= dy * 0.3; } kresli(); });
   const konec = (e) => { if (!P.has(e.pointerId)) return; P.delete(e.pointerId); if (P.size) { pin = null; return; } el.classList.remove('gm-tah'); if (tah) { el._potlac = performance.now() + 350; tah = false; } };
   el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
   el.addEventListener('click', (e) => { if (performance.now() < (el._potlac || 0) && !e.target.closest('.gm-ui')) { e.stopPropagation(); e.preventDefault(); } }, true);
   el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return;  e.preventDefault(); cancelAnimationFrame(anim);
-    const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; v.zm *= Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)); kresli(); }, { passive: false });
+    const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; if (e.ctrlKey || e.metaKey) v.zm *= Math.exp(-Math.max(-60, Math.min(60, d)) * 0.006); else { const dx = e.deltaMode === 1 ? e.deltaX * 18 : e.deltaX; if (e.shiftKey && !dx) v.px = (v.px || 0) - d; else { v.py = (v.py || 0) - d; v.px = (v.px || 0) - dx; } } kresli(); }, { passive: false });
   el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || e.altKey || e.ctrlKey || e.metaKey) return; const k = e.key; let ok = true;
     if ((k === 'Enter' || k === ' ') && e.target.matches('[data-b3p]')) e.target.click(); else if (k === 'ArrowLeft') anim3({ rz: v.rz - 20 }, 160); else if (k === 'ArrowRight') anim3({ rz: v.rz + 20 }, 160); else if (k === 'ArrowUp') anim3({ rx: v.rx - 8 }, 160); else if (k === 'ArrowDown') anim3({ rx: v.rx + 8 }, 160);
     else if (k === '+' || k === '=') anim3({ zm: v.zm * 1.4 }, 180); else if (k === '-' || k === '_') anim3({ zm: v.zm / 1.4 }, 180); else if (k === '0') el._gm.fit(300); else ok = false;
@@ -3590,10 +3595,11 @@ function budBox(nb) { const bx = planPatra(nb).map((k) => planRuc(nb, k)).filter
 function b3Html(nb, R, pat, pk, otvP, patra, leg) { if (S.b3m === 'steny') return b3sHtml(nb, R, pat, pk, otvP, patra, leg);
   const fl = pat.filter((k) => k !== 'x').slice().sort((a, b) => a - b); const pl = fl.map((k) => [k, planRuc(nb, k)]); const bx = pl.filter(([, x]) => x).map(([, x]) => planBox(x));
   if (!bx.length) return ''; const u = [Math.min(...bx.map((b) => b[0])), Math.min(...bx.map((b) => b[1]))]; u.push(Math.max(...bx.map((b) => b[0] + b[2])) - u[0], Math.max(...bx.map((b) => b[1] + b[3])) - u[1]); const vb = u.map((x) => Math.round(x * 10) / 10).join(' ');
+  const zi = Math.max(0, pl.findIndex(([k]) => k >= 0));
   const desky = pl.map(([k, x], i) => { const nm = planNazev(nb, k) || patroKr(k), c = otvP(k);
     const sv = x ? planSvg(x, R, nb, '', k).replace(/^<div class="bpsw[^"]*">/, '').replace(/<\/div>$/, '').replace(/ style="width:[^"]*"/, '').replace(/viewBox="[^"]*"/, `viewBox="${vb}"`).replace('aria-label="Plánek patra"', 'aria-hidden="true"') : `<svg class="b3-nic" viewBox="${vb}" aria-hidden="true"><rect x="${u[0]}" y="${u[1]}" width="${u[2]}" height="${u[3]}" rx="2"/></svg>`;
     return `<div class="b3-p${k === pk ? ' on' : ''}${c ? ' ma' : ''}${x ? '' : ' nic'}" style="--i:${i}" data-b3p="${k}" data-bpb="${esc(nb)}" role="button" tabindex="0" aria-label="${esc(nm)}${c ? ': ' + c + ' nesplněných' : ''}${x ? '' : ', plánek zatím nemám'} – otevřít patro">${sv}<span class="b3-stit">${esc(nm)}${c ? `<b>${c}</b>` : ''}</span></div>`; }).join('');
-  return `<div class="gm gm-3d${S.gmVstup ? ' gm-vstup' : ''}" data-gm3="3d|${esc(nb)}" data-gmk="plan" data-n="${pl.length}" data-ar="${Math.round((u[2] / u[3]) * 1e4) / 1e4}" data-gmr="94" tabindex="0" role="region" aria-label="3D pohled na ${esc(nb)} – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro ho otevřeš"><div class="b3-sc">${desky}</div>${gmCtl('plan')}${b3Mod()}${patra}<p class="b3-tip gm-ui">Klepni na patro · tažením otočíš</p></div>${leg}`; }
+  return `<div class="gm gm-3d${S.gmVstup ? ' gm-vstup' : ''}" data-gm3="3d|${esc(nb)}" data-gmk="plan" data-n="${pl.length}" data-ar="${Math.round((u[2] / u[3]) * 1e4) / 1e4}" data-gmr="94" tabindex="0" role="region" aria-label="3D pohled na ${esc(nb)} – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro ho otevřeš"><div class="b3-sc"><div class="b3-zem" style="--i:${zi}" aria-hidden="true"></div>${desky}</div>${gmCtl('plan')}${b3Mod()}${patra}<p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
 document.addEventListener('click', (e) => { if (!e.target.closest) return; const t3 = e.target.closest('[data-bp3d]'); if (t3) { S.bp3d = t3.dataset.bp3d === '1'; if (S.bp3d) S.bpSel = null; vykresli(); return; }
   const t = e.target.closest('[data-b3p]'); if (!t || e.target.closest('[data-bpm]')) return; S.bp3d = false; S.bpB = t.dataset.bpb; S.bpP = { b: t.dataset.bpb, k: +t.dataset.b3p }; vykresli(); });
 // v67: 3D model se stěnami – kreslení na plátno: místnosti jako krabice bez stropu, chodby, schodiště, patra nad sebou (rozložená / složená)
@@ -3607,11 +3613,11 @@ function b3sHtml(nb, R, pat, pk, otvP, patra, leg) {
     m: x ? (x.m || []).map(([m, X, Y, W, H, t]) => ({ m, X, Y, W, H, t: t || '', ma: m ? (Rm.get(norm(m)) || {}).otv || 0 : 0 })) : [], ch: x ? x.ch || [] : [], sch: x ? x.sch || [] : [] })) };
   const vz = `<svg class="b3-vz bpsvg bpvest" aria-hidden="true" focusable="false"><g class="bpm v-m"><rect/></g><g class="bpm ma v-ma"><rect/></g><rect class="bpch v-ch"/><g class="bpsch v-sch"><rect/></g><g class="bpvyt v-vyt"><rect/></g><rect class="bptech v-tech"/>${Object.keys(TYP_MIST).map((t) => `<g class="bpm t-${t} v-t-${t}"><rect/></g>`).join('')}</svg>`;
   const rz = S.b3x !== false;
-  return `<div class="gm gm-3d gm-3s" data-gm3s="${esc(key)}" data-gmk="plan" data-gmr="94" tabindex="0" role="region" aria-label="3D model ${esc(nb)} se stěnami – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro nebo místnost ji otevřeš"><canvas class="b3-cv"></canvas>${vz}${gmCtl('plan')}${b3Mod()}${patra}<button type="button" class="btn sm b3-x gm-ui" data-b3x aria-pressed="${rz}">${rz ? 'Složit patra' : 'Rozložit patra'}</button><p class="b3-tip gm-ui">Klepni na patro nebo místnost · tažením otočíš</p></div>${leg}`; }
+  return `<div class="gm gm-3d gm-3s" data-gm3s="${esc(key)}" data-gmk="plan" data-gmr="94" tabindex="0" role="region" aria-label="3D model ${esc(nb)} se stěnami – otáčíš tažením, přiblížíš kolečkem nebo dvěma prsty, klepnutím na patro nebo místnost ji otevřeš"><canvas class="b3-cv"></canvas>${vz}${gmCtl('plan')}${b3Mod()}${patra}<button type="button" class="btn sm b3-x gm-ui" data-b3x aria-pressed="${rz}">${rz ? 'Složit patra' : 'Rozložit patra'}</button><p class="b3-tip gm-ui"><span class="b3-tm">Klepni na patro nebo místnost · táhni = otočit · kolečko = nahoru a dolů · Ctrl + kolečko = blíž</span><span class="b3-tt">Klepni na patro nebo místnost · táhni = otočit · dva prsty = blíž a posun</span></p></div>${leg}`; }
 function gm3sInit(el) {
   if (el._gm) return; const cv = el.querySelector('canvas'), key = el.dataset.gm3s, D = B3D[key]; if (!cv || !D) return; const ctx = cv.getContext('2d'); if (!ctx) return;
   if (S.gmFull === 'plan') { el.classList.add('gm-full'); document.documentElement.classList.add('gm-zamek'); }
-  const Z0 = { rx: 55, rz: -32, zm: 1 }; let v = { ...Z0, ...(GMV[key] || {}) }, anim = 0, stit = [], plochy = [], box0 = [0, 0, 1, 1];
+  const Z0 = { rx: 55, rz: -32, zm: 1, px: 0, py: 0 }; let v = { ...Z0, ...(GMV[key] || {}) }, anim = 0, stit = [], plochy = [], box0 = [0, 0, 1, 1], hov = null, mys = null;
   const cs = getComputedStyle(el), cv_ = (k, d) => cs.getPropertyValue(k).trim() || d; const bar = (sel) => { const e = el.querySelector('.b3-vz ' + sel); return e ? getComputedStyle(e).fill : '#ccc'; };
   const C = { m: bar('.v-m rect'), ma: bar('.v-ma rect'), ch: bar('.v-ch'), sch: bar('.v-sch rect'), vyt: bar('.v-vyt rect'), tech: bar('.v-tech'), t: {} }; Object.keys(TYP_MIST).forEach((t) => { C.t[t] = bar('.v-t-' + t + ' rect'); });
   const ink = cv_('--ink', '#1b2420'), plo = cv_('--plocha', '#fff'), warn = cv_('--warn', '#a35c00'), okb = cv_('--ok', '#1d7a3e'); const tma = matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
@@ -3625,20 +3631,25 @@ function gm3sInit(el) {
     const vys = (n - 1) * G + VH; let a = [Infinity, Infinity, -Infinity, -Infinity]; [u[0], u[0] + u[2]].forEach((X) => [u[1], u[1] + u[3]].forEach((Y) => [0, vys].forEach((Z) => { const q = pr0(X, Y, Z); a = [Math.min(a[0], q[0]), Math.min(a[1], q[1]), Math.max(a[2], q[0]), Math.max(a[3], q[1])]; })));
     const sl = (window.innerWidth || 1000) < 700 ? 8 : 94, L0 = 84, T0 = 62, av = [Math.max(80, W - sl - L0 - 10), Math.max(80, H - T0 - 70)];
     const sc = Math.min(av[0] / Math.max(1, a[2] - a[0]), av[1] / Math.max(1, a[3] - a[1])) * 0.95 * v.zm, ox = L0 + av[0] / 2 - (sc * (a[0] + a[2])) / 2, oy = T0 + av[1] / 2 - (sc * (a[1] + a[3])) / 2;
-    const P = (X, Y, Z) => { const q = pr0(X, Y, Z); return [ox + sc * q[0], oy + sc * q[1], q[2]]; };
-    const F = []; const quad = (pts, fill, st, i, m, w) => { const q = pts.map((b) => P(b[0], b[1], b[2])); F.push({ q, d: q.reduce((x, b) => x + b[2], 0) / q.length, lay: w === -9 ? 0 : w === -8 ? 1 : w === -5 ? 2 : 3, fill, st, i, m }); };
+    const P = (X, Y, Z) => { const q = pr0(X, Y, Z); return [ox + (v.px || 0) + sc * q[0], oy + (v.py || 0) + sc * q[1], q[2]]; };
+    const F = []; const quad = (pts, fill, st, i, m, w, al) => { const q = pts.map((b) => P(b[0], b[1], b[2])); F.push({ q, d: q.reduce((x, b) => x + b[2], 0) / q.length, lay: w === -10 ? -1 : w === -9 ? 0 : w === -8 ? 1 : w === -5 ? 2 : 3, fill, st, i, m, a: al == null ? 1 : al }); };
+    const zi = Math.max(0, D.f.findIndex((f) => f.k >= 0)), zx = u[2] * 0.35, zy = u[3] * 0.35;
     const stena = tma ? 'rgba(78,90,85,.86)' : 'rgba(228,233,230,.8)', stenaMa = 'rgba(255,165,60,.6)', obrys = tma ? 'rgba(255,255,255,.28)' : 'rgba(0,0,0,.32)';
     D.f.forEach((f, i) => { const z0 = i * G, b = f.box;
+      if (i === zi) quad([[u[0] - zx, u[1] - zy, z0 - 0.15], [u[0] + u[2] + zx, u[1] - zy, z0 - 0.15], [u[0] + u[2] + zx, u[1] + u[3] + zy, z0 - 0.15], [u[0] - zx, u[1] + u[3] + zy, z0 - 0.15]], tma ? 'rgba(70,140,70,.34)' : 'rgba(110,185,95,.32)', tma ? 'rgba(110,190,110,.45)' : 'rgba(60,130,60,.45)', i, null, -10);
       quad([[b[0], b[1], z0 - 0.05], [b[0] + b[2], b[1], z0 - 0.05], [b[0] + b[2], b[1] + b[3], z0 - 0.05], [b[0], b[1] + b[3], z0 - 0.05]], tma ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.04)', f.on ? okb : obrys, i, null, -9);
       f.ch.forEach(([x, y, w, h]) => quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], C.ch, null, i, null, -8));
-      const krab = (x, y, w, h, pod, st, m, ma) => { quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], pod, null, i, m, -5);
-        [[[x, y], [x + w, y]], [[x + w, y], [x + w, y + h]], [[x + w, y + h], [x, y + h]], [[x, y + h], [x, y]]].forEach(([A, B]) => quad([[A[0], A[1], z0], [B[0], B[1], z0], [B[0], B[1], z0 + VH], [A[0], A[1], z0 + VH]], st, ma ? warn : obrys, i, m)); };
-      f.sch.forEach(([x, y, w, h, d]) => krab(x, y, w, h, d === 'vytah' ? C.vyt : d && d !== 'sch' ? C.tech : C.sch, d === 'vytah' ? C.vyt : 'rgba(110,118,114,.85)', null, 0));
-      f.m.forEach((r) => krab(r.X + 0.15, r.Y + 0.15, r.W - 0.3, r.H - 0.3, r.ma ? C.ma : (r.t && C.t[r.t]) || C.m, r.ma ? stenaMa : stena, r.m || null, r.ma)); });
+      const krab = (x, y, w, h, pod, st, m, ma, al) => { quad([[x, y, z0], [x + w, y, z0], [x + w, y + h, z0], [x, y + h, z0]], pod, null, i, m, -5);
+        [[[x, y], [x + w, y]], [[x + w, y], [x + w, y + h]], [[x + w, y + h], [x, y + h]], [[x, y + h], [x, y]]].forEach(([A, B]) => quad([[A[0], A[1], z0], [B[0], B[1], z0], [B[0], B[1], z0 + VH], [A[0], A[1], z0 + VH]], st, ma ? warn : obrys, i, m, 3, al)); };
+      f.sch.forEach(([x, y, w, h, d]) => krab(x, y, w, h, d === 'vytah' ? C.vyt : d && d !== 'sch' ? C.tech : C.sch, d === 'vytah' ? C.vyt : 'rgba(110,118,114,.85)', null, 0, 0.8));
+      f.m.forEach((r) => { const bt = (r.t && C.t[r.t]) || C.m; krab(r.X + 0.15, r.Y + 0.15, r.W - 0.3, r.H - 0.3, r.ma ? C.ma : bt, r.ma ? warn : bt, r.m || null, r.ma, r.ma ? 0.42 : 0.3); }); });
     // shora: vyšší patro vždy před nižším; v patře podlahy pod stěnami, stěny podle hloubky
     F.sort((x, y) => x.i - y.i || x.lay - y.lay || x.d - y.d); plochy = F;
-    F.forEach((f) => { ctx.beginPath(); f.q.forEach((b, j) => (j ? ctx.lineTo(b[0], b[1]) : ctx.moveTo(b[0], b[1]))); ctx.closePath(); ctx.fillStyle = f.fill; ctx.fill(); if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = 0.7; ctx.stroke(); } });
+    F.forEach((f) => { const h = hov && f.m && f.m === hov.m && D.f[f.i].k === hov.k; ctx.beginPath(); f.q.forEach((b, j) => (j ? ctx.lineTo(b[0], b[1]) : ctx.moveTo(b[0], b[1]))); ctx.closePath(); ctx.globalAlpha = h ? Math.max(f.a, 0.88) : f.a; ctx.fillStyle = f.fill; ctx.fill(); ctx.globalAlpha = 1;
+      if (h) { ctx.strokeStyle = okb; ctx.lineWidth = 1.8; ctx.stroke(); } else if (f.st) { ctx.strokeStyle = f.st; ctx.lineWidth = 0.7; ctx.stroke(); } });
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (hov && mys) { const f = D.f.find((x) => x.k === hov.k), r = f && f.m.find((x) => x.m === hov.m); if (r) { const t = `${r.m}${r.t && TYP_MIST[r.t] ? ' · ' + TYP_MIST[r.t] : ''}${r.ma ? ' · ' + r.ma + ' nesplněné' : ''} · ${f.nm}`; ctx.font = '600 13px system-ui,sans-serif'; const w = ctx.measureText(t).width + 16, x = Math.min(W - w - 4, mys[0] + 14), y = Math.max(4, mys[1] - 34);
+      ctx.fillStyle = plo; ctx.strokeStyle = okb; ctx.lineWidth = 1.5; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, 26, 8); else ctx.rect(x, y, w, 26); ctx.fill(); ctx.stroke(); ctx.fillStyle = ink; ctx.textAlign = 'left'; ctx.fillText(t, x + 8, y + 13.5); ctx.textAlign = 'center'; } }
     D.f.forEach((f, i) => f.m.forEach((r) => { if (!r.ma) return; const c = P(r.X + r.W / 2, r.Y + r.H / 2, i * G + VH + 0.8); ctx.beginPath(); ctx.arc(c[0], c[1], 10, 0, 7); ctx.fillStyle = warn; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.fillStyle = '#fff'; ctx.font = '700 12px system-ui,sans-serif'; ctx.fillText(String(r.ma), c[0], c[1] + 0.5); }));
     // štítky pater vlevo od patra, rozestoupené, ať se nepřekrývají
     ctx.font = '700 14px system-ui,sans-serif'; const SL = D.f.map((f, i) => { const b = f.box; let lx = Infinity, ly = 0; [[b[0], b[1]], [b[0] + b[2], b[1]], [b[0] + b[2], b[1] + b[3]], [b[0], b[1] + b[3]]].forEach(([X, Y]) => { const q = P(X, Y, i * G + VH / 2); if (q[0] < lx) { lx = q[0]; ly = q[1]; } });
@@ -3650,26 +3661,30 @@ function gm3sInit(el) {
     const zm = el.querySelector('[data-gmz="-1"]'), zp = el.querySelector('[data-gmz="1"]'); if (zm) zm.disabled = v.zm <= 0.501; if (zp) zp.disabled = v.zm >= 3.999; };
   const vPoly = (x, y, q) => { let c = false; for (let i = 0, j = q.length - 1; i < q.length; j = i++) { if ((q[i][1] > y) !== (q[j][1] > y) && x < ((q[j][0] - q[i][0]) * (y - q[i][1])) / (q[j][1] - q[i][1]) + q[i][0]) c = !c; } return c; };
   const vyber = (x, y) => { const t = stit.find((s) => x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h); if (t) return { k: t.k, m: null }; for (let j = plochy.length - 1; j >= 0; j--) { const f = plochy[j]; if (vPoly(x, y, f.q)) return { k: D.f[f.i].k, m: f.m }; } return null; };
+  el.addEventListener('pointermove', (e) => { if (P.size || e.pointerType === 'touch' || e.target.closest('.gm-ui')) return; const [x, y] = kl(e.clientX, e.clientY); const h = vyber(x, y); const nh = h && h.m ? { k: h.k, m: h.m } : null; mys = [x, y];
+    if ((nh ? nh.k + '|' + nh.m : '') !== (hov ? hov.k + '|' + hov.m : '') || nh) { hov = nh; kresli(); } cv.style.cursor = h ? 'pointer' : ''; });
+  el.addEventListener('pointerleave', () => { if (hov) { hov = null; kresli(); } });
   const otevri = (h) => { S.bp3d = false; S.bpB = D.nb; S.bpP = { b: D.nb, k: h.k }; if (h.m) S.bpSel = { b: D.nb, m: h.m }; vykresli(); };
   const anim3 = (cil, ms) => { cancelAnimationFrame(anim); const z = { ...v }; if (!ms || gmPomalu()) { v = { ...v, ...cil }; kresli(); return; } const t0 = performance.now();
-    const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
+    const krok = (t) => { const q = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - q, 3); ['rx', 'rz', 'zm', 'px', 'py'].forEach((k) => { if (cil[k] != null) v[k] = z[k] + (cil[k] - z[k]) * e; }); kresli(); if (q < 1) anim = requestAnimationFrame(krok); }; anim = requestAnimationFrame(krok); };
   const kl = (x, y) => { const r = el.getBoundingClientRect(); return [x - r.left, y - r.top]; }, ven = (x, y) => { const r = el.getBoundingClientRect(); return [r.left + x, r.top + y]; };
   el._gm = { kresli, rozm: () => ({ l: 0, t: 0, SW: 0, SH: 0 }), zoomBod: (f, x, y, ms) => anim3({ zm: v.zm * f }, ms), fit: (ms) => anim3({ ...Z0, rz: Z0.rz + Math.round((v.rz - Z0.rz) / 360) * 360 }, ms), pohled: () => ({ ...v }),
-    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
+    dbg: (m) => plochy.filter((q) => q.m === m).length, barvy: () => ({ tma, plo, ink }), hover: () => (hov ? hov.m : null), stitky: () => stit.map((t) => { const [x, y] = ven(t.x + t.w / 2, t.y + t.h / 2); return { k: t.k, x, y }; }),
     najdi: (m) => { const f = plochy.filter((q) => q.m === m); for (const q of f) { const cx = q.q.reduce((a, b) => a + b[0], 0) / q.q.length, cy = q.q.reduce((a, b) => a + b[1], 0) / q.q.length; const h = vyber(cx, cy); if (h && h.m === m) return ven(cx, cy); } return null; } };
   kresli(); if (GM_RO) GM_RO.observe(el);
   const P = new Map(); let tah = false, st = null, pin = null;
   const zacni = (e) => { if (tah) return; tah = true; el.classList.add('gm-tah'); try { el.setPointerCapture(e.pointerId); } catch {} };
-  el.addEventListener('pointerdown', (e) => { if (e.target.closest('.gm-ui') || (e.pointerType === 'mouse' && e.button !== 0)) return; cancelAnimationFrame(anim);
-    P.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (P.size === 1) { st = { x: e.clientX, y: e.clientY }; tah = false; } if (P.size === 2) { const [a, b] = [...P.values()]; pin = Math.hypot(a.x - b.x, a.y - b.y) || 1; zacni(e); } });
+  let pos = false; el.addEventListener('contextmenu', (e) => { if (!e.target.closest('.gm-ui')) e.preventDefault(); });
+  el.addEventListener('pointerdown', (e) => { if (e.target.closest('.gm-ui') || (e.pointerType === 'mouse' && e.button > 2)) return; cancelAnimationFrame(anim);
+    P.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (P.size === 1) { st = { x: e.clientX, y: e.clientY }; tah = false; pos = e.shiftKey || (e.pointerType === 'mouse' && e.button > 0); } if (P.size === 2) { const [a, b] = [...P.values()]; pin = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; zacni(e); } });
   el.addEventListener('pointermove', (e) => { const q = P.get(e.pointerId); if (!q) return;
-    if (P.size >= 2 && pin) { q.x = e.clientX; q.y = e.clientY; const [a, b] = [...P.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y) || 1; v.zm *= d / pin; pin = d; kresli(); return; }
-    if (!tah) { if (Math.hypot(e.clientX - st.x, e.clientY - st.y) < 6) return; zacni(e); } const dx = e.clientX - q.x, dy = e.clientY - q.y; q.x = e.clientX; q.y = e.clientY; v.rz += dx * 0.35; v.rx -= dy * 0.3; kresli(); });
+    if (P.size >= 2 && pin) { q.x = e.clientX; q.y = e.clientY; const [a, b] = [...P.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y) || 1, mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2; v.zm *= d / pin.d; v.px = (v.px || 0) + mx - pin.x; v.py = (v.py || 0) + my - pin.y; pin = { d, x: mx, y: my }; kresli(); return; }
+    if (!tah) { if (Math.hypot(e.clientX - st.x, e.clientY - st.y) < 6) return; zacni(e); } const dx = e.clientX - q.x, dy = e.clientY - q.y; q.x = e.clientX; q.y = e.clientY; if (pos) { v.px = (v.px || 0) + dx; v.py = (v.py || 0) + dy; } else { v.rz += dx * 0.35; v.rx -= dy * 0.3; } kresli(); });
   const konec = (e) => { if (!P.has(e.pointerId)) return; P.delete(e.pointerId); if (P.size) { pin = null; return; } el.classList.remove('gm-tah');
-    if (tah) { tah = false; return; } if (e.type !== 'pointerup' || e.target.closest('.gm-ui')) return; const [x, y] = kl(e.clientX, e.clientY); const h = vyber(x, y); if (h) otevri(h); };
+    if (tah) { tah = false; return; } if (e.type !== 'pointerup' || pos || e.target.closest('.gm-ui')) return; const [x, y] = kl(e.clientX, e.clientY); const h = vyber(x, y); if (h) otevri(h); };
   el.addEventListener('pointerup', konec); el.addEventListener('pointercancel', konec);
   el.addEventListener('wheel', (e) => { if (e.target.closest('.gm-pat')) return;  e.preventDefault(); cancelAnimationFrame(anim);
-    const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; v.zm *= Math.exp(-Math.max(-300, Math.min(300, d)) * (e.ctrlKey ? 0.01 : 0.0022)); kresli(); }, { passive: false });
+    const d = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY; if (e.ctrlKey || e.metaKey) v.zm *= Math.exp(-Math.max(-60, Math.min(60, d)) * 0.006); else { const dx = e.deltaMode === 1 ? e.deltaX * 18 : e.deltaX; if (e.shiftKey && !dx) v.px = (v.px || 0) - d; else { v.py = (v.py || 0) - d; v.px = (v.px || 0) - dx; } } kresli(); }, { passive: false });
   el.addEventListener('keydown', (e) => { if (e.target.closest('.gm-ui') || e.altKey || e.ctrlKey || e.metaKey) return; const k = e.key; let ok = true;
     if (k === 'ArrowLeft') anim3({ rz: v.rz - 20 }, 160); else if (k === 'ArrowRight') anim3({ rz: v.rz + 20 }, 160); else if (k === 'ArrowUp') anim3({ rx: v.rx - 8 }, 160); else if (k === 'ArrowDown') anim3({ rx: v.rx + 8 }, 160);
     else if (k === '+' || k === '=') anim3({ zm: v.zm * 1.4 }, 180); else if (k === '-' || k === '_') anim3({ zm: v.zm / 1.4 }, 180); else if (k === '0') el._gm.fit(300); else ok = false;
