@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v71"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v72"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -84,10 +84,10 @@ td input,td select{border:1px solid var(--line);border-radius:6px;padding:5px 7p
 @media (max-width:780px){.dvoj{grid-template-columns:1fr}}
 .kal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .kal .dh{font-size:12px;color:var(--mut);text-align:center;font-weight:600;padding:4px 0}
-.den{background:var(--plocha);border:1px solid var(--line2);border-radius:8px;min-height:64px;padding:5px 6px;display:flex;flex-direction:column;gap:2px;cursor:pointer;text-align:left}
-.den.mimo{opacity:.4}.den.dnes{border-color:var(--acc)}.den.vyb{outline:2px solid var(--acc)}
-.den .c{font-size:12px;color:var(--mut)}.den .hod{font:600 15px var(--f-mono);color:var(--acc);margin-top:auto}
-.den.vikend{background:var(--line2)}
+.kal .den{background:var(--plocha);border:1px solid var(--line2);border-radius:8px;min-height:64px;padding:5px 6px;display:flex;flex-direction:column;gap:2px;cursor:pointer;text-align:left;margin:0;max-width:none;width:100%;min-width:0}
+.kal .den.mimo{opacity:.4}.kal .den.dnes{border-color:var(--acc)}.kal .den.vyb{outline:2px solid var(--acc)}
+.kal .den .c{font-size:12px;color:var(--mut)}.kal .den .hod{font:600 15px var(--f-mono);color:var(--acc);margin-top:auto}
+.kal .den.vikend{background:var(--line2)}
 .souhrn{display:flex;gap:16px;flex-wrap:wrap;margin:6px 0 12px}
 .souhrn div{font-size:13px;color:var(--mut)}.souhrn b{display:block;font:600 22px var(--f-mono);color:var(--ink)}
 .prazdne{text-align:center;padding:30px 16px;color:var(--mut)}
@@ -330,7 +330,7 @@ kbd{font:600 12px var(--f-mono);border:1px solid var(--line);border-bottom-width
 .tour-spot{position:fixed;z-index:40;border-radius:10px;box-shadow:0 0 0 4px var(--stamp),0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;transition:all .2s}
 .tour-b{position:fixed;z-index:41;width:min(330px,calc(100vw - 24px));box-sizing:border-box;background:var(--plocha);color:var(--ink);border-radius:12px;padding:12px 14px;box-shadow:0 8px 30px rgba(0,0,0,.3)}.tour-b p{margin:4px 0 10px}.tour-b .n{font:600 12px var(--f-mono);color:var(--mut)}.tour-b b{font:700 16px var(--f-head)}
 @media (prefers-reduced-motion:reduce){.tour-spot{transition:none}}
-.den{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:10px auto 0}.den-h{display:flex;align-items:center;gap:10px}.den-hp{flex:1;display:flex;flex-direction:column;gap:6px}.den-hp b{font-size:18px}
+div.den{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:10px auto 0}.den-h{display:flex;align-items:center;gap:10px}.den-hp{flex:1;display:flex;flex-direction:column;gap:6px}.den-hp b{font-size:18px}
 .den-zp{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none;font-size:22px;flex:none}
 .den-pr{height:8px;border-radius:4px;background:var(--line)}.den-pr i{display:block;height:8px;border-radius:4px;background:var(--ok)}
 .den-k{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--plocha)}.den-k p{margin:0;font-size:16px}.den-ok{border-color:color-mix(in srgb,var(--ok) 50%,var(--line))}
@@ -1076,9 +1076,10 @@ table.mx{border-collapse:separate;border-spacing:2px;min-width:560px}table.mx td
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v71';
+const VERZE = 'v72';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v72', 'Opravený kalendář: dny v kalendáři hodin jsou zase přes celou šířku sloupce (od v63 se smrskly na úzký proužek). Pracovní den na Dnes už nemá navíc rámeček okolo.'],
   ['v71', 'Čitelné 3D: v Patrech je plánek po přiblížení ostrý a štítky pater zůstanou malé. Ve Stěnách je číslo místnosti namalované na podlaze (i s druhem místnosti) a na vnější stěně, která míří ven – leží v ploše jako barva, neotáčí se. Silně je vidět jen to, na co se díváš: shora nápis na podlaze, ze strany nápis na stěně; ten druhý je světlý a průhledný.'],
   ['v70', 'PEF: učebny C (C11–C28) jsou v plánku, ve 3D i v seznamu učeben jako počítačové – mají vlastní barvu a legendu. V Nápadech je nový nápad Průchod školou s kamerou a Fotky místností.'],
   ['v69', '3D budovy: kolečkem posouváš nahoru a dolů (Shift + kolečko do strany), Ctrl + kolečko nebo dva prsty přibližují, posun i pravým tlačítkem nebo Shift + tažením. Zelená plocha ukazuje zemi u přízemí, stěny mají barvu místnosti a jsou průhlednější, místnost pod myší se zvýrazní i s názvem. Legenda je výraznější.'],
