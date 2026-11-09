@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v101"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v102"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -1251,9 +1251,10 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v101';
+const VERZE = 'v102';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v102', 'Štítky pro příruční tiskárnu: ve Skladu › 🏷 Štítky na krabičky jsou nové velikosti 50 × 30 mm a 40 × 30 mm (role). Každý štítek je samostatná stránka přesně té velikosti – v tisku vybereš příruční tiskárnu a papír 50 × 30 mm, nebo uložíš PDF a otevřeš ho v aplikaci tiskárny. Ke kontrole: vyber 2 položky, velikost 50 × 30, Stáhnout k tisku – v souboru jsou 2 stránky 50 × 30 mm.'],
   ['v101', '3D budovy: kolečko teď přibližuje, Ctrl + kolečko posouvá nahoru a dolů, Shift + kolečko do strany. Štítky hned pochopitelné: v Napsat je skládačka na klepání – vybereš Co (šroub, matice, podložka, pérovka, vrut, hmoždinka, závitová tyč, nýt), průměr, délku, povrch, kusy a pozici a štítek se hned ukáže v náhledu. Tlačítkem + Přidat na arch ho připíšeš a můžeš skládat další. Když ještě nic nevybereš, ukáže se ukázka, jak štítky vypadají. Prázdný sklad otevře rovnou Napsat.'],
   ['v100', 'Stá verze! Sklad má řazení: vedle hledání vybereš Podle názvu, Podle místa (regál po regálu), Co dochází nahoře nebo Naposledy změněné – volba se pamatuje. Za posledních deset verzí přibyly ve Skladu štítky na krabičky, počítání vážením, Co dokoupit, inventura po regálech s papírovým archem, historie položky a hledání rozměrů.'],
   ['v99', 'Hledání ve skladu rozumí rozměrům: M10x60 najde M10×60 i M10 x 60 a naopak. V úpravě položky pole Kde leží nabízí místa, která už ve skladu máš (regál 1, dílna…), takže se píšou pořád stejně a inventura po regálech je seřadí k sobě.'],
@@ -1859,6 +1860,8 @@ const VEL_STK = {
   '105x48': { w: 105, h: 48, sl: 2, ra: 6, arch: true, nazev: '105 × 48 mm – samolepicí arch, 12 na A4' },
   '52x30': { w: 52.5, h: 29.7, sl: 4, ra: 10, arch: true, nazev: '52,5 × 29,7 mm – samolepicí arch, 40 na A4' },
   '64x18': { w: 64, h: 18, sl: 3, ra: 15, arch: false, kratky: true, nazev: '64 × 18 mm – pruh do kapsy na váze (vystřihnout), 45 na A4' },
+  '50x30r': { w: 50, h: 30, sl: 1, ra: 1, arch: true, role: true, nazev: '50 × 30 mm – příruční tiskárna (role), štítek po štítku' },
+  '40x30r': { w: 40, h: 30, sl: 1, ra: 1, arch: true, role: true, nazev: '40 × 30 mm – příruční tiskárna (role), štítek po štítku' },
 };
 function stkCss(v, P) {
   const V = VEL_STK[v] || VEL_STK['70x37'];
@@ -1877,7 +1880,7 @@ ${P} .ks{font-weight:700;font-size:calc(var(--h)*.13);white-space:nowrap}
 ${P} .po{box-sizing:border-box;width:calc(var(--h)*.38);height:calc(var(--h)*.38);border:calc(var(--h)*.02) solid #000;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:calc(var(--h)*.15);line-height:1}
 ${P} .po.dl{font-size:calc(var(--h)*.1)}
 ${P} .q{width:calc(var(--h)*.4);height:calc(var(--h)*.4)}
-${V.kratky ? `${P} .d,${P} .f,${P} .lot,${P} .q{display:none}${P} .ik{width:calc(var(--h)*.7);height:calc(var(--h)*.7)}${P} .r{font-size:calc(var(--h)*.42)}${P} .r.dl{font-size:calc(var(--h)*.3);-webkit-line-clamp:1}${P} .n{font-size:calc(var(--h)*.2)}${P} .ks{font-size:calc(var(--h)*.22)}${P} .po{width:calc(var(--h)*.72);height:calc(var(--h)*.72);font-size:calc(var(--h)*.3)}${P} .po.dl{font-size:calc(var(--h)*.2)}${P} .pr{flex-direction:row}` : ''}${V.h < 32 && !V.kratky ? `${P} .f{display:none}` : ''}`;
+${V.kratky ? `${P} .d,${P} .f,${P} .lot,${P} .q{display:none}${P} .ik{width:calc(var(--h)*.7);height:calc(var(--h)*.7)}${P} .r{font-size:calc(var(--h)*.42)}${P} .r.dl{font-size:calc(var(--h)*.3);-webkit-line-clamp:1}${P} .n{font-size:calc(var(--h)*.2)}${P} .ks{font-size:calc(var(--h)*.22)}${P} .po{width:calc(var(--h)*.72);height:calc(var(--h)*.72);font-size:calc(var(--h)*.3)}${P} .po.dl{font-size:calc(var(--h)*.2)}${P} .pr{flex-direction:row}` : ''}${V.h < 32 && !V.kratky ? `${P} .f{display:none}` : ''}${V.role ? `${P} .ik{width:calc(var(--h)*.28);height:calc(var(--h)*.28)}${P} .n{font-size:calc(var(--h)*.1)}${P} .r{font-size:calc(var(--h)*.16)}${P} .r.dl{font-size:calc(var(--h)*.11)}${P} .d,${P} .f{font-size:calc(var(--h)*.08)}${P} .ks{font-size:calc(var(--h)*.11)}${P} .po{width:calc(var(--h)*.32);height:calc(var(--h)*.32);font-size:calc(var(--h)*.13)}${P} .q{width:calc(var(--h)*.34);height:calc(var(--h)*.34)}` : ''}`;
 }
 function stitekKrab(x) {
   const r = x.r, hl = [r.norma, r.trida].filter(Boolean).join(' '), maR = !!r.rozmer;
@@ -1900,6 +1903,7 @@ function stkSeznam() { const T = S.stk; if (!T) return [];
   const L = T.z === 'text' ? String(T.text || '').split('\n').map(stkZRadku).filter(Boolean) : S.sklad.filter((it) => T.vyb.includes(it.id)).sort((a, b) => a.nazev.localeCompare(b.nazev, 'cs')).map((it) => stkZeSkladu(it, T.mn, T.qr && T.vel !== '64x18'));
   const k = Math.max(1, Math.min(60, Math.round(+T.kop || 1))); const o = []; L.forEach((x) => { for (let i = 0; i < k; i++) o.push(x); }); return o; }
 function stitkyKrabickyTisk(L, v) {
+  if ((VEL_STK[v] || {}).role) return stitkyRoleTisk(L, v);
   const V = VEL_STK[v] || VEL_STK['70x37'], naStr = V.sl * V.ra, top = Math.max(0, (297 - V.ra * V.h) / 2), left = Math.max(0, (210 - V.sl * V.w) / 2), str = [];
   for (let i = 0; i < L.length; i += naStr) str.push(L.slice(i, i + naStr));
   return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Štítky na krabičky ${fmtD(dnes())}</title><style>@page{size:A4;margin:0}html,body{margin:0}
@@ -1907,6 +1911,15 @@ function stitkyKrabickyTisk(L, v) {
 .str:last-child{break-after:auto}${V.arch ? '' : '.s{outline:.2mm dashed #999;outline-offset:-.1mm}'}
 .info{font:14px Arial,sans-serif;text-align:center;padding:10px}@media screen{body{background:#ddd}.str{background:#fff;margin:10px auto;box-shadow:0 1px 4px rgba(0,0,0,.3)}}@media print{.info{display:none}}
 ${stkCss(v, '.stkL')}</style></head><body class="stkL"><div class="info">${L.length} štítků · ${V.nazev} · tiskni ve skutečné velikosti (100 %, bez přizpůsobení stránce) – Ctrl + P</div>${str.map((pg) => `<div class="str">${pg.map(stitekKrab).join('')}</div>`).join('')}</body></html>`;
+}
+// v102: příruční tiskárna – každý štítek je samostatná stránka velikosti štítku (role 50 × 30 nebo 40 × 30 mm)
+function stitkyRoleTisk(L, v) {
+  const V = VEL_STK[v];
+  return `<!doctype html><html lang="cs"><head><meta charset="utf-8"><title>Štítky pro příruční tiskárnu ${fmtD(dnes())}</title><style>@page{size:${V.w}mm ${V.h}mm;margin:0}html,body{margin:0}
+.str{width:${V.w}mm;height:${V.h}mm;overflow:hidden;break-after:page}.str:last-child{break-after:auto}
+.info{font:14px/1.5 Arial,sans-serif;text-align:center;padding:10px 14px;max-width:620px;margin:0 auto}
+@media screen{body{background:#ddd}.str{background:#fff;margin:10px auto;box-shadow:0 1px 4px rgba(0,0,0,.3)}}@media print{.info{display:none}}
+${stkCss(v, '.stkL')}</style></head><body class="stkL"><div class="info"><b>${L.length} ${L.length === 1 ? 'štítek' : L.length <= 4 ? 'štítky' : 'štítků'} · ${V.w} × ${V.h} mm</b> – každý štítek je jedna stránka.<br>Ctrl + P → tiskárna = tvoje příruční tiskárna, velikost papíru ${V.w} × ${V.h} mm, okraje žádné, měřítko 100 %.<br>Když tiskárna tiskne jen přes aplikaci: Ctrl + P → Uložit jako PDF a to PDF otevři v aplikaci tiskárny.</div>${L.map((x) => `<div class="str">${stitekKrab(x)}</div>`).join('')}</body></html>`;
 }
 // v101: skládačka štítku na klepání + ukázka
 const STK_DRUHY = [['sroub', 'Šroub'], ['matice', 'Matice'], ['podlozka', 'Podložka'], ['perovka', 'Pérovka'], ['vrut', 'Vrut'], ['hmozdinka', 'Hmoždinka'], ['tyc', 'Závitová tyč'], ['nyt', 'Nýt']];
