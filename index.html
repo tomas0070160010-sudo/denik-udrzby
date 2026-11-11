@@ -1,4 +1,4 @@
-<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v104"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="denik-verze" content="v105"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1b2420"><link rel="icon" type="image/png" href="ikona-192.png"><link rel="apple-touch-icon" href="ikona-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Deník"><title>Deník údržby</title>
 <style id="denik-css">
 html[data-offline] .hl h1::after{content:"offline";font:600 11px ui-monospace,Consolas,monospace;margin-left:8px;padding:2px 6px;border-radius:6px;background:var(--stamp);color:#1b2420;vertical-align:middle;letter-spacing:.03em}
 /* Rozvržení: pracovní deník – horní lišta s kartami, pod ní jeden sloupec (na šířku seznam + detail). Výrazný jen „štítek“ čísla požadavku. */
@@ -716,7 +716,7 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
 @media (max-width:640px){.dopl-f img{max-height:30vh}.dopl-h{margin-top:10px}}
 .toast{width:max-content}
 /* v104: telefon – hlavička na jeden řádek (víc místa pro obsah), hledání bez překrytí šipkou */
-@media (max-width:640px){.pc-k{display:none}
+@media (max-width:640px){.pc-k{display:none}#draftForm .dopl-a{margin-top:10px}
   header .hl{gap:8px;row-gap:4px}header .hl h1{font-size:19px;min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}
   header .hl:has(#zpetBtn:not([hidden])) .znak{display:none}header .hl .zpet{margin-right:0}
   html[data-cesta]:not([data-cesta="domu"]) header .hl .stav{display:none}
@@ -724,6 +724,29 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
 /* v104: logo čitelné i v tmavém vzhledu */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .znak{background:var(--stamp);color:#1b2420}}
 :root[data-theme="dark"] .znak{background:var(--stamp);color:#1b2420}
+/* v105: víc fotek najednou, krátký formulář, Splněno přejetím, stav ve výsledcích hledání, Další úkol */
+.davka{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:15px}.davka .dopl-pr{flex:0 1 200px}
+.foto .vice{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.fkr input,.fkr textarea{font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--plocha);width:100%;min-width:0}
+.fkr input:focus,.fkr textarea:focus{outline:2px solid var(--acc);outline-offset:0;border-color:var(--acc)}.fkr .pole label{font-size:13px}
+.fkr .pole.nejiste input{border-color:var(--warn);background:var(--warn-s)}
+.rq.rq-dopl{white-space:nowrap;border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}.rq.rq-dopl b{color:var(--warn)}
+.pvp{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:center}.pvp>b,.pvp>small{grid-column:1}.pvp>.pst{grid-column:2;grid-row:1/3}
+.pv .chip.pst{background:none;border:0;padding:0;font:600 13.5px var(--f-ui);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.pv .chip.pst::before{content:'';width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+.pv .chip.pst.st-novy{color:var(--mod)}.pv .chip.pst.st-rozpr{color:var(--acc)}.pv .chip.pst.st-material{color:var(--warn)}.pv .chip.pst.st-hotovy{color:var(--mut)}.pv .chip.pst.st-dopl{color:var(--warn)}
+.dkr.swp{position:relative;z-index:1;background:color-mix(in srgb,var(--ok) calc(var(--swp,0) * 22%),var(--plocha))}
+.dkr.swp::before{content:'✓ Splněno';position:absolute;top:0;bottom:0;right:100%;width:100vw;display:flex;align-items:center;justify-content:flex-end;padding-right:16px;box-sizing:border-box;background:var(--ok);color:#fff;font-weight:700;font-size:16px;border-radius:12px 0 0 12px;opacity:calc(.35 + var(--swp,0) * .65)}
+@media (pointer:coarse){#hlavni .dkr.snf:not(.hot){touch-action:pan-y}}
+.sw-tip{display:none;margin:4px 0 8px}@media (pointer:coarse){.sw-tip{display:block}}
+.dm-dalsi{width:100%;margin-bottom:8px}.den-start{border:0;cursor:pointer;font:inherit}
+/* v105: dlaždice na telefonu, spodní lišta se 6 položkami, Naposledy, Nastavení */
+nav.spodni{grid-template-columns:repeat(6,1fr)}nav.spodni a{font-size:11px;padding:5px 0}nav.spodni a .i{padding:3px 9px}
+.vse-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:14px 0 10px}.vse-h h2{margin:0}
+.dl-vse{margin-bottom:14px}@media (max-width:640px){.dl-vse{grid-template-columns:repeat(2,minmax(0,1fr))}.dl-vse .dl{min-height:118px;padding:12px}.dl-vse .dl.top{grid-column:1/-1;min-height:84px}}
+.vse-plny{display:flex;gap:8px;align-items:center;margin:4px 0 6px}.vse-pr{margin-top:22px}
+.navrat{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--acc) 40%,var(--line));background:var(--acc-s);margin:8px 0}.navrat>span{flex:1 1 140px}.navrat .btn{min-height:40px}
+.nast{margin-bottom:12px}.nast h3{margin-top:0}.nast-r{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line2);cursor:pointer;font-size:15px}.nast-r:last-of-type{border-bottom:0}.nast-r input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--acc);flex:none}
 </style>
 
 <div id="nejede" class="nejede" role="alert"><b>Aplikace se tady nespustila.</b> Tenhle náhled nespouští programy. Otevři soubor v prohlížeči <b>Chrome</b> – na počítači dvojklikem, v telefonu Stažené soubory → otevřít v Chrome.</div>
@@ -754,6 +777,7 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
   <a href="#novy" data-v="novy" class="hl2"><span class="i" data-ico="foto"></span>Vyfotit</a>
   <a href="#seznam" data-v="seznam"><span class="i" data-ico="seznam"></span>Požadavky</a>
   <a href="#mapa" data-v="mapa"><span class="i" data-ico="mapa"></span>Mapa</a>
+  <a href="#vse" data-v="vse" aria-label="Všechny nástroje"><span class="i" data-ico="vse"></span>Vše</a>
 </nav>
 <div class="pomoc" id="pomoc" hidden></div>
 <div id="hotovo"></div>
@@ -859,6 +883,13 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
   class SrvChyba extends Error { constructor(st, zprava) { super(zprava || ('server ' + st)); this.st = st; } }
   let cfg = lsG(LS_CFG); // { url, key }
   let sez = lsG(LS_SEZ); // { at, rt, exp, uid, email }
+  // v105: po dlouhé nečinnosti (výchozí 7 dní, Nastavení) se Deník odhlásí jen tady v prohlížeči; data a neodeslané změny zůstanou
+  const AKT0 = lsG('denik-aktivita'); const odhlDny = () => { const v = lsG('odhlasitPo'); return v === null || v === undefined || isNaN(+v) ? 7 : +v; };
+  function dlouhoPryc(akt) { const d = odhlDny(); return !!(cfg && sez && d > 0 && +akt > 0 && Date.now() - +akt > d * 864e5); }
+  function autoOdhlasit() { const d = odhlDny(), at = sez && sez.at; if (at && cfg && navigator.onLine !== false) puvFetch(cfg.url + '/auth/v1/logout?scope=local', { method: 'POST', headers: { apikey: cfg.key, Authorization: 'Bearer ' + at } }).catch(() => {});
+    sez = null; lsS(LS_SEZ, null); clearTimeout(obnovaT); try { if (ws) ws.close(); } catch (e) {} S.autoOdhl = true; S.prihlasit = false; try { kresliStav(); } catch (e) {}
+    ukazPrihlaseni('Dlouho jsi tu nebyl (víc než ' + (d === 1 ? '1 den' : d + ' dní') + ') – pro jistotu se přihlas znovu. Data v zařízení zůstala, neodeslané změny počkají.'); }
+
   const S = { chybaSync: '', online: null, rt: 'off', sync: 0, chyby: [], fronta: 0, fotek: 0, odesila: false, prihlasit: false, prohlizet: false };
 
   // --- úložiště v zařízení: IndexedDB (dokumenty, fotky, fronta k odeslání), nebo náhradní v paměti
@@ -1219,7 +1250,7 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
         <label for="srvMail">E-mail</label><input id="srvMail" type="email" autocomplete="username" spellcheck="false" value="${esc(sez && sez.email || lsG('denik-srv-mail') || '')}">
         <label for="srvHeslo">Heslo</label><input id="srvHeslo" type="password" autocomplete="current-password">
         <p class="srvchyba" id="srvChyba" role="alert">${esc(zprava || '')}</p>
-        <div class="srvbtns"><button class="btn p" type="submit" id="srvOk">Přihlásit</button>${mamData ? '<button class="btn ghost" type="button" data-srvf="prohlizet">Zatím jen prohlížet</button>' : ''}</div>
+        <div class="srvbtns"><button class="btn p" type="submit" id="srvOk">Přihlásit</button>${mamData && !S.autoOdhl ? '<button class="btn ghost" type="button" data-srvf="prohlizet">Zatím jen prohlížet</button>' : ''}</div>
       </form>
       <p class="srvmut">Adresa a klíč zůstanou jen v tomhle prohlížeči. Heslo se neukládá (prohlížeč si ho může zapamatovat sám).</p></div>`;
     document.body.appendChild(prihl); zamkni(true);
@@ -1238,7 +1269,7 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
     const stary = cfg; cfg = { url, key }; ok.disabled = true; ok.textContent = 'Přihlašuji…';
     try { const u = await prihlas(email, heslo); lsS(LS_CFG, cfg); lsS('denik-srv-mail', email);
       const meta = await get('meta', 'uid').catch(() => null); if (meta && meta !== u.id) { await vymazVse(); C.clear(); Q = []; await nactiFrontu(); }
-      await put('meta', 'uid', u.id); S.prihlasit = false; S.prohlizet = false; zavriPrihlaseni(); hotovoStart(); pripoj();
+      await put('meta', 'uid', u.id); S.prihlasit = false; S.prohlizet = false; S.autoOdhl = false; zavriPrihlaseni(); hotovoStart(); pripoj();
     } catch (e) { cfg = stary || (lsG(LS_CFG) ? lsG(LS_CFG) : { url, key }); ok.disabled = false; ok.textContent = 'Přihlásit';
       const t = e instanceof SitChyba ? 'Server neodpovídá – jsi připojený k internetu? Zkontroluj i adresu serveru.' : ({ heslo: 'Špatný e-mail nebo heslo.', klic: 'Klíč nesedí – zkopíruj Publishable key ze stejného projektu.', potvrzeni: 'E-mail ještě není potvrzený (v Supabase: Authentication → Users).', adresa: 'Na téhle adrese server Supabase není – zkopíruj Project URL.', mnoho: 'Moc pokusů za sebou – zkus to za pár minut.' })[e.message] || 'Přihlásit se nepodařilo (' + esc(e.st || '') + ').';
       ch.textContent = t; const pole = e.message === 'heslo' ? '#srvHeslo' : e.message === 'klic' || e.message === 'adresa' ? (($('#srvCfg').hidden = false), e.message === 'klic' ? '#srvKey' : '#srvUrl') : null; if (pole) $(pole).focus(); } }
@@ -1256,12 +1287,13 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
   window.addEventListener('offline', () => { S.online = false; kresliStav(); });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'visible' || !sez || S.prihlasit) return; odesli(); if (!ws) rtPripoj(); if (S.rt !== 'ok' || Date.now() - S.sync > 300000) synchronizuj().catch(() => {}); });
   setInterval(() => { if (document.visibilityState === 'visible' && sez && !S.prihlasit && S.rt !== 'ok') synchronizuj().catch(() => {}); }, 60000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !prihl && dlouhoPryc(lsG('denik-aktivita'))) autoOdhlasit(); });
   window.addEventListener('storage', (e) => { if (e.key === LS_SEZ && e.newValue) { const n = lsG(LS_SEZ); if (n && sez && n.uid === sez.uid && n.exp > sez.exp) { sez = n; planujObnovu(); rtToken(); } } });
   (async () => {
     S.chyby = lsG('denik-srv-chyby') || []; S.sync = lsG('denik-srv-sync') || 0;
     try { const L = await vse('docs'); L.forEach(({ k, v }) => { const i = String(k).indexOf('/'); if (i > 0 && v) mapa(k.slice(0, i)).set(k.slice(i + 1), v); }); } catch (e) {}
     await nactiFrontu().catch(() => {});
-    const go = () => { vlozStav(); if (cfg && sez) { hotovoStart(); planujObnovu(); pripoj(); } else ukazPrihlaseni(); };
+    const go = () => { vlozStav(); if (dlouhoPryc(AKT0)) { autoOdhlasit(); return; } if (cfg && sez) { hotovoStart(); planujObnovu(); pripoj(); } else ukazPrihlaseni(); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
   })();
   const st = document.createElement('style'); st.id = 'srv-css'; st.textContent = CSS; (document.head || document.documentElement).appendChild(st);
@@ -1287,9 +1319,11 @@ button.cislo.kop{border:0;cursor:copy;font-size:inherit}button.cislo.kop:hover{f
 <script>
 (() => {
 const $ = (s, el = document) => el.querySelector(s);
-const VERZE = 'v104';
+const VERZE = 'v105';
 // novinky: [verze, text, jen verze se serverem]
 const NOVINKY = [
+  ['v105', 'Na telefonu je dole nové ☰ Vše – všechny části Deníku jako velké dlaždice s počty (stejně jako Domů na počítači), i Štítky, Doplnit údaje a Nastavení. Deník si pamatuje, kde jsi byl: po krátké pauze se otevře na stejném místě (i rozepsané), po dlouhé pauze nebo další den na Domů s řádkem „Naposledy: … · Pokračovat“. Ve verzi se serverem se po 7 dnech bez používání odhlásí jen v tomhle prohlížeči (data zůstanou). Obojí jde změnit v Nastavení.'],
+  ['v105', 'Víc fotek najednou: v Nový požadavek „🖼 Víc fotek najednou“ (nebo fotky přetáhni do okna, případně vlož Ctrl + V) – každá fotka je jeden požadavek k doplnění, průběh ukazuje 3 / 7, Vrátit vrátí celou dávku. Ruční Nový požadavek má jen 5 hlavních kolonek jako Doplnit údaje (Budova, Místnost, Závada, Číslo, Datum), zbytek je v „Další údaje“. V Požadavcích rychlý výběr „K doplnění“, výsledky hledání ukazují stav barvou a slovem. Splněno přejetím karty doprava v Dnes (na telefonu), na počítači klávesa S v otevřeném požadavku. ▶ Další úkol: jedno tlačítko na Domů a v Dnes – když nemáš plán, sestaví ho po trase od základny a ukáže první úkol; v Pracovním dni je vidět, jak daleko to je. Ke kontrole: Vyfotit › Víc fotek najednou › vyber 3 fotky › Doplnit údaje ukáže 1 z 3.'],
   ['v104', 'Rychlejší každodenní práce: 📷 Vyfotit papír – fotka se uloží hned jako nový požadavek, údaje doplníš po ní nebo kdykoli později v novém okně Doplnit údaje (fotka papíru vedle kolonek, Budova a Místnost s nabídkou, Uložit a další). Kde se papír čte sám, nemusíš na čtení čekat – Uložit jen fotku. Na Domů a v Požadavcích vidíš, kolik fotek čeká na údaje. Rozepsaný nový požadavek se pamatuje i po zavření. Smazání požadavku a Splněno jde vrátit (Vrátit). Na telefonu je hlavička na jeden řádek – víc místa pro obsah. Na počítači klávesy N nový, H Domů, D Dnes, P Požadavky, M Mapa. Opravy: mapa areálu kreslí celé obrysy budov s dvorem, logo je čitelné v tmavém vzhledu. Ke kontrole: Vyfotit › vyber fotku › hned je v Doplnit údaje › Budova (nabídka), Místnost, Závada › Uložit – požadavek je v seznamu.'],
   ['v103', 'Zeptat se kolegy: jeho odpověď teď naklikáš jako rychlé volby z katalogu – kdo odpověděl, materiál (klepnutí = +1 kus, znovu = další kus), u každé položky kde ji vzít (u kolegy, sklad, objednat, sklad na místě…), nářadí a krátká rada. Zapsat k úkolu je jedno klepnutí. Vložit jeho zprávu textem jde dál (nebo vlož jeho zprávu – zapíšu ji sám). Ke kontrole: otevři úkol › 🙋 Zeptat se kolegy, klepni na kolegu, 2× na položku, u ní kde vzít, jedno nářadí, Zapsat – v Materiálu jsou 2 ks s Kde vzít, nářadí je v Nářadí na tenhle úkol.'],
   ['v102', 'Štítky pro příruční tiskárnu: ve Skladu › 🏷 Štítky na krabičky jsou nové velikosti 50 × 30 mm a 40 × 30 mm (role). Každý štítek je samostatná stránka přesně té velikosti – v tisku vybereš příruční tiskárnu a papír 50 × 30 mm, nebo uložíš PDF a otevřeš ho v aplikaci tiskárny. Ke kontrole: vyber 2 položky, velikost 50 × 30, Stáhnout k tisku – v souboru jsou 2 stránky 50 × 30 mm.'],
@@ -2377,7 +2411,7 @@ function vDnes() {
   const tp = trasaPlanu(); const T = tp.T; const ids = planDnes(); const vyb = tp.vyb; const kap = +T.hodin || 6; const celk = tp.praceH + tp.cestaH; const ar = archUkoly();
   const vst = 'border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--plocha)';
   if (S.dnesTab === 'tyden') return segDnes() + vTyden();
-  let o = segDnes() + (vyb.some((p) => p.stav !== 'hotovy') ? '<a class="dm-hl den-start" href="#den">▶ Pracovat úkol po úkolu</a>' : '') + `<h2>Plán na dnes · ${fmtD(dnes())}</h2><div class="seg" role="group" aria-label="Jak se dnes pohybuješ"><button data-voz="0" class="${T.vozitko ? '' : 'on'}" aria-pressed="${!T.vozitko}">🚶 Pěšky</button><button data-voz="1" class="${T.vozitko ? 'on' : ''}" aria-pressed="${!!T.vozitko}">🛺 S vozítkem</button></div>
+  let o = segDnes() + '<button class="dm-hl den-start" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button>' + `<h2>Plán na dnes · ${fmtD(dnes())}</h2><div class="seg" role="group" aria-label="Jak se dnes pohybuješ"><button data-voz="0" class="${T.vozitko ? '' : 'on'}" aria-pressed="${!T.vozitko}">🚶 Pěšky</button><button data-voz="1" class="${T.vozitko ? 'on' : ''}" aria-pressed="${!!T.vozitko}">🛺 S vozítkem</button></div>
     ${(() => { const st = startDnes(T); return `<div class="seg" role="group" aria-label="Odkud dnes začínáš"><span class="small mut" style="padding:0 6px">Začínám</span><button data-tstart="" class="${st ? '' : 'on'}" aria-pressed="${!st}">⌂ Na základně</button><button data-tstart="?" class="${st ? 'on' : ''}" aria-pressed="${!!st}">📍 ${st ? esc(MAPA_B[st][2]) : 'Jinde…'}</button></div>`; })()}
     <div class="seg" role="group" aria-label="Kolik vás dnes je"><span class="small mut" style="padding:0 6px">👥 Nás je</span>${[1, 2, 3].map((n) => `<button data-tlidi="${n}" class="${(+T.lidi || 1) === n ? 'on' : ''}" aria-pressed="${(+T.lidi || 1) === n}">${n}</button>`).join('')}</div>
     ${S.startVyb || startDnes(T) ? `<div class="rada stv">${S.startVyb ? `<select id="trStart" aria-label="Odkud dnes začínáš"><option value="">Vyber budovu…</option>${Object.keys(MAPA_B).sort((a, b) => MAPA_B[a][2].localeCompare(MAPA_B[b][2], 'cs')).map((k) => `<option value="${k}"${startDnes(T) === k ? ' selected' : ''}>${esc(MAPA_B[k][2])}</option>`).join('')}</select><span class="small mut">nebo na <a href="#mapa">mapě</a> klikni na budovu → „Začínám tady“</span>` : ''}${startDnes(T) ? `<label class="small" style="display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="trPres"${tp.pres ? ' checked' : ''}> nejdřív se stavím na základně (nářadí, materiál)</label>` : ''}</div>` : ''}
@@ -2390,7 +2424,7 @@ function vDnes() {
       ${(() => { const L = tp.vyb.filter((p) => p.stav !== 'hotovy' && lidiP(p) > (+T.lidi || 1)); return L.length ? `<p class="small" style="color:var(--warn);margin:6px 0 0">👥 Na víc lidí: ${L.map((p) => '<b>' + esc(p.cislo || p.nazev || '') + '</b> (' + lidiP(p) + ')').join(', ')} – dnes vás je ${+T.lidi || 1}. Přidej lidi nahoře, nebo to dej na jiný den.</p>` : ''; })()}
       ${celk > kap ? `<p class="small" style="color:var(--err);margin:6px 0 0">Je toho víc, než se dnes reálně vejde (≈ ${fmtH(r1(celk))} h). Úkoly označené „nevejde se?“ nech na zítra.</p>` : ''}
       ${tz.length ? `<p class="small" style="margin:6px 0 0">🚶 Pěšky poneseš i: <b>${tz.map(esc).join(', ')}</b> – zvaž vozítko, nebo si pro to dojdi, až budeš poblíž.</p>` : ''}</div>`;
-    o += `<h3>Trasa ${tp.mapa ? '· podle ' + (tp.planek ? 'plánku' : tp.areal ? 'mapy areálu' : 'mapy') + (tp.km != null ? ', ≈ ' + fmtH(r1(tp.km * 1.3)) + ' km' : '') : '· podle pořadí budov (níž v nastavení)'}</h3>${tp.planek ? '<p class="small"><a href="#mapa">Ukázat trasu na plánku →</a></p>' : ''}<ol class="trasa">${tp.start ? `<li class="zak st"><b>📍 Začínáš: ${esc(MAPA_B[tp.start][2])}</b>${tp.pres ? '' : '<div class="small mut">Bez zastávky na základně – to, co potřebuješ, už máš u sebe.</div>'}</li>` : ''}${!tp.start || tp.pres ? `<li class="zak"><b>${tp.start ? '⌂ Nejdřív ' : ''}${esc(T.zakladna)}</b><div class="small mut">${T.vozitko ? 'Nalož všechno na vozítko (seznam „Co si vzít“ níž).' : 'Vezmi, co je v „Co si vzít“ – a jen to.'}</div></li>` : ''}
+    o += `<h3>Trasa ${tp.mapa ? '· podle ' + (tp.planek ? 'plánku' : tp.areal ? 'mapy areálu' : 'mapy') + (tp.km != null ? ', ≈ ' + fmtH(r1(tp.km * 1.3)) + ' km' : '') : '· podle pořadí budov (níž v nastavení)'}</h3>${tp.planek ? '<p class="small"><a href="#mapa">Ukázat trasu na plánku →</a></p>' : ''}<p class="small mut sw-tip">Tip: přejeď kartou úkolu doprava = Splněno.</p><ol class="trasa">${tp.start ? `<li class="zak st"><b>📍 Začínáš: ${esc(MAPA_B[tp.start][2])}</b>${tp.pres ? '' : '<div class="small mut">Bez zastávky na základně – to, co potřebuješ, už máš u sebe.</div>'}</li>` : ''}${!tp.start || tp.pres ? `<li class="zak"><b>${tp.start ? '⌂ Nejdřív ' : ''}${esc(T.zakladna)}</b><div class="small mut">${T.vozitko ? 'Nalož všechno na vozítko (seznam „Co si vzít“ níž).' : 'Vezmi, co je v „Co si vzít“ – a jen to.'}</div></li>` : ''}
       ${tp.zast.map((z) => { const vz = vezmiSi(z.ukoly.filter((p) => p.stav !== 'hotovy')); const pot = [...vz.sk.flatMap(([, g]) => [...g.values()].map((e) => fmtH(e.ks) + '× ' + e.nazev)), ...vz.nar, ...vz.mist.flatMap((e) => [...e.veci.values()].map((t) => t + ' (na místě)'))];
         return `<li><b>${esc(z.b)}</b> <span class="small mut">${z.ukoly.length} ${z.ukoly.length === 1 ? 'úkol' : z.ukoly.length < 5 ? 'úkoly' : 'úkolů'}</span>${ulozkyPro(z.ukoly[0]).map((u) => `<div class="small">🏠 ${esc(u.nazev)}${u.klic ? ' · 🔑 ' + esc(u.klic) : ''}</div>`).join('')}
           ${z.ukoly.map((p, i) => `${patroPredel(z.ukoly, i)}<label class="dkr snf${p.stav === 'hotovy' ? ' hot' : ''}"><input type="checkbox" data-spl="${esc(p.id)}"${p.stav === 'hotovy' ? ' checked' : ''} aria-label="Splněno ${esc(p.cislo || '')}">${papirNahled(p)}<span><span class="cislo">${esc(p.cislo || '')}</span> ${esc(p.nazev || '')}${popisKr(p) ? `<span class="small dpop">${esc(popisKr(p))}</span>` : '<br>'}<span class="small mut">${esc(p.mistnost || p.mistoOdhad || '')}${p.mistnost || p.mistoOdhad ? ' · ' : ''}≈ ${fmtH(odhadH(p))} h</span>${nevejde.has(p.id) ? ' <span class="chip warn">nevejde se?</span>' : ''}</span><a href="#p-${esc(p.id)}" aria-label="Otevřít ${esc(p.cislo || '')}">›</a></label>`).join('')}
@@ -2699,8 +2733,8 @@ function dnesKarty() { const k = dnes(); const z = S.doch[k] || {}; const u = (z
     <div class="rada">${u.length < 2 || ot ? `<button class="btn${ot ? '' : ' p'}" data-a="dch-ted">${ot ? 'Odcházím teď' : 'Přišel jsem teď'}</button>` : ''}${(() => { const sb = sabDen(k); if (!sb.length) return ''; if (!ot && u.length < sb.length) return `<button class="btn sm" data-a="sab-od">Podle rozvrhu ${hm(sb[u.length].od)}</button>`; const i = u.indexOf(ot); const s = ot && (sb[i] || sb[sb.length - 1]); return s && s.do ? `<button class="btn sm" data-a="sab-do">Podle rozvrhu ${hm(s.do)}</button>` : ''; })()}<a class="btn ghost sm" href="#dochazka">${ot || !u.length ? 'Jiný čas' : 'Docházka'} →</a></div>${+nast().fondMes > 0 ? fondHtml(mesHod(), nast()).replace('class="fond"', 'class="fond" style="margin:10px 0 0"') : ''}</div>`;
   const plan = tp.vyb.length ? `<div class="karta dk"><div class="dk-h"><b>Plán na dnes</b><span class="small mut">${hot}/${tp.vyb.length} hotovo · ≈ ${fmtH(r1(tp.praceH + tp.cestaH))} h · ${rezervaH(tp) < 0 ? '<b style="color:var(--err)">přes o ' + fmtH(-rezervaH(tp)) + ' h</b>' : 'rezerva ' + fmtH(rezervaH(tp)) + ' h'}</span></div>
     <div>${tp.poradi.map((p) => `<label class="dkr snf${p.stav === 'hotovy' ? ' hot' : ''}"><input type="checkbox" data-spl="${esc(p.id)}"${p.stav === 'hotovy' ? ' checked' : ''} aria-label="Splněno ${esc(p.cislo || '')}">${papirNahled(p)}<span><b>${esc(budovaKr(p))}${p.mistnost || p.mistoOdhad ? ' · ' + esc(p.mistnost || p.mistoOdhad) : ''}</b><br><span class="small">${esc(p.nazev || '')}</span>${popisKr(p) ? `<span class="small dpop">${esc(popisKr(p))}</span>` : ''}</span><a href="#p-${esc(p.id)}" aria-label="Otevřít ${esc(p.cislo || '')}">›</a></label>`).join('')}</div>
-    <div class="rada" style="margin-top:8px"><a class="btn sm" href="#dnes">Trasa a co si vzít →</a></div></div>`
-    : '<div class="karta dk"><div class="dk-h"><b>Plán na dnes</b></div><p class="small" style="margin:6px 0 10px">Zatím nic. Vyber pár úkolů, nebo si nech den navrhnout – seřadí se po trase a ukáže se, co si vzít.</p><div class="rada"><button class="btn p" data-a="plan-navrh" data-pak="dnes">✨ Navrhnout den</button><a class="btn ghost" href="#dnes">Vybrat sám</a></div></div>';
+    <div class="rada" style="margin-top:8px"><button class="btn sm p" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button><a class="btn sm" href="#dnes">Trasa a co si vzít →</a></div></div>`
+    : '<div class="karta dk"><div class="dk-h"><b>Plán na dnes</b></div><p class="small" style="margin:6px 0 10px">Zatím nic. Vyber pár úkolů, nebo si nech den navrhnout – seřadí se po trase a ukáže se, co si vzít.</p><div class="rada"><button class="btn p" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button><button class="btn" data-a="plan-navrh" data-pak="dnes">✨ Navrhnout den</button><a class="btn ghost" href="#dnes">Vybrat sám</a></div></div>';
   return `<div class="dnesh">${doch}${plan}</div>`; }
 // --- budovy: kolik je kde nesplněných, jak vážné, jak náročné, odhad hodin
 const ODHAD_H = { 1: 0.5, 2: 1.5, 3: 4 };
@@ -2773,7 +2807,7 @@ function hledejVseHtml(q) { const w = norm(q).split(' ').filter(Boolean); const 
   const add = (nad, L) => { if (L.length) out.push(`<div class="pg">${nad} · ${L.length > 8 ? '8+' : L.length}</div>` + L.slice(0, 8).join('')); };
   { const H = ucHledej(q); const L = [...H.presne, ...H.L].slice(0, 6); add('Učebny', L.map((u) => `<a class="pv" href="#ucebny" data-ucq="${esc(u.k)}"><b>🏫 ${esc(ucKod(u.k))}</b><small>${esc(u.nazev)} · ${esc(u.typ)}${u.patro != null ? ' · ' + esc(ucPatroTx(u.patro)) : ''}</small></a>`)); }
   add('Nápověda', TEMATA.filter((t) => m(t.nazev + ' ' + t.body.join(' ') + ' ' + (t.klic || ''))).map((t) => `<a class="pv" href="#" data-pa="tema" data-id="${t.id}"><b>❔ ${esc(t.nazev)}</b><small>${esc(t.body[0])}</small></a>`));
-  add('Požadavky', S.poz.filter((p) => m([p.cislo, p.nazev, p.popis, budovaKr(p), p.mistnost, p.mistoOdhad, p.objednatel, p.poznamka].join(' '))).sort((SORT.nove || SORT.dul)[1]).map((p) => `<a class="pv" href="#p-${esc(p.id)}"><b>${esc(p.cislo || '')} ${esc(p.nazev || '')}</b><small>${esc(budovaKr(p))}${p.mistnost ? ' · ' + esc(p.mistnost) : ''} · ${(STAV[p.stav] || STAV.novy)[0]}</small></a>`));
+  add('Požadavky', S.poz.filter((p) => m([p.cislo, p.nazev, p.popis, budovaKr(p), p.mistnost, p.mistoOdhad, p.objednatel, p.poznamka].join(' '))).sort((SORT.nove || SORT.dul)[1]).map((p) => `<a class="pv pvp" href="${kDopl(p) ? '#doplnit=' + encodeURIComponent(p.id) : '#p-' + esc(p.id)}"><b>${esc(p.cislo || '')} ${kDopl(p) ? 'Doplnit údaje' : esc(p.nazev || '')}</b><small>${esc(budovaKr(p))}${p.mistnost ? ' · ' + esc(p.mistnost) : ''}</small>${p.slouceno ? '<span class="chip pst st-hotovy">sloučeno</span>' : kDopl(p) ? '<span class="chip pst st-dopl">k doplnění</span>' : `<span class="chip pst st-${esc(p.stav || 'novy')}">${(STAV[p.stav] || STAV.novy)[0]}</span>`}</a>`));
   add('Katalog', S.katalog.filter((k) => m([k.nazev, k.druh, k.typ, k.vyrobce, katPopis(k), k.kde].join(' '))).map((k) => `<a class="pv" href="#kat=${encodeURIComponent(k.id)}"><b>${esc(k.nazev)}</b><small>${esc(katPopis(k))}</small></a>`));
   add('Sklady a klíče', S.ulozky.filter((u) => m([u.nazev, u.budovy, u.kde, u.co, u.klic].join(' '))).map((u) => `<a class="pv" href="#ulozky"><b>${esc(u.nazev)}</b><small>${esc([u.budovy, u.co, u.klic ? '🔑 ' + u.klic : ''].filter(Boolean).join(' · '))}</small></a>`));
   add('Místa', [...mistaVse().values()].filter((M) => m(nazevMista(M) + ' ' + ((M.zaznam || {}).rozvadec || '') + ' ' + ((M.zaznam || {}).jistice || []).map((j) => [j.oz, j.typ, j.co].join(' ')).join(' '))).map((M) => `<a class="pv" href="#misto=${encodeURIComponent(M.key)}"><b>${esc(nazevMista(M))}</b><small>${M.poz.length} ${M.poz.length === 1 ? 'požadavek' : M.poz.length > 1 && M.poz.length < 5 ? 'požadavky' : 'požadavků'}</small></a>`));
@@ -2785,7 +2819,7 @@ function pomocObsah() { const q = (S.pomQ || '').trim(); if (q) return hledejVse
   const t = (S.pomTema && TEMATA.find((x) => x.id === S.pomTema)) || temaPro(cesta());
   return `${t ? `<div class="pg">${S.pomTema ? 'Téma' : 'Tady jsi'}</div>` + temaHtml(t, true) : ''}<div class="pg">Prohlídka</div><button class="btn p" data-pa="tour" data-id="zacatek">▶ Projít aplikaci od začátku (1 min)</button>
     <div class="pg">Všechna témata</div>${TEMATA.filter((x) => x !== t).map((x) => temaHtml(x, false)).join('')}
-    <div class="pg">Klávesy na počítači</div><p class="small"><kbd>?</kbd> nápověda · <kbd>/</kbd> nebo <kbd>Ctrl</kbd>+<kbd>K</kbd> hledat · <kbd>Esc</kbd> zavřít · <kbd>N</kbd> nový požadavek · <kbd>H</kbd> Domů · <kbd>D</kbd> Dnes · <kbd>P</kbd> Požadavky · <kbd>M</kbd> Mapa · v Doplnit údaje <kbd>Enter</kbd> další kolonka, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> uložit · v prohlídce <kbd>←</kbd> <kbd>→</kbd></p>`; }
+    <div class="pg">Klávesy na počítači</div><p class="small"><kbd>?</kbd> nápověda · <kbd>/</kbd> nebo <kbd>Ctrl</kbd>+<kbd>K</kbd> hledat · <kbd>Esc</kbd> zavřít · <kbd>N</kbd> nový požadavek · <kbd>H</kbd> Domů · <kbd>D</kbd> Dnes · <kbd>P</kbd> Požadavky · <kbd>M</kbd> Mapa · <kbd>S</kbd> Splněno (v otevřeném požadavku a v Pracovním dni) · v Doplnit údaje a v Novém <kbd>Enter</kbd> další kolonka, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> uložit · v prohlídce <kbd>←</kbd> <kbd>→</kbd></p>`; }
 function otevriPomoc() { const el = $('#pomoc'); S.pomQ = ''; S.pomTema = null; el.innerHTML = `<div class="pp" role="dialog" aria-modal="true" aria-labelledby="pomH"><div class="pp-h"><b id="pomH">Nápověda a hledání</b><label class="btn sm" for="najIn2" title="Vyfoť papír požadavku – otevře se ten požadavek">📄 Papír</label><input id="najIn2" type="file" accept="image/*" capture="environment" hidden><label class="btn sm" for="qrIn" title="Vyfoť QR štítek na rozvaděči nebo dveřích">📷 Štítek</label><input id="qrIn" type="file" accept="image/*" capture="environment" hidden><button class="btn sm ghost" data-pa="zavrit" aria-label="Zavřít (Esc)">✕</button></div><div class="pp-q"><input id="pomQ" type="search" placeholder="Hledej cokoli: číslo, místo, zářivku, jak na…" aria-label="Hledat všude" autocomplete="off"></div><div class="pp-b" id="pomVys">${pomocObsah()}</div></div>`;
   el.hidden = false; document.body.style.overflow = 'hidden'; $('#pomQ').focus(); }
 function zavriPomoc() { const el = $('#pomoc'); if (!el || el.hidden) return; el.hidden = true; el.innerHTML = ''; document.body.style.overflow = ''; }
@@ -3303,9 +3337,9 @@ async function ulozKandidata(c, imp) {
 // --- pohledy
 function stavRadek() { const n = S.poz.filter((p) => p.stav !== 'hotovy').length; const k = S.poz.filter((p) => p.stav !== 'hotovy' && (p.material || []).some(kObjednani)).length;
   $('#stav').textContent = S.nacteno ? n + ' otevřených' + (k ? ' · ' + k + ' čeká na objednání' : '') + ' · ' + S.poz.length + ' celkem' + (S.db ? '' : ' · ukládá se jen v tomhle prohlížeči') + ' · ' + VERZE : 'Načítám… · ' + VERZE; }
-const stavOk = (p, s) => s === 'vse' ? true : s === 'otevrene' ? p.stav !== 'hotovy' : s === 'dul' ? p.stav !== 'hotovy' && dulezitost(p) === 3 : s === 'mat-k' ? (p.material || []).some(kObjednani) : s === 'mat-o' ? (p.material || []).some(objednano) : s === 'hlidat' ? hlidat(p).length > 0 : p.stav === s;
-const RYCHLE = [['otevrene', 'Nesplněné'], ['dul', 'Důležité'], ['material', 'Čeká na věc'], ['hotovy', 'Splněno']];
-const STAVF_T = { otevrene: 'Nesplněné', vse: 'Všechny', dul: 'Důležité nesplněné', 'mat-k': 'Materiál k objednání', 'mat-o': 'Materiál objednaný', hlidat: '⚠ Pohlídat' };
+const stavOk = (p, s) => s === 'dopl' ? kDopl(p) : s === 'vse' ? true : s === 'otevrene' ? p.stav !== 'hotovy' : s === 'dul' ? p.stav !== 'hotovy' && dulezitost(p) === 3 : s === 'mat-k' ? (p.material || []).some(kObjednani) : s === 'mat-o' ? (p.material || []).some(objednano) : s === 'hlidat' ? hlidat(p).length > 0 : p.stav === s;
+const RYCHLE = [['otevrene', 'Nesplněné'], ['dul', 'Důležité'], ['material', 'Čeká na věc'], ['hotovy', 'Splněno'], ['dopl', 'K doplnění']];
+const STAVF_T = { dopl: 'K doplnění', otevrene: 'Nesplněné', vse: 'Všechny', dul: 'Důležité nesplněné', 'mat-k': 'Materiál k objednání', 'mat-o': 'Materiál objednaný', hlidat: '⚠ Pohlídat' };
 function filtrSeznam() {
   const q = norm(S.filtr), f = S.f;
   const fStav = (p) => stavOk(p, S.stavF);
@@ -3380,7 +3414,7 @@ function vSeznam() {
   const aktF = ['fak', 'bud', 'pat', 'obt', 'dul', 'cek', 'cekR', 'druh', 'mes', 'mat'].filter((k) => f[k]).length + (f.grp && f.grp !== 'bud' ? 1 : 0);
   let o = `<div class="pzh"><h2>Požadavky</h2><span class="small mut">${nOt} nesplněných${nCe ? ' · ' + nCe + ' čeká na věc' : ''}</span><span class="pzh-a"><label class="btn" for="najIn">🔎 Najít podle papíru</label><input id="najIn" type="file" accept="image/*" capture="environment" hidden><a class="btn" href="#import">⇪ Z WhatsAppu</a><a class="btn p pzh-f" href="#novy">+ Vyfotit požadavek</a></span></div>
     <div class="hledat"><input id="filtr" type="search" placeholder="Hledat číslo, místo, závadu, jméno…" value="${esc(S.filtr)}" aria-label="Hledat"></div>
-    <div class="rychle" role="group" aria-label="Rychlý výběr">${RYCHLE.map(([k, t]) => `<button class="rq${S.stavF === k ? ' on' : ''}" data-rq="${k}" aria-pressed="${S.stavF === k}">${t}<b>${nRq(k)}</b></button>`).join('')}<button class="rq gbtn${f.grp === 'bud' ? ' on' : ''}" data-a="grp-bud" aria-pressed="${f.grp === 'bud'}">Po budovách</button><button class="rq fbtn${S.fOpen ? ' on' : ''}" id="fBtn" data-a="f-panel" aria-expanded="${!!S.fOpen}" aria-controls="fPan">Filtry${aktF ? '<b>' + aktF + '</b>' : ''} ${S.fOpen ? '▴' : '▾'}</button></div>`;
+    <div class="rychle" role="group" aria-label="Rychlý výběr">${RYCHLE.filter(([k]) => k !== 'dopl' || S.stavF === 'dopl' || S.poz.some(kDopl)).map(([k, t]) => `<button class="rq${k === 'dopl' ? ' rq-dopl' : ''}${S.stavF === k ? ' on' : ''}" data-rq="${k}" aria-pressed="${S.stavF === k}">${t}<b>${nRq(k)}</b></button>`).join('')}<button class="rq gbtn${f.grp === 'bud' ? ' on' : ''}" data-a="grp-bud" aria-pressed="${f.grp === 'bud'}">Po budovách</button><button class="rq fbtn${S.fOpen ? ' on' : ''}" id="fBtn" data-a="f-panel" aria-expanded="${!!S.fOpen}" aria-controls="fPan">Filtry${aktF ? '<b>' + aktF + '</b>' : ''} ${S.fOpen ? '▴' : '▾'}</button></div>`;
   if (!S.poz.length) return o + '<div class="prazdne karta"><b>Zatím žádné požadavky</b>Klikni na „+ Vyfotit požadavek“ a vyfoť papír. ' + (cteSe() ? 'Údaje se vyplní samy, ty jen zkontroluješ.' : 'Fotka se uloží hned, údaje doplníš kdykoli.') + '</div>';
   const moz = (k, fn, por) => { const c = new Map(); zaklad.filter((p) => ok(p, k)).forEach((p) => { const v = fn(p); c.set(v, (c.get(v) || 0) + 1); }); return [...c.entries()].sort(por || ((a, b) => String(a[0]).localeCompare(String(b[0]), 'cs'))); };
   const sel = (k, nazev, pol) => `<select data-flt="${k}" class="${f[k] ? 'on' : ''}" aria-label="${nazev}"><option value="">${nazev}: vše</option>${pol.map(([v, t, n]) => `<option value="${esc(v)}"${String(f[k]) === String(v) ? ' selected' : ''}>${esc(t)} · ${n}</option>`).join('')}</select>`;
@@ -3478,13 +3512,10 @@ function vDoplnit() { if (!S.nacteno) return '<div class="prazdne"><b>Načítám
   const dal = ['kategorie', 'objednatel', 'kontakt', 'zdrojFinancovani', 'resitel', 'popis'].some((k) => String(val(k)).trim());
   return `<div class="dopl-h"><h2>Doplnit údaje</h2>${n > 1 && i >= 0 ? `<span class="small mut">${i + 1} z ${n}</span><span class="dopl-pr" aria-hidden="true"><i style="width:${Math.round((100 * (i + 1)) / n)}%"></i></span>` : ''}</div>
   <div class="dopl"><div>${foto}</div><div class="karta" id="doplForm" data-id="${esc(p.id)}">
-    <div class="dopl-k">${pole('budova', 'Budova', { list: 'budList', ph: 'např. Kolej EFG' })}${pole('mistnost', 'Místnost', { list: 'mistList', ph: 'např. F310' })}${pole('nazev', 'Závada – krátce', { cela: true, ph: 'např. nesvítí světlo' })}${pole('cislo', 'Číslo papíru', { ph: 'např. 2026/123' })}${pole('datum', 'Datum na papíře', { typ: 'date' })}</div>
-    <div id="doplEx">${doplEx(p, val('cislo'))}</div>
-    <details class="dopl-dal"${dal ? ' open' : ''}><summary>Další údaje z papíru (nepovinné)</summary><div class="dopl-k">${pole('kategorie', 'Kategorie')}${pole('objednatel', 'Objednatel')}${pole('kontakt', 'Kontakt')}${pole('zdrojFinancovani', 'Zdroj financování')}${pole('resitel', 'Řešitel', { cela: true })}<div class="pole cela"><label for="dp-popis">Popis závady</label><textarea id="dp-popis" data-k="popis" rows="2">${esc(val('popis'))}</textarea>${diktBtn('dp-popis')}</div></div></details>
-    ${budList()}${mistList(val('budova'))}
+    ${formKratky(p, 'dp', val, `<div id="doplEx">${doplEx(p, val('cislo'))}</div>`)}
     <div class="dopl-a">${zb ? `<button class="btn p" data-a="dopl-ulozit" data-dal="1">Uložit a další (${zb})</button><button class="btn" data-a="dopl-ulozit">Uložit</button>` : '<button class="btn p" data-a="dopl-ulozit">Uložit požadavek</button>'}<button class="btn ghost" data-a="dopl-pozdeji">Později</button></div>
     <p class="small mut dopl-pozn">Stačí, co víš – zbytek doplníš kdykoli, rozepsané se pamatuje.<span class="pc-k"> Enter = další kolonka${zb ? ', <kbd>Ctrl</kbd>+<kbd>Enter</kbd> = uložit a další' : ', <kbd>Ctrl</kbd>+<kbd>Enter</kbd> = uložit'}.</span></p>
-    <div class="rada dopl-dal2"><a class="btn sm ghost" href="#p-${esc(p.id)}">Otevřít celý požadavek ›</a><button class="btn sm ghost" data-a="dopl-smazat">Smazat – vyfoceno omylem</button></div></div></div>`; }
+    <div class="rada dopl-dal2"><a class="btn sm ghost" href="#p-${esc(p.id)}">Otevřít celý požadavek ›</a>${S.assets ? '<label class="btn sm ghost" for="fotoVice">🖼 Přidat další fotky</label><input id="fotoVice" type="file" accept="image/*" multiple hidden>' : ''}<button class="btn sm ghost" data-a="dopl-smazat">Smazat – vyfoceno omylem</button></div></div></div>`; }
 async function doplAkce(a, b) { const id = S.doplId; const p = id && S.poz.find((q) => q.id === id); if (!p) return;
   const dalsi = () => { const pr = S.doplPres || []; return doplVse().filter((q) => q.id !== id && !pr.includes(q.id)); }; const jdi = (L, jinak) => { location.hash = L.length ? 'doplnit=' + encodeURIComponent(L[0].id) : jinak; };
   const vals = () => { const o = {}; document.querySelectorAll('#doplForm [data-k]').forEach((x) => { o[x.dataset.k] = x.value.trim(); }); return o; };
@@ -3501,17 +3532,66 @@ document.addEventListener('input', (e) => { const t = e.target; if (!t || !t.dat
     if (t.dataset.k === 'cislo') { const p = S.poz.find((q) => q.id === id), x = $('#doplEx'); if (p && x) x.innerHTML = doplEx(p, t.value); }
     if (t.dataset.k === 'budova') { const dl = $('#mistList'); if (dl) dl.innerHTML = mistOpt(t.value); } return; }
   if (t.closest('#draftForm') && cesta() === 'novy') { S.draft = { ...(S.draft || { stav: 'novy', datum: dnes() }), [t.dataset.k]: t.value }; S.draftKdy = new Date().toISOString(); ls.set('rozepsanoNovy', { d: S.draft, kdy: S.draftKdy });
-    if (t.dataset.k === 'budova') { const dl = $('#mistList'); if (dl) dl.innerHTML = mistOpt(t.value); } } });
+    if (t.dataset.k === 'budova') { const dl = $('#mistList'); if (dl) dl.innerHTML = mistOpt(t.value); }
+    if (t.dataset.k === 'cislo') { const x = document.querySelector('#draftForm .fkr-ex'); if (x) x.innerHTML = novyEx(t.value); } } });
 document.addEventListener('focusin', (e) => { if (e.target && e.target.closest && e.target.closest('#doplForm') && S.vratit) { $('#toast').hidden = true; S.vratit = null; } });
-document.addEventListener('keydown', (e) => { const t = e.target; if (e.key !== 'Enter' || !t || !t.closest || !t.closest('#doplForm') || t.tagName === 'TEXTAREA' && !(e.ctrlKey || e.metaKey)) return; if (t.tagName === 'BUTTON' || t.tagName === 'A' || t.tagName === 'SUMMARY') return;
-  e.preventDefault(); if (e.ctrlKey || e.metaKey) { const bt = document.querySelector('#doplForm [data-a="dopl-ulozit"]'); if (bt) bt.click(); return; }
-  const L = [...document.querySelectorAll('#doplForm .dopl-k:first-child [data-k]')]; const i = L.indexOf(t); const d = i >= 0 && L[i + 1]; if (d) { d.focus(); if (d.select) try { d.select(); } catch {} } else { const bt = document.querySelector('#doplForm [data-a="dopl-ulozit"]'); if (bt) bt.focus(); } });
+document.addEventListener('keydown', (e) => { const t = e.target; const fm = e.key === 'Enter' && t && t.closest && t.closest('#doplForm, #draftForm'); if (!fm || t.tagName === 'TEXTAREA' && !(e.ctrlKey || e.metaKey)) return; if (t.tagName === 'BUTTON' || t.tagName === 'A' || t.tagName === 'SUMMARY') return;
+  const hl = () => fm.id === 'doplForm' ? document.querySelector('#doplForm [data-a="dopl-ulozit"]') : document.querySelector('[data-a="ulozit-verzi"]') || document.querySelector('[data-a="ulozit-novy"]');
+  e.preventDefault(); if (e.ctrlKey || e.metaKey) { const bt = hl(); if (bt) bt.click(); return; }
+  const L = [...fm.querySelectorAll('.fkr > .dopl-k:first-child [data-k]')]; const i = L.indexOf(t); const d = i >= 0 && L[i + 1]; if (d) { d.focus(); if (d.select) try { d.select(); } catch {} } else { const bt = hl(); if (bt) bt.focus(); } });
+// v105: víc fotek najednou – každá fotka = jeden požadavek k doplnění, průběh „3 / 7“ (výběr, přetažení, Ctrl + V)
+const fotkyUl = (n) => (n === 1 ? 'fotka uložena jako nový požadavek' : (n >= 2 && n <= 4 ? 'fotky uloženy' : 'fotek uloženo') + ' jako nové požadavky');
+const fotekN = (n) => n + ' ' + (n === 1 ? 'fotka' : n >= 2 && n <= 4 ? 'fotky' : 'fotek');
+const jeObr = (f) => !!f && (/^image\//.test(f.type || '') || /\.(jpe?g|png|webp|heic|heif|gif|bmp)$/i.test(f.name || ''));
+const davkaHtml = () => { const D = S.davka; if (!D) return ''; return `<div class="davka" id="davka" role="status" aria-live="polite"><span class="ai"></span><span>Ukládám fotky <b id="davkaN">${D.i} / ${D.n}</b></span><span class="dopl-pr"><i id="davkaBar" style="width:${Math.round((100 * D.i) / D.n)}%"></i></span></div>`; };
+const davkaUkaz = () => { const D = S.davka; if (!D) return; const n = $('#davkaN'), b = $('#davkaBar'); if (n) n.textContent = D.i + ' / ' + D.n; if (b) b.style.width = Math.round((100 * D.i) / D.n) + '%'; toast('Ukládám fotky ' + D.i + ' / ' + D.n + '…'); };
+async function rychleDavka(files) { files = [...(files || [])].filter(jeObr); if (!files.length) { toast('Tohle nejsou fotky.'); return; } if (!S.assets) { toast('Fotky tu teď uložit nejde.'); return; } if (S.davka) { toast('Ještě se ukládají předchozí fotky.'); return; }
+  S.davka = { n: files.length, i: 0, ids: [], chyby: 0 }; if (cesta() === 'novy') vykresli();
+  for (const f of files) { S.davka.i++; davkaUkaz(); try { const d = await rychleUloz(f, null); S.davka.ids.push(d.id); } catch { S.davka.chyby++; } }
+  const { ids, chyby } = S.davka; S.davka = null; if (!ids.length) { toast('Fotky se nepodařilo uložit – zkus to znovu.'); vykresli(); return; }
+  location.hash = 'doplnit=' + encodeURIComponent(ids[0]); vykresli();
+  toastZpet(`${ids.length === 1 ? '1 ' + fotkyUl(1) : ids.length + ' ' + fotkyUl(ids.length)}${chyby ? ' (' + fotekN(chyby) + ' se nepovedlo)' : ''}. Údaje doplň teď, nebo později.`, rychleZpetVse(ids)); }
+const rychleZpetVse = (ids) => async () => { let n = 0; for (const id of ids) { const q = S.poz.find((x) => x.id === id); if (!q) continue; const fid = (q.fotky || []).map((f) => f.id).filter(Boolean);
+    await smazPoz(id); await zKose('pozadavky~' + id); if (S.assets) for (const x of fid) { try { await S.assets.delete(x); } catch {} } doplVPryc(id); n++; }
+  toast('Vráceno – ' + fotekN(n) + ' se neuložilo.'); location.hash = 'novy'; vykresli(); };
+// v105: krátký formulář – stejných 5 kolonek jako Doplnit údaje (Budova, Místnost, Závada, Číslo, Datum), zbytek v „Další údaje“
+function formKratky(p, pre, val, mezi) { val = val || ((k) => p[k] || ''); const nej = nejisteF(p) && !!(p.mistoOdhad || val('mistnost'));
+  const pole = (k, t, o = {}) => { const ph = k === 'mistnost' && !val(k) && p.mistoOdhad ? p.mistoOdhad + '?' : o.ph;
+    return `<div class="pole${o.cela ? ' cela' : ''}${k === 'mistnost' && nej ? ' nejiste' : ''}"><label for="${pre}-${k}">${t}${k === 'mistnost' && nej ? ' – nejisté' : ''}</label><input id="${pre}-${k}" data-k="${k}" type="${o.typ || 'text'}" value="${esc(val(k))}"${o.list ? ` list="${o.list}"` : ''}${ph ? ` placeholder="${esc(ph)}"` : ''} enterkeyhint="next" autocomplete="off"></div>`; };
+  const dal = ['kategorie', 'objednatel', 'kontakt', 'zdrojFinancovani', 'resitel', 'popis'].some((k) => String(val(k)).trim());
+  return `<div class="fkr"><div class="dopl-k">${pole('budova', 'Budova', { list: 'budList', ph: 'např. Kolej EFG' })}${pole('mistnost', 'Místnost', { list: 'mistList', ph: 'např. F310' })}${pole('nazev', 'Závada – krátce', { cela: true, ph: 'např. nesvítí světlo' })}${pole('cislo', 'Číslo papíru', { ph: 'např. 2026/123' })}${pole('datum', 'Datum na papíře', { typ: 'date' })}</div>
+    ${mezi || '<div class="fkr-ex"></div>'}
+    <details class="dopl-dal"${dal ? ' open' : ''}><summary>Další údaje z papíru (nepovinné)</summary><div class="dopl-k">${pole('kategorie', 'Kategorie')}${pole('objednatel', 'Objednatel')}${pole('kontakt', 'Kontakt')}${pole('zdrojFinancovani', 'Zdroj financování')}${pole('resitel', 'Řešitel', { cela: true })}<div class="pole cela"><label for="${pre}-popis">Popis závady</label><textarea id="${pre}-popis" data-k="popis" rows="2">${esc(val('popis'))}</textarea>${diktBtn(pre + '-popis')}${p.popisOpraveny && p.popisOpraveny !== p.popis ? `<span class="small mut">Bez překlepů: ${esc(p.popisOpraveny)}</span>` : ''}</div></div></details>
+    ${budList()}${mistList(val('budova'))}</div>`; }
+const novyEx = (c) => { c = String(c || '').trim(); const ex = c && S.poz.find((q) => !q.slouceno && q.cislo && norm(q.cislo) === norm(c)); if (!ex) return '';
+  return `<div class="upoz warn"><span class="ik">↻</span><div><b>Tenhle papír už v deníku je</b> – <a class="cislo" href="#p-${esc(ex.id)}" style="text-decoration:none">${esc(ex.cislo)}</a> ${esc(ex.nazev || '')} (${(STAV[ex.stav] || STAV.novy)[0]}). Ulož ho jako další verzi – nic se nezdvojí.<div class="rada" style="margin-top:8px"><button class="btn p sm" data-a="ulozit-verzi">Uložit jako verzi ${(verzePapiru(ex).length || 1) + 1}</button></div></div></div>`; };
+// v105: Splněno přejetím karty doprava (Dnes, plán na Domů) – jen dotyk; myš a klávesnice dál zaškrtávátkem. Vrátit je v okně po Splněno.
+(() => { let sw = null; const SEL = '#hlavni .dkr.snf';
+  const zrus = (s) => { s.k.style.transition = 'transform .18s'; s.k.style.transform = ''; setTimeout(() => { s.k.classList.remove('swp'); s.k.style.transition = ''; s.k.style.removeProperty('--swp'); }, 200); };
+  const bezKliku = () => { const f = (e) => { e.preventDefault(); e.stopPropagation(); }; document.addEventListener('click', f, true); setTimeout(() => document.removeEventListener('click', f, true), 450); };
+  document.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse' || !e.isPrimary || !e.target.closest) return; const k = e.target.closest(SEL); if (!k || k.classList.contains('hot') || e.target.closest('a')) return;
+    const i = k.querySelector('[data-spl]'); if (!i) return; sw = { k, id: i.dataset.spl, x0: e.clientX, y0: e.clientY, dx: 0, akt: false }; }, { passive: true });
+  document.addEventListener('pointermove', (e) => { if (!sw || !e.isPrimary) return; const dx = e.clientX - sw.x0, dy = e.clientY - sw.y0;
+    if (!sw.akt) { if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { sw = null; return; } if (dx > 14 && dx > Math.abs(dy) * 1.4) { sw.akt = true; sw.k.classList.add('swp'); } else return; }
+    sw.dx = Math.max(0, dx); sw.k.style.transform = `translateX(${sw.dx}px)`; sw.k.style.setProperty('--swp', String(Math.min(1, sw.dx / Math.max(80, sw.k.offsetWidth * 0.4)))); }, { passive: true });
+  document.addEventListener('pointerup', (e) => { if (!sw || !e.isPrimary) return; const s = sw; sw = null; if (!s.akt) return; bezKliku();
+    if (s.dx < Math.max(80, s.k.offsetWidth * 0.4)) { zrus(s); return; }
+    s.k.style.transition = 'transform .16s'; s.k.style.transform = `translateX(${s.k.offsetWidth}px)`;
+    setTimeout(async () => { const q = S.poz.find((x) => x.id === s.id); if (q && q.stav !== 'hotovy') { prepniSplneno(q); await ulozPoz(q); poSplneni(q); } vykresli(); }, 170); });
+  document.addEventListener('pointercancel', () => { if (sw && sw.akt) zrus(sw); sw = null; }); })();
+// v105: „▶ Další úkol“ – nejbližší úkol od místa, kde jsi naposledy skončil (ráno od základny)
+const tedKde = () => { const T = trasaN(); const h = S.poz.filter((p) => p.stav === 'hotovy' && p.splnenoDne === dnes()).sort((a, b) => String(b.upraveno || '').localeCompare(String(a.upraveno || '')))[0];
+  const k = h && mapKlic(budovaKr(h)); return (k && mapBod(k)) || (startDnes(T) && mapBod(startDnes(T))) || mapBod('⌂'); };
+const odTed = (p) => { const k = mapKlic(budovaKr(p)), q = k && mapBod(k), s = tedKde(); return q && s ? Math.hypot(q[0] - s[0], q[1] - s[1]) * MAPA_M : null; };
+function nejblizsiUkol(L) { return L.slice().sort((a, b) => (odTed(a) ?? 1e9) - (odTed(b) ?? 1e9) || dulezitost(b) - dulezitost(a) || dniOd(b.datum) - dniOd(a.datum))[0] || null; }
+const vzdTxt = (p) => { const m = odTed(p); if (m == null) return ''; const h = S.poz.some((q) => q.stav === 'hotovy' && q.splnenoDne === dnes()); return m < 25 ? (h ? ' · ve stejné budově' : ' · u základny') : ' · ≈ ' + (m < 1000 ? Math.round(m / 10) * 10 + ' m' : fmtH(r1(m / 1000)) + ' km') + (h ? ' odtud' : ' od základny'); };
 function vNovy() {
   if (!S.draft && !S.foto) { const r = ls.get('rozepsanoNovy', null); if (r && r.d && Object.entries(r.d).some(([k, v]) => !['stav', 'datum'].includes(k) && String(v || '').trim())) { S.draft = r.d; S.draftKdy = r.kdy; } }
   const d = S.draft;
   let o = '<h2>Nový požadavek</h2>';
   o += `<div class="foto"><div><b>Vyfoť papír „Požadavek na údržbu“</b><br><span class="small mut">${rychleJde() ? 'Na telefonu se otevře fotoaparát. Fotka se <b>uloží hned</b> jako nový požadavek – údaje doplníš po ní, nebo později.' : 'Na telefonu se otevře fotoaparát. Údaje se vyplní samy a ty jen opravíš, co nesedí.'}</span></div>
     <label class="btn p" for="fotoIn">📷 Vyfotit / vybrat fotku</label><input id="fotoIn" type="file" accept="image/*" capture="environment" hidden>
+    ${S.assets ? `<div class="vice"><label class="btn" for="fotoVice">🖼 Víc fotek najednou</label><input id="fotoVice" type="file" accept="image/*" multiple hidden><span class="small mut pc-k">nebo fotky přetáhni sem, případně vlož Ctrl + V</span></div>` : ''}${davkaHtml()}
     ${S.foto ? `<img src="${S.foto}" alt="Fotka požadavku">` : ''}${S.ai.foto ? '<div><span class="ai"></span> Čtu papír…</div>' : ''}
     ${S.fotoFile && S.assets && cteSe() && (S.ai.foto || !d || !(d.nazev || d.popis)) ? '<button class="btn" data-a="novy-jen-foto">Uložit jen fotku – údaje doplním později</button>' : ''}
     ${S.sample || rychleJde() ? '' : '<span class="small mut">Čtení fotky tu teď nejde – vyplň údaje ručně níž.</span>'}</div>
@@ -3522,7 +3602,7 @@ function vNovy() {
     Ulož ho jako <b>další verzi</b>: fotka se přidá, prázdné údaje se doplní a nové ručně psané poznámky se zapíšou. Nic starého se nepřepíše.${d.rucne ? `<br><span class="small">Ručně na nové fotce: <i>${esc(d.rucne)}</i></span>` : ''}
     <div class="rada" style="margin-top:8px"><button class="btn p" data-a="ulozit-verzi">Uložit jako verzi ${(verzePapiru(ex).length || 1) + 1}</button><a class="btn sm ghost" href="#p-${esc(ex.id)}">Otevřít ${esc(ex.cislo)}</a></div></div></div>`;
   if (S.draftKdy && d && !S.foto) o += `<p class="small mut novy-obn">✎ Pokračuješ v rozepsaném (${esc(fmtKdy(S.draftKdy))}).<button class="btn sm ghost" data-a="zahodit">Začít znovu</button></p>`;
-  o += '<h3>' + (rychleJde() ? 'Nebo vyplň ručně (bez fotky)' : 'Údaje') + '</h3><div class="karta" id="draftForm">' + formular(p, 'n') + (d && d.rucne && !ex ? `<p class="small mut" style="margin:8px 0 0">Ručně na papíře: <i>${esc(d.rucne)}</i> – uloží se do poznámky.</p>` : '') + '</div>' + (d && !ex ? upozorneni(p) : '');
+  o += '<h3>' + (rychleJde() ? 'Nebo vyplň ručně (bez fotky)' : 'Údaje') + '</h3><div class="karta" id="draftForm">' + formKratky(p, 'n') + (d && d.rucne && !ex ? `<p class="small mut" style="margin:8px 0 0">Ručně na papíře: <i>${esc(d.rucne)}</i> – uloží se do poznámky.</p>` : '') + '</div>' + (d && !ex ? upozorneni(p) : '');
   o += `<div class="rada" style="margin-top:12px"><button class="btn p" data-a="ulozit-novy">Uložit požadavek</button><button class="btn ghost" data-a="zahodit">Zahodit</button></div>`;
   return o;
 }
@@ -3751,6 +3831,9 @@ async function overFotky(kol) { if (!S.sample || S.ai.over) return; const L = (S
     S.ai.over.i++; vykresli(); }
   S.ai.over = null; vykresli(); toast(`Ověřeno: ${ok} fotek sedí${ne ? ', ' + ne + ' nesedí – u nich zůstane ikonka' : ''}.`); }
 const svg = (d, s = 24) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+ICO.vse = '<rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/>';
+ICO.nast = '<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>';
+ICO.dopl = '<path d="M5 19h4l10-10-4-4L5 15z"/><path d="M13 7l4 4"/>'; ICO.stitek = '<path d="M4 5h8l8 8-7 7-9-9z"/><circle cx="8.5" cy="9" r="1.4"/>';
 document.querySelectorAll('#spodni [data-ico], #karty [data-ico]').forEach((e) => { e.innerHTML = svg(ICO[e.dataset.ico], 22); });
 const kratkaBudova = (s) => (s || '').replace(/^ČZU\s*\/\s*Suchdol\s*\/\s*/i, '').trim();
 const dniOd = (d) => d ? Math.round((new Date(dnes()) - new Date(d)) / 864e5) : 0;
@@ -3785,30 +3868,30 @@ function vDomuJednoduse() { if (!S.nacteno) return '<div class="prazdne"><b>Nač
   const doch = ot ? `<button class="dm-doch" data-a="dch-ted"><span class="dm-ik ok" aria-hidden="true"></span><span>V práci od <b>${hm(ot.od)}</b></span><span class="dm-m">Odcházím</span></button>`
     : u.length >= 2 ? `<a class="dm-doch" href="#dochazka"><span class="dm-ik" aria-hidden="true"></span><span>Dnes odpracováno</span><span class="dm-m">Docházka</span></a>`
     : `<button class="dm-doch" data-a="dch-ted"><span class="dm-ik" aria-hidden="true"></span><span>${u.length ? 'Jsem zpátky v práci' : 'Přišel jsem do práce'}</span><span class="dm-m">zapsat ${hm(new Date().toTimeString().slice(0, 5))}</span></button>`;
-  const dnesK = zbyva.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><span class="dm-l">Dnes máš</span><b class="dm-n">${ukolu(zbyva.length)}</b><span class="dm-s">${esc(bud.slice(0, 3).join(', '))}${bud.length > 3 ? ' a další' : ''} · asi ${fmtH(r1(zbyva.reduce((a, p) => a + odhadH(p), 0) + tp.cestaH))} h${tp.vyb.length - zbyva.length ? ' · ' + (tp.vyb.length - zbyva.length) + ' hotovo' : ''}</span><a class="dm-hl" href="#den">Začít den</a></section>`
-    : tp.vyb.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Dnešní plán je hotový</b><span class="dm-s">${ukolu(tp.vyb.length)} splněno – dobrá práce.</span><a class="dm-hl dm-hl2" href="#dnes">Přidat další</a></section>`
-    : `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Na dnes nic naplánováno</b><span class="dm-s">${otev.length ? 'Nesplněných je ' + otev.length + '. Nech si den navrhnout, nebo vyber sám.' : 'Nic nečeká – všechno je hotové.'}</span>${otev.length ? '<div class="dm-2"><button class="dm-hl" data-a="plan-navrh" data-pak="dnes">Navrhnout den</button><a class="dm-hl dm-hl2" href="#dnes">Vybrat sám</a></div>' : ''}</section>`;
+  const dnesK = zbyva.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><span class="dm-l">Dnes máš</span><b class="dm-n">${ukolu(zbyva.length)}</b><span class="dm-s">${esc(bud.slice(0, 3).join(', '))}${bud.length > 3 ? ' a další' : ''} · asi ${fmtH(r1(zbyva.reduce((a, p) => a + odhadH(p), 0) + tp.cestaH))} h${tp.vyb.length - zbyva.length ? ' · ' + (tp.vyb.length - zbyva.length) + ' hotovo' : ''}</span><button class="dm-hl" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button></section>`
+    : tp.vyb.length ? `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Dnešní plán je hotový</b><span class="dm-s">${ukolu(tp.vyb.length)} splněno – dobrá práce.</span><button class="dm-hl dm-hl2" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button></section>`
+    : `<section class="dm-dnes" aria-label="Dnešní práce"><b class="dm-n">Na dnes nic naplánováno</b><span class="dm-s">${otev.length ? 'Nesplněných je ' + otev.length + '. ▶ Další úkol sestaví den po trase od základny, nebo si nech den navrhnout.' : 'Nic nečeká – všechno je hotové.'}</span>${otev.length ? '<div class="dm-2"><button class="dm-hl" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button><button class="dm-hl dm-hl2" data-a="plan-navrh" data-pak="dnes">Navrhnout den</button></div>' : ''}</section>`;
   const up = domuUpoz(kObj);
   return (!ls.get('pruvodce', 0) ? '<div class="karta uvitani"><span>👋 <b>Jsi tu poprvé?</b> Krátká prohlídka ti ukáže, kde co je a kam klepnout (asi 1 minuta).</span><button class="btn sm p" data-a="tour-zacni">▶ Spustit prohlídku</button><button class="btn sm ghost" data-a="tour-ne">Teď ne</button></div>' : '') + novinkyKarta() + prazdnyOffline() + vlozenaHtml()
-    + `<div class="dm"><div class="dm-hlav"><span class="dm-dat">${DNY_CELE[d.getDay()]} ${d.getDate()}. ${MES2[d.getMonth()]}</span><span class="dm-poz">${POZDRAV()}</span></div>${doch}${dnesK}${doplHtml()}
+    + `<div class="dm"><div class="dm-hlav"><span class="dm-dat">${DNY_CELE[d.getDay()]} ${d.getDate()}. ${MES2[d.getMonth()]}</span><span class="dm-poz">${POZDRAV()}</span></div>${navratHtml()}${doch}${dnesK}${doplHtml()}
     <nav class="dm-akce" aria-label="Hlavní akce"><a class="dm-a dm-novy" href="#novy"><span class="ik">${svg(ICO.foto, 32)}</span><span><b>Nový požadavek</b><small>${cteSe() ? 'vyfoť papír, zbytek se vyplní' : 'vyfoť papír – uloží se hned'}</small></span></a>
       <button class="dm-a" data-a="dm-najit"><span class="ik">${svg(ICO.seznam, 28)}</span><span><b>Najít</b><small>číslo, místnost, budova</small></span></button>
       <a class="dm-a" href="#mapa"><span class="ik">${svg(ICO.mapa, 28)}</span><span><b>Mapa</b><small>budovy a patra</small></span></a></nav>
     ${up ? `<div class="dm-up ${up[3]}"><span>${esc(up[0])}</span><button class="btn${up[3] === 'warn' ? ' p' : ''}" data-a="${up[1]}">${up[2]}</button></div>` : ''}
-    <a class="dm-vse" href="#vse">Všechno ostatní <small>(${otev.length} nesplněných, sklad, docházka, přehledy…)</small></a></div>`; }
+    <a class="dm-vse" href="#vse">☰ Všechny nástroje <small>(${otev.length} nesplněných, sklad, docházka, přehledy…)</small></a></div>`; }
 // --- pracovní den: jeden úkol po druhém (v63)
 function denPoradi() { const tp = trasaPlanu(); const L = tp.poradi; const po = S.denPozdeji || []; const zb = L.filter((p) => p.stav !== 'hotovy');
   return { tp, L, zb: [...zb.filter((p) => !po.includes(p.id)), ...po.map((id) => zb.find((p) => p.id === id)).filter(Boolean)] }; }
 function denVezmi(p) { const v = vezmiSi([p]); return [...v.sk.flatMap(([k, g]) => [...g.values()].map((e) => fmtH(e.ks) + '× ' + e.nazev + (ulozkaJmeno(k) ? ' (' + ulozkaJmeno(k).nazev + ')' : ''))), ...v.nar, ...v.mist.flatMap((e) => [...e.veci.values()].map((t) => t + ' – je na místě'))]; }
 function vDen() { if (!S.nacteno) return '<div class="prazdne"><b>Načítám…</b></div>'; const { L, zb } = denPoradi();
   const hlav = (t) => `<div class="den-h"><a class="den-zp" href="#domu" aria-label="Zpět domů">←</a><div class="den-hp"><b>${t}</b>${L.length ? `<div class="den-pr" role="progressbar" aria-valuemin="0" aria-valuemax="${L.length}" aria-valuenow="${L.length - zb.length}" aria-label="Hotovo ${L.length - zb.length} z ${L.length}"><i style="width:${Math.round(100 * (L.length - zb.length) / L.length)}%"></i></div>` : ''}</div><a class="den-zp" href="#dnes" aria-label="Celý plán dne">☰</a></div>`;
-  if (!L.length) return `<div class="den">${hlav('Pracovní den')}<section class="den-k"><b class="den-n">Na dnes nic naplánováno</b><p>Nech si den navrhnout, nebo vyber úkoly sám.</p><div class="dm-2"><button class="dm-hl" data-a="plan-navrh" data-pak="den">Navrhnout den</button><a class="dm-hl dm-hl2" href="#dnes">Vybrat sám</a></div></section></div>`;
-  if (!zb.length) return `<div class="den">${hlav('Hotovo')}<section class="den-k den-ok"><b class="den-n">${L.length === 1 ? 'Úkol je hotový' : L.length <= 4 ? 'Všechny ' + ukolu(L.length) + ' jsou hotové' : 'Všech ' + ukolu(L.length) + ' je hotovo'}</b><p>Dobrá práce. Hodiny jsou zapsané u každého úkolu.</p><div class="dm-2"><a class="dm-hl" href="#domu">Domů</a><a class="dm-hl dm-hl2" href="#dnes">Přidat další</a></div></section></div>`;
+  if (!L.length) return `<div class="den">${hlav('Pracovní den')}<section class="den-k"><b class="den-n">Na dnes nic naplánováno</b><p>Nech si den navrhnout, nebo vyber úkoly sám.</p><div class="dm-2"><button class="dm-hl" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button><a class="dm-hl dm-hl2" href="#dnes">Vybrat sám</a></div></section></div>`;
+  if (!zb.length) return `<div class="den">${hlav('Hotovo')}<section class="den-k den-ok"><b class="den-n">${L.length === 1 ? 'Úkol je hotový' : L.length <= 4 ? 'Všechny ' + ukolu(L.length) + ' jsou hotové' : 'Všech ' + ukolu(L.length) + ' je hotovo'}</b><p>Dobrá práce. Hodiny jsou zapsané u každého úkolu.</p><div class="dm-2"><a class="dm-hl" href="#domu">Domů</a><button class="dm-hl dm-hl2" data-a="dalsi-ukol" data-pak="den">▶ Další úkol</button></div></section></div>`;
   const p = zb[0]; const k = L.length - zb.length + 1; const vb = vBud(p); const mist = p.mistnost || p.mistoOdhad || ''; const vz = denVezmi(p); const ma = S.denVzato || {};
   const pat = vb.k === 99 ? '' : vBudNaz(vb);
   return `<div class="den">${hlav('Úkol ' + k + ' z ' + L.length)}
     <section class="den-k" aria-label="Teď"><span class="den-l">TEĎ${(S.denPozdeji || []).includes(p.id) ? ' · odložený' : ''}</span><b class="den-n">${esc(p.nazev || 'Požadavek')}</b>
-      <span class="den-kde">${esc(budovaKr(p))}${mist ? ' · <b class="mono">' + esc(mist) + '</b>' : ''}${pat ? ' · ' + esc(pat) : ''}</span>
+      <span class="den-kde">${esc(budovaKr(p))}${mist ? ' · <b class="mono">' + esc(mist) + '</b>' : ''}${pat ? ' · ' + esc(pat) : ''}<span class="den-vzd">${esc(vzdTxt(p))}</span></span>
       ${popisKr(p) ? `<span class="den-pop">${esc(popisKr(p))}</span>` : ''}${p.objednatel ? `<span class="den-pop">objednal ${esc(p.objednatel)}${p.kontakt ? ' · ' + esc(p.kontakt) : ''}</span>` : ''}
       <div class="dm-2"><button class="den-b" data-a="den-cesta">Ukázat cestu</button><a class="den-b" href="#p-${esc(p.id)}">Podrobnosti</a></div></section>
     ${vz.length ? `<section class="den-vz" aria-label="Vezmi si"><span class="den-l">VEZMI SI</span>${vz.map((t, i) => `<label class="den-c"><input type="checkbox" data-a="den-vzato" data-k="${esc(p.id + ':' + i)}"${ma[p.id + ':' + i] ? ' checked' : ''}><span>${esc(t)}</span></label>`).join('')}</section>` : ''}
@@ -3816,12 +3899,11 @@ function vDen() { if (!S.nacteno) return '<div class="prazdne"><b>Načítám…<
       ${zb.length > 1 ? `<p class="den-dal">Potom: ${zb.slice(1, 4).map((q) => esc(budovaKr(q) + (q.mistnost ? ' ' + q.mistnost : ''))).join(' → ')}${zb.length > 4 ? ' …' : ''}</p>` : ''}</div></div>`; }
 const domuPlny0 = () => (window.innerWidth || 1000) >= 900; const domuPlnyJe = () => { const x = ls.get('domuPlny', null); return x == null ? domuPlny0() : !!x; };
 function vDomu() { return domuPlnyJe() ? vDomuVse() : vDomuJednoduse(); }
-function vVse() { const plny = domuPlnyJe();
-  return `<div class="rada" style="justify-content:space-between;margin-top:12px"><h2 style="margin:0">Všechno</h2><label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-a="domu-plny"${plny ? ' checked' : ''}> Domů jako dřív (všechno na jedné stránce)</label></div>` + vDomuVse(); }
+function vVse() { const plny = domuPlnyJe(), T = dlazdiceT(), n = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno).length;
+  return `<div class="vse-h"><h2>Všechny nástroje</h2><span class="small mut">${S.nacteno ? n + ' nesplněných' : 'Načítám…'}</span></div><nav class="dlazdice dl-vse" aria-label="Všechny nástroje">${T.map(dlHtml).join('')}</nav>
+    <label class="small vse-plny"><input type="checkbox" data-a="domu-plny"${plny ? ' checked' : ''}> Na Domů ukazovat celý přehled (jako na počítači)</label><h2 class="vse-pr">Přehled</h2>` + vDomuVse(true); }
 function domuHlava() { const d = new Date(dnes() + 'T12:00'); return `<div class="dmh"><span class="dm-dat">${DNY_CELE[d.getDay()]} ${d.getDate()}. ${MES2[d.getMonth()]}</span><h2 class="dmh-poz">${POZDRAV()}</h2></div>`; }
-function vDomuVse() {
-  const otev = S.poz.filter((p) => p.stav !== 'hotovy'); const spl = S.poz.length - otev.length;
-  let kObj = 0; otev.forEach((p) => (p.material || []).forEach((x) => { if (kObjednani(x)) kObj++; }));
+function dlazdiceT() { const otev = S.poz.filter((p) => p.stav !== 'hotovy'); const spl = S.poz.length - otev.length; let kObj = 0; otev.forEach((p) => (p.material || []).forEach((x) => { if (kObjednani(x)) kObj++; }));
   const T = [
     ['novy', 'foto', 'Vyfotit požadavek', cteSe() ? 'Papír se přečte sám, ty jen zkontroluješ' : 'Fotka se uloží hned, údaje doplníš kdykoli', '', 'top'],
     ['dnes', 'plan', 'Plán na dnes', 'Co dnes udělat, co si vzít a odkud', planDnes().length || '', 'c-ok'],
@@ -3841,21 +3923,29 @@ function vDomuVse() {
     ['mista', 'mista', 'Místa a rozvaděče', 'Jistič, okruh, svítidla', S.mista.length || '', 'c-warn'],
     ['najit', 'foto', 'Najít podle papíru', 'Vyfoť papír → otevře se požadavek', '', 'c-fia'],
     ['ucebny', 'mista', 'Učebny', 'E455, MI, LIB-139 → budova a patro', UC.length, 'c-mod'],
-    ['mapa', 'mapa', 'Mapa areálu', 'Body z GPS, později ESP32', '', 'c-mu'],
+    ['mapa', 'mapa', 'Mapa areálu', 'Budovy shora, patra, trasa dne', '', 'c-mu'],
     ['zaloha', 'zaloha', 'Záloha a export', ls.get('zaloha', '') ? 'Poslední: ' + fmtD(ls.get('zaloha', '')) : 'Stáhni si všechna data', '', 'c-mu'],
     ['novinky', 'napad', 'Co je nového', 'Verze ' + VERZE + ' – co přibylo', '', 'c-mu'],
     ['napady', 'napad', 'Nápady a otázky', otzZbyva() ? 'Mám pro tebe ' + otzZbyva() + ' ' + (otzZbyva() === 1 ? 'otázku' : otzZbyva() < 5 ? 'otázky' : 'otázek') + ' · tvoje nápady' : 'Co přidat dál – vyber, co chceš', otzZbyva() ? '? ' + otzZbyva() : NAPADY.filter((n) => !n[5] && (S.napady || {})[n[0]] && S.napady[n[0]].volba).length + '/' + NAPADY.filter((n) => !n[5]).length, 'c-fia'],
   ];
+  const nd = doplVse().length; T.splice(1, 0, ['doplnit', 'dopl', 'Doplnit údaje', nd ? 'Fotky papírů, které čekají na údaje' : 'Všechny fotky mají údaje', nd || '', 'c-warn']);
+  T.splice(3, 0, ['den', 'plan', 'Další úkol', 'Úkol po úkolu po trase od základny', denPoradi().zb.length || '', 'c-ok']);
+  T.push(['stitky', 'stitek', 'Štítky', 'Na krabičky a regály, příruční tiskárna', '', 'c-fia'], ['nastaveni', 'nast', 'Nastavení', 'Kde začít po otevření' + (window.__server ? ', přihlášení' : ''), '', 'c-mu']);
+  return T; }
+function vDomuVse(bezDl) {
+  const otev = S.poz.filter((p) => p.stav !== 'hotovy'); const spl = S.poz.length - otev.length;
+  let kObj = 0; otev.forEach((p) => (p.material || []).forEach((x) => { if (kObjednani(x)) kObj++; }));
+  const T = dlazdiceT();
   const tel = !!(window.matchMedia && matchMedia('(max-width:640px)').matches);
   const TT = T.filter(([h]) => !['novy', 'foto', 'seznam', 'material', 'dnes'].includes(h));
-  return (S.nacteno ? '' : '') + (S.nacteno && !ls.get('pruvodce', 0) ? '<div class="karta uvitani"><span>👋 <b>Jsi tu poprvé?</b> Krátká prohlídka ti ukáže, kde co je a kam klepnout (asi 1 minuta).</span><button class="btn sm p" data-a="tour-zacni">▶ Spustit prohlídku</button><button class="btn sm ghost" data-a="tour-ne">Teď ne</button></div>' : '') + novinkyKarta() + (S.nacteno ? domuHlava() + prazdnyOffline() + vlozenaHtml() + dnesKarty() + doplHtml() + cekaniGraf(true) + hlidatHtml() + revizeHtml() + zalohaPripominka() : '') + `<div class="jen-tel"><div class="takce">
+  return (S.nacteno ? '' : '') + (S.nacteno && !ls.get('pruvodce', 0) ? '<div class="karta uvitani"><span>👋 <b>Jsi tu poprvé?</b> Krátká prohlídka ti ukáže, kde co je a kam klepnout (asi 1 minuta).</span><button class="btn sm p" data-a="tour-zacni">▶ Spustit prohlídku</button><button class="btn sm ghost" data-a="tour-ne">Teď ne</button></div>' : '') + novinkyKarta() + (S.nacteno ? domuHlava() + navratHtml() + prazdnyOffline() + vlozenaHtml() + dnesKarty() + doplHtml() + cekaniGraf(true) + hlidatHtml() + revizeHtml() + zalohaPripominka() : '') + (bezDl ? '' : `<div class="jen-tel"><div class="takce">
       <a class="p" href="#novy"><span class="ik">${svg(ICO.foto, 26)}</span>Vyfotit požadavek<small>${cteSe() ? 'papír se přečte sám' : 'uloží se hned'}</small></a>
       <a href="#foto"><span class="ik">${svg(ICO.fotoplus, 26)}</span>Fotka k požadavku<small>vyfoť a klepni, kam patří</small></a>
       <a href="#seznam"><span class="ik">${svg(ICO.seznam, 26)}</span>Požadavky<small>${otev.length} nesplněných</small></a>
       <a href="#material"><span class="ik">${svg(ICO.material, 26)}</span>Materiál<small>${kObj ? kObj + ' k objednání' : 'co objednat'}</small></a></div>
     <h3>Všechno ostatní</h3><nav class="tvse" aria-label="Další části">${TT.map(([h, i, t, , n, c]) => `<a class="${c}" href="#${h}"><span class="ik">${svg(ICO[i], 20)}</span>${t}${n !== '' && n != null ? `<span class="n">${n}</span>` : ''}</a>`).join('')}</nav></div>
     <div class="jen-pc"><div class="uvod"><h2>Co chceš dělat?</h2><span class="mut small">${S.nacteno ? otev.length + ' nesplněných' + (kObj ? ' · ' + kObj + ' položek k objednání' : '') : 'Načítám…'}</span></div>
-    <nav class="dlazdice" aria-label="Hlavní menu">${T.map(([h, i, t, p, n, c]) => `<a class="dl ${c}" href="#${h}"><span class="ik">${svg(ICO[i], c === 'top' ? 30 : 26)}</span><span><b>${t}</b><br><span class="p">${p}</span></span>${n !== '' && n != null ? `<span class="poc">${n}</span>` : ''}</a>`).join('')}</nav></div>` + budovyHtml(tel);
+    <nav class="dlazdice" aria-label="Hlavní menu">${T.map(([h, i, t, p, n, c]) => `<a class="dl ${c}" href="#${h}"><span class="ik">${svg(ICO[i], c === 'top' ? 30 : 26)}</span><span><b>${t}</b><br><span class="p">${p}</span></span>${n !== '' && n != null ? `<span class="poc">${n}</span>` : ''}</a>`).join('')}</nav></div>`) + budovyHtml(tel);
 }
 function vPrehled() {
   if (!S.nacteno) return '<div class="prazdne"><b>Načítám…</b></div>';
@@ -4506,11 +4596,12 @@ function dLista(el) {
   if (!window.IntersectionObserver) return; S.dsIO = new IntersectionObserver((E) => { const x = E[E.length - 1]; bar.hidden = x.isIntersecting || x.boundingClientRect.top > 0; }); S.dsIO.observe(b);
 }
 function vykresli() {
-  const c = cesta(); const v = c.startsWith('doplnit') ? 'novy' : c === 'den' ? 'dnes' : c.startsWith('p-') ? 'seznam' : c === 'novy' ? 'novy' : c === 'import' || c === 'foto' || c === 'napady' || c === 'zaloha' || c === 'novinky' || c === 'vse' ? 'domu' : c === 'lide' || c === 'ulozky' ? 'naradi' : c.startsWith('misto=') ? 'mista' : c.startsWith('kat=') ? 'katalog' : c === 'ucebny' ? 'mista' : c === 'najit' ? 'seznam' : c;
+  if (cesta() === 'stitky') { if (!S.stk) stkOtevri(null); history.replaceState(null, '', '#sklad'); if (HIST[HIST.length - 1] === 'stitky') HIST[HIST.length - 1] = 'sklad'; }
+  const c = cesta(); const v = c.startsWith('doplnit') ? 'novy' : c === 'den' ? 'dnes' : c.startsWith('p-') ? 'seznam' : c === 'novy' ? 'novy' : c === 'import' || c === 'foto' || c === 'napady' || c === 'zaloha' || c === 'novinky' ? 'domu' : c === 'vse' || c === 'nastaveni' ? 'vse' : c === 'lide' || c === 'ulozky' ? 'naradi' : c.startsWith('misto=') ? 'mista' : c.startsWith('kat=') ? 'katalog' : c === 'ucebny' ? 'mista' : c === 'najit' ? 'seznam' : c;
   if (c.startsWith('p-')) { const id = c.slice(2); const l = ls.get('posl', []).filter((x) => x !== id); l.unshift(id); ls.set('posl', l.slice(0, 8)); }
   document.documentElement.dataset.cesta = v; document.querySelectorAll('#karty a, #spodni a').forEach((a) => a.classList.toggle('on', a.dataset.v === v)); kPocty(); oblRender(v);
   const el = $('#hlavni'); const okno = c === 'mapa'; document.documentElement.classList.toggle('mapa-okno', okno); if (okno) { if (window.scrollY) window.scrollTo(0, 0); oknoRozm(); } else S.mapDalsi = false;
-  el.innerHTML = c === 'doplnit' || c.startsWith('doplnit=') ? vDoplnit() : c.startsWith('p-') ? vDetail(c.slice(2)) : c.startsWith('misto=') ? vMisto(klicMista()) : c.startsWith('kat=') ? vKat(kid()) : c === 'katalog' ? vKatalog() : c === 'prehledy' ? vPrehledy() : c === 'domu' ? vDomu() : c === 'foto' ? vFoto() : c === 'dochazka' ? vDochazka() : c === 'napady' ? vNapady() : c === 'dnes' ? vDnes() : c === 'den' ? vDen() : c === 'sklad' ? vSklad() : c === 'zaloha' ? vZaloha() : c === 'novinky' ? vNovinky() : c === 'vse' ? vVse() : c === 'prehled' ? vPrehled() : c === 'naradi' || c === 'lide' || c === 'ulozky' ? vNaradi(c) : c === 'novy' ? vNovy() : c === 'import' ? vImport() : c === 'material' ? vMaterial() : c === 'kalendar' ? vKalendar() : c === 'mista' ? vMista() : c === 'mapa' ? vMapa() : c === 'najit' ? vNajit() : c === 'ucebny' ? vUcebny() : c === 'seznam' ? vSeznam() : vDomu();
+  el.innerHTML = c === 'doplnit' || c.startsWith('doplnit=') ? vDoplnit() : c === 'nastaveni' ? vNastaveni() : c.startsWith('p-') ? vDetail(c.slice(2)) : c.startsWith('misto=') ? vMisto(klicMista()) : c.startsWith('kat=') ? vKat(kid()) : c === 'katalog' ? vKatalog() : c === 'prehledy' ? vPrehledy() : c === 'domu' ? vDomu() : c === 'foto' ? vFoto() : c === 'dochazka' ? vDochazka() : c === 'napady' ? vNapady() : c === 'dnes' ? vDnes() : c === 'den' ? vDen() : c === 'sklad' ? vSklad() : c === 'zaloha' ? vZaloha() : c === 'novinky' ? vNovinky() : c === 'vse' ? vVse() : c === 'prehled' ? vPrehled() : c === 'naradi' || c === 'lide' || c === 'ulozky' ? vNaradi(c) : c === 'novy' ? vNovy() : c === 'import' ? vImport() : c === 'material' ? vMaterial() : c === 'kalendar' ? vKalendar() : c === 'mista' ? vMista() : c === 'mapa' ? vMapa() : c === 'najit' ? vNajit() : c === 'ucebny' ? vUcebny() : c === 'seznam' ? vSeznam() : vDomu();
   if (c.startsWith('p-')) dLista(el);
   if (S.skIO) { S.skIO.disconnect(); S.skIO = null; }
   if (c.startsWith('p-')) { const hs = [...el.querySelectorAll('h3')]; if (hs.length > 3) { const kr = (t) => { t = t.split('·')[0].trim(); return /hodin/i.test(t) ? 'Hodiny' : /^verze/i.test(t) ? 'Verze papíru' : /^údaje/i.test(t) ? 'Údaje' : t.split(' ')[0]; };
@@ -4518,6 +4609,7 @@ function vykresli() {
       const pr = el.querySelector('.prior'); if (pr) pr.after(nav); else el.prepend(nav); skokInit(el, hs, nav); } }
   stavRadek();
   gmVsechny();
+  if (S.navrat && c !== 'domu') S.navrat = null; if (S.navratY != null && S.nacteno) { const y = S.navratY; S.navratY = null; setTimeout(() => window.scrollTo(0, y), 60); } poslZapis();
 }
 const aktP = () => { const c = cesta(); return c.startsWith('p-') ? S.poz.find((q) => q.id === c.slice(2)) : null; };
 const ctiForm = (sel, p) => { document.querySelectorAll(sel + ' [data-k]').forEach((i) => { p[i.dataset.k] = i.value.trim(); }); return p; };
@@ -4643,6 +4735,7 @@ document.addEventListener('change', async (e) => {
   if (t.name === 'rfTyp') { S.rfTyp = t.value; return; }
   if (t.id === 'prehF') { S.prehF = t.value; vykresli(); return; }
   if (t.id === 'edFoto' && t.files[0]) { S.ai.edFoto = true; vykresli(); try { const r = await nahrajFoto(t.files[0], 'naradi'); S.edFoto = r.id; } catch { toast('Fotku se nepodařilo uložit.'); } S.ai.edFoto = false; vykresli(); return; }
+  if (t.id === 'fotoVice' && t.files.length) { const L = [...t.files]; t.value = ''; await rychleDavka(L); return; }
   if (t.id === 'fotoIn' && t.files[0] && rychleJde()) { const f = t.files[0]; t.value = ''; S.foto = URL.createObjectURL(f); S.fotoFile = f; S.ai.foto = true; vykresli();
     try { const d = await rychleUloz(f, S.draft); S.draft = null; S.foto = null; S.fotoFile = null; S.ai.foto = false; rozepsNovyPryc(); location.hash = 'doplnit=' + encodeURIComponent(d.id); toastZpet('Fotka uložena jako nový požadavek. Údaje doplň teď, nebo později.', rychleZpet(d.id)); }
     catch (err) { S.ai.foto = false; toast('Fotku se nepodařilo uložit – zkus to znovu.'); vykresli(); }
@@ -4716,6 +4809,7 @@ document.addEventListener('click', async (e) => {
   if (b.dataset.otevri) { const q = S.poz.find((x) => x.id === b.dataset.otevri); location.hash = kDopl(q) ? 'doplnit=' + encodeURIComponent(q.id) : 'p-' + b.dataset.otevri; return; }
   if (b.dataset.den) { S.den = b.dataset.den; vykresli(); return; }
   const p = aktP(); const a = b.dataset.a;
+  if (a === 'navrat-pryc') { S.navrat = null; vykresli(); return; }
   if (a && a.startsWith('dopl-')) { await doplAkce(a, b); return; }
   if (a === 'novy-jen-foto' && S.fotoFile) { const f = S.fotoFile; S.fotoTok = (S.fotoTok || 0) + 1; const ex = $('#draftForm') ? ctiForm('#draftForm', { ...(S.draft || {}) }) : S.draft;
     try { const d = await rychleUloz(f, ex); S.draft = null; S.foto = null; S.fotoFile = null; S.ai.foto = false; rozepsNovyPryc(); location.hash = kDopl(d) ? 'doplnit=' + encodeURIComponent(d.id) : 'p-' + d.id; toastZpet('Fotka uložena jako nový požadavek.', rychleZpet(d.id)); }
@@ -4911,14 +5005,14 @@ document.addEventListener('click', async (e) => {
   if (a === 'map-dalsi') { S.mapDalsi = !S.mapDalsi; vykresli(); const t = document.querySelector(S.mapDalsi ? '.mdalsi [data-a="map-dalsi"]' : '.mapnav [data-a="map-dalsi"]'); if (t) t.focus({ preventScroll: true }); return; }
   if (a === 'map-zakl') { S.mapZakl = !S.mapZakl; if (S.mapZakl) { S.mapSel = ''; S.bpSel = null; S.bpP = null; S.bpB = ''; } vykresli(); return; }
   if (a === 'plan-vse') { S.planVse = true; vykresli(); return; }
-  if (a === 'plan-navrh') { const T = trasaN(); const kap = +T.hodin || 6; const ids = planDnes().slice(); const pred = ids.length; const hop = CESTA[T.vozitko ? 'vozitko' : 'pesky'].hop / 60;
-    const kand = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno && !ids.includes(p.id) && !(p.material || []).some((x) => kObjednani(x) || objednano(x)) && lidiP(p) <= (+T.lidi || 1) && !(T.den === 'lehky' && obtiznost(p) === 3));
+  if (a === 'plan-navrh' || a === 'dalsi-ukol') { if (a === 'dalsi-ukol' && denPoradi().zb.length) { if (location.hash !== '#den') location.hash = 'den'; else vykresli(); return; } const T = trasaN(); const kap = +T.hodin || 6; const ids = planDnes().slice(); const pred = ids.length; const hop = CESTA[T.vozitko ? 'vozitko' : 'pesky'].hop / 60;
+    const kand = S.poz.filter((p) => p.stav !== 'hotovy' && !p.slouceno && !kDopl(p) && !ids.includes(p.id) && !(p.material || []).some((x) => kObjednani(x) || objednano(x)) && lidiP(p) <= (+T.lidi || 1) && !(T.den === 'lehky' && obtiznost(p) === 3));
     const sk = (p) => dulezitost(p) * 10 + Math.min(dniOd(p.datum), 90) / 9 + (obtiznost(p) === 1 ? (T.den === 'lehky' ? 8 : 2) : obtiznost(p) === 3 ? (T.den === 'tezky' ? 4 : -4) : 0); const pb = new Map(); kand.forEach((p) => { const k = budovaKr(p) || '?'; if (!pb.has(k)) pb.set(k, []); pb.get(k).push(p); });
     const B = [...pb.entries()].map(([k, L]) => ({ k, L: L.sort((x, y) => sk(y) - sk(x)), s: L.reduce((a, p) => a + sk(p), 0) })).sort((x, y) => y.s - x.s);
     const t0 = trasaPlanu(ids); let cas = t0.praceH + t0.cestaH + (ids.length ? 0 : hop); const bp = new Set(t0.vyb.map((p) => budovaKr(p) || '?'));
     for (const X of B) { if (!bp.has(X.k) && bp.size >= 4) continue; for (const p of X.L) { const h = odhadH(p) + (bp.has(X.k) ? 0 : hop); if (cas + h > kap) continue; cas += h; bp.add(X.k); ids.push(p.id); } }
-    if (ids.length === pred) { toast('Nic dalšího se dnes už nevejde.'); return; }
-    await ulozNast('plan', { datum: dnes(), ids }); toast('Navrženo ' + (ids.length - pred) + ' – odškrtni, co nechceš.'); if (b.dataset.pak && location.hash !== '#' + b.dataset.pak) location.hash = b.dataset.pak; else vykresli(); return; }
+    if (ids.length === pred && a === 'dalsi-ukol') { const nj = nejblizsiUkol(kand); if (nj) ids.push(nj.id); } if (ids.length === pred) { toast(a === 'dalsi-ukol' ? 'Nic dalšího nečeká – všechno je hotové, nebo čeká na materiál.' : 'Nic dalšího se dnes už nevejde.'); return; }
+    await ulozNast('plan', { datum: dnes(), ids }); toast(a === 'dalsi-ukol' ? (pred ? 'Přidáno do plánu: ' + (ids.length - pred) + '.' : 'Plán na dnes: ' + ukolu(ids.length) + ' po trase od základny.') : 'Navrženo ' + (ids.length - pred) + ' – odškrtni, co nechceš.'); if (b.dataset.pak && location.hash !== '#' + b.dataset.pak) location.hash = b.dataset.pak; else vykresli(); return; }
   if (a === 'naj-zustat' && S.naj) { S.naj.zustat = true; S.naj.otevirani = null; vykresli(); return; }
   if (a === 'naj-zoom' && S.naj) { window.open(S.naj.url, '_blank', 'noopener'); return; }
   if (a === 'naj-novy' && S.naj) { const f = S.naj.file; S.naj = null; location.hash = 'novy'; S.foto = URL.createObjectURL(f); S.fotoFile = f; S.draft = null;
@@ -5180,7 +5274,7 @@ document.addEventListener('keydown', (e) => { const pise = e.target.matches && e
 $('#zpetBtn').addEventListener('click', () => zpet()); $('#zpetPlov').addEventListener('click', (e) => { e.stopPropagation(); zpet(); setTimeout(zpetStav, 0); });
 document.addEventListener('click', () => setTimeout(zpetStav, 0));
 zapisHist();
-const naKat = () => { const c = cesta(); return c === 'katalog' ? 'katGal' : c.startsWith('kat=') ? 'kFotoGal' : ''; };
+const naKat = () => { const c = cesta(); return (c === 'novy' || c === 'doplnit' || c.startsWith('doplnit=')) && S.assets ? 'fotoVice' : c === 'katalog' ? 'katGal' : c.startsWith('kat=') ? 'kFotoGal' : ''; };
 function vlozObrazky(files) { files = files.filter((f) => /^image\//.test(f.type)); const inp = files.length && naKat() && document.getElementById(naKat()); if (!inp) return false;
   try { const dt = new DataTransfer(); files.forEach((f) => dt.items.add(f)); inp.files = dt.files; inp.dispatchEvent(new Event('change', { bubbles: true })); return true; } catch { return false; } }
 document.addEventListener('paste', (e) => { if (e.target && e.target.tagName === 'TEXTAREA') return; const f = [...((e.clipboardData && e.clipboardData.files) || [])]; if (vlozObrazky(f)) e.preventDefault(); });
@@ -5209,6 +5303,9 @@ document.addEventListener('keydown', (e) => {
   if (piseS || otev || e.altKey || e.ctrlKey || e.metaKey) return;
   if ((e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'j' || e.key === 'k') && cesta() === 'seznam') { const L = [...document.querySelectorAll('.seznam .pol')]; if (!L.length) return; e.preventDefault();
     const i = L.indexOf(document.activeElement), dol = e.key === 'ArrowDown' || e.key === 'j', n = i < 0 ? 0 : dol ? Math.min(L.length - 1, i + 1) : Math.max(0, i - 1); L[n].focus(); L[n].scrollIntoView({ block: 'nearest' }); return; }
+  if ((e.key === 's' || e.key === 'S') && !e.shiftKey && $('#lb').hidden && !S.hotovo) { const c = cesta();
+    if (c === 'den') { const bt = document.querySelector('[data-a="den-hotovo"]'); if (bt) { e.preventDefault(); bt.click(); } return; }
+    if (c.startsWith('p-')) { const q = aktP(); if (!q) return; e.preventDefault(); if (q.stav === 'hotovy') { toast('Už je splněno.'); return; } prepniSplneno(q); ulozPoz(q).then(() => { poSplneni(q); vykresli(); }); return; } }
   { const KL = { n: 'novy', h: 'domu', d: 'dnes', p: 'seznam', m: 'mapa' }, kk = KL[e.key]; if (kk && !e.shiftKey && $('#lb').hidden && !S.hotovo) { e.preventDefault(); if (cesta() !== kk) location.hash = kk; return; } }
   if (e.key === '?' || e.key === '/') { e.preventDefault(); otevriPomoc(); } });
 async function stahni(nazev, data) {
@@ -5240,6 +5337,39 @@ function pracovniList(p) {
   <h2>Poznámka</h2><div class="pozn">${esc(p.poznamka || '')}</div>
   <p style="margin-top:22px">Hotovo dne: ……………………… &nbsp;&nbsp; Podpis pracovníka: ……………………………………</p></body></html>`;
 }
+// v105: kde jsem byl – po krátké pauze se Deník otevře tam, kde jsi skončil; po dlouhé (jiný den / víc než 8 h) na Domů s „Naposledy… Pokračovat“
+const NAVRAT = [[0, 'Vždy začít na Domů'], [2, 'Pokračovat, kde jsem skončil – po pauze do 2 hodin'], [8, 'Pokračovat, kde jsem skončil – po pauze do 8 hodin, ve stejný den'], [24, 'Pokračovat, kde jsem skončil – po pauze do 24 hodin, i přes půlnoc']];
+const ODHL = [[1, 'Po 1 dni bez používání'], [7, 'Po 7 dnech bez používání'], [30, 'Po 30 dnech bez používání'], [0, 'Nikdy']];
+const navratH = () => { const v = ls.get('navratH', null); return v !== null && NAVRAT.some((x) => x[0] === +v) ? +v : 8; };
+const odhlDny = () => { const v = ls.get('odhlasitPo', null); return v !== null && ODHL.some((x) => x[0] === +v) ? +v : 7; };
+const kratkaPauza = (akt, lim) => { const p = Date.now() - akt; return lim > 0 && p >= 0 && p < lim * 36e5 && (lim >= 24 || new Date(akt).toDateString() === new Date().toDateString()); };
+const AKT0 = +ls.get('denik-aktivita', 0) || 0, POSL0 = ls.get('posledni', null); let aktivni = false, aktT = 0, poslT = 0;
+const aktZapis = () => { aktivni = true; if (Date.now() - aktT < 15000) return; aktT = Date.now(); ls.set('denik-aktivita', aktT); };
+function poslZapis() { if (!S.nacteno) return; ls.set('posledni', { c: cesta(), y: Math.round(window.scrollY || 0), kdy: Date.now() }); }
+['pointerdown', 'keydown', 'wheel'].forEach((t) => document.addEventListener(t, aktZapis, { passive: true, capture: true }));
+addEventListener('scroll', () => { if (Date.now() - poslT > 1500) { poslT = Date.now(); poslZapis(); } }, { passive: true });
+addEventListener('pagehide', () => { if (aktivni) { aktT = 0; aktZapis(); } poslZapis(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { if (aktivni) { aktT = 0; aktZapis(); } poslZapis(); return; }
+  const akt = +ls.get('denik-aktivita', 0) || 0; if (!akt || kratkaPauza(akt, navratH() || 8) || cesta() === 'domu') return; // vrátil ses po dlouhé pauze s otevřeným Deníkem → Domů
+  S.navrat = { c: cesta(), y: Math.round(window.scrollY || 0), kdy: akt }; location.hash = 'domu'; });
+(() => { const P = POSL0, h0 = (location.hash || '').slice(1); if (!P || !P.c || P.c === 'domu' || (h0 && h0 !== 'domu')) return; const akt = AKT0 || +P.kdy || 0; if (!akt) return;
+  if (kratkaPauza(akt, navratH())) { history.replaceState(null, '', '#' + P.c); HIST.length = 0; HIST.push('domu', P.c); zpetStav(); S.navratY = +P.y || 0; } else S.navrat = P; })();
+const NAZ_C = { domu: 'Domů', novy: 'Nový požadavek', den: 'Pracovní den', vse: 'Všechny nástroje', nastaveni: 'Nastavení', zaloha: 'Záloha a export', import: 'Import z WhatsAppu', napady: 'Nápady a otázky', novinky: 'Co je nového', ucebny: 'Učebny', najit: 'Najít podle papíru', lide: 'Lidé', ulozky: 'Sklady a klíče', foto: 'Fotka k požadavku' };
+function nazevCesty(c) { if (c.startsWith('p-')) { const q = S.poz.find((x) => x.id === c.slice(2)); return q ? 'Požadavek ' + [q.cislo, kDopl(q) ? 'k doplnění' : kratkyNazev(q)].filter(Boolean).join(' · ') : 'Požadavek'; }
+  if (c.startsWith('doplnit')) return 'Doplnit údaje'; let x = ''; try { x = decodeURIComponent(c.slice(c.indexOf('=') + 1)); } catch {}
+  if (c.startsWith('kat=')) { const k = katId(x); return 'Katalog' + (k ? ': ' + k.nazev : ''); } if (c.startsWith('misto=')) return 'Místo ' + x.replace(/\|/g, ' · ');
+  if (NAZ_C[c]) return NAZ_C[c]; const a = document.querySelector(`#karty a[data-v="${CSS.escape(c)}"]`); return a ? (a.querySelector('.kt') || a).textContent.replace('⌂', '').trim() : c; }
+function navratHtml() { const P = S.navrat; if (!P || !P.c || !S.nacteno || cesta() !== 'domu') return ''; const d = new Date(+P.kdy || 0); let kdy = '';
+  if (+P.kdy) { const hm2 = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); kdy = d.toDateString() === new Date().toDateString() ? 'dnes ' + hm2 : d.toDateString() === new Date(Date.now() - 864e5).toDateString() ? 'včera ' + hm2 : fmtD(iso(d)) + ' ' + hm2; }
+  return `<div class="navrat" role="status"><span>Naposledy: <b>${esc(nazevCesty(P.c))}</b>${kdy ? ` <small class="mut">· ${esc(kdy)}</small>` : ''}</span><a class="btn sm p" href="#${esc(P.c)}">Pokračovat ›</a><button class="btn sm ghost" data-a="navrat-pryc" aria-label="Skrýt">✕</button></div>`; }
+function vNastaveni() { const nh = navratH(), od = odhlDny(); const radio = (name, L, v, vych) => L.map(([k, t]) => `<label class="nast-r"><input type="radio" name="${name}" value="${k}"${k === v ? ' checked' : ''}><span>${esc(t)}${k === vych ? ' <small class="mut">(výchozí)</small>' : ''}</span></label>`).join('');
+  return `<div class="dopl-h"><h2>Nastavení</h2><span class="small mut">platí jen pro toto zařízení</span></div>
+    <div class="karta nast"><h3>Po otevření Deníku</h3>${radio('navratH', NAVRAT, nh, 8)}<p class="small mut">Po delší pauze (nebo další den) se otevře Domů a nahoře bude „Naposledy: … · Pokračovat“ – jedním klepnutím jsi zpátky. Rozepsané kolonky se pamatují vždy.</p></div>
+    ${window.__server ? `<div class="karta nast"><h3>Znovu se přihlásit</h3>${radio('odhlasitPo', ODHL, od, 7)}<p class="small mut">Po této době bez používání se Deník odhlásí jen tady v prohlížeči – data v zařízení zůstanou, neodeslané změny počkají a odešlou se po přihlášení. Na serveru se nic nemění.</p></div>` : ''}
+    <div class="karta nast"><h3>Domů</h3><label class="nast-r"><input type="checkbox" data-a="domu-plny"${domuPlnyJe() ? ' checked' : ''}><span>Na Domů ukazovat celý přehled (jako na počítači)</span></label></div>`; }
+document.addEventListener('change', (e) => { const t = e.target; if (t.name === 'navratH' || t.name === 'odhlasitPo') { ls.set(t.name, +t.value); toast('Uloženo – platí pro toto zařízení.'); } });
+// v105: všechny nástroje jako dlaždice (na telefonu ☰ Vše, na počítači Domů)
+const dlHtml = ([h, i, t, p, n, c]) => `<a class="dl ${c}" href="#${h}"><span class="ik">${svg(ICO[i] || ICO.seznam, c === 'top' ? 30 : 26)}</span><span><b>${t}</b><br><span class="p">${p}</span></span>${n !== '' && n != null ? `<span class="poc">${n}</span>` : ''}</a>`;
 // --- start
 vykresli();
 (async () => {
